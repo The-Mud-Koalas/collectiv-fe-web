@@ -1,71 +1,115 @@
 import { PasswordField, TextInputField } from "@/components/shared/forms";
 import React from "react";
-import { FieldError, SubmitErrorHandler, SubmitHandler, useForm } from "react-hook-form";
+import {
+  FieldError,
+  SubmitErrorHandler,
+  SubmitHandler,
+  UseFormReturn,
+  useForm,
+} from "react-hook-form";
 import { auth } from "@/config/firebase";
 import { signInWithEmailAndPassword } from "firebase/auth";
-import { useRouter } from "next/router";
 import { toast } from "react-toastify";
 import { FirebaseError } from "firebase/app";
+import { Inter } from "next/font/google";
+import CollectivLogo from "@/components/shared/svg/CollectivLogo";
+import { Button } from "@/components/shared/elements";
+import AccountNavbar from "../AccountNavbar";
+import Link from "next/link";
+import { EMAIL_REGEX } from "@/utils/constants/regex";
+import { formatFirebaseAuthErrorMessage } from "@/utils/helpers/formatting/formatFirebaseAuthErrorMessage";
+import { exactLengthValidator } from "@/utils/helpers/validator/lengthValidator";
+import { numericValidator } from "@/utils/helpers/validator/numericValidator";
+import { useWindowSize } from "@/hooks/display";
 
 interface FormFields {
   email: string;
   password: string;
 }
 
-const Login: React.FC = () => {
-  const router = useRouter();
-  const { register, handleSubmit, reset } = useForm<FormFields>();
+interface Props {
+  form: UseFormReturn<LoginFormFields>;
+  onSubmit: SubmitHandler<LoginFormFields>;
+  onError: SubmitErrorHandler<FieldError>;
+  isLoading: boolean;
+}
 
-  const submitLogin: SubmitHandler<FormFields> = async (data) => {
-    const { email, password } = data;
-    try {
-      const user = await signInWithEmailAndPassword(auth, email, password);
-      reset();
-    } catch (error) {
-      if (error instanceof FirebaseError) {
-        switch (error.code) {
-          case "auth/wrong-password": {
-            toast.error("Your password is incorrect.");
-            break;
-          }
-          case "auth/user-not-found": {
-            toast.error("This user does not exist.");
-            break;
-          }
-          default : {
-            toast.error("An error has occured.");
-            break;
-          }
-        }
-      }
+const inter = Inter({ subsets: ["latin"] });
 
-      toast.error("An error has occured.");
-    }
-  };
-
-  const onError: SubmitErrorHandler<FieldError> = (error) => {
-    const errors = Object.values(error).map(item => item.message) as string[] ;
-    toast.error(errors?.[0]);
-  }
+const Login: React.FC<Props> = ({ form, onSubmit, onError, isLoading }) => {
+  const { register, handleSubmit } = form;
+  const { windowWidth } = useWindowSize();
 
   return (
-    <div>
-      <form onSubmit={handleSubmit(submitLogin, onError)}>
-        <TextInputField label="Email" field="email" register={register} registerOptions={{
-          pattern: {
-            value: /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/g,
-            message: "The email inputted is invalid"
-          }
-        }}/>
-        <PasswordField label="Password" field="password" register={register} registerOptions={{
-          validate: {
-            isNumeric: (v: string) => !isNaN(Number(v)) || "Your passcode should be numeric.",
-            isLengthSix: (v: string) => v.length === 6 || "Your passcode should have a length of 6."
-          }
-        }}/>
-        <button>Login</button>
-      </form>
-    </div>
+    <>
+      <AccountNavbar />
+      <div className="grid place-items-center">
+        <div
+          className={`${inter.className} flex flex-col px-5 py-8 md:py-[5%] gap-6 max-w-xl w-full`}
+        >
+          <div>
+            <h1 className="text-2xl font-bold md:text-4xl">Sign In to</h1>
+            <div className="bg-tertiary w-fit px-1 my-1">
+              <CollectivLogo
+                color="black"
+                dimensions={{ width: windowWidth >= 768 ? 260 : 140 }}
+              />
+            </div>
+          </div>
+          <form
+            className="flex flex-col gap-4 w-full"
+            onSubmit={handleSubmit(onSubmit, onError)}
+          >
+            <TextInputField
+              label="Email"
+              field="email"
+              register={register}
+              registerOptions={{
+                pattern: {
+                  value: EMAIL_REGEX,
+                  message: "The email you entered is invalid",
+                },
+                required: "This field should not be left empty.",
+              }}
+            />
+            <PasswordField
+              label="Password"
+              field="password"
+              register={register}
+              registerOptions={{
+                validate: {
+                  isNumeric: numericValidator,
+                  isLengthSix: exactLengthValidator(6),
+                },
+                required: "This field should not be left empty.",
+              }}
+            />
+            <Link
+              href="/accounts/forget"
+              className="text-xs sm:text-sm sm:font-semibold underline"
+            >
+              Forgot password?
+            </Link>
+            <Button
+              disabled={isLoading}
+              type="submit"
+              className="bg-primary-700 flex justify-center items-center p-3 rounded-lg"
+            >
+              <p className="text-primary-200 font-semibold text-sm">Sign In</p>
+            </Button>
+            <p className="text-xs sm:text-sm">
+              Not a member?{" "}
+              <Link
+                href="/accounts/signup"
+                className="underline text-primary-700 sm:font-semibold"
+              >
+                Register now
+              </Link>
+            </p>
+          </form>
+        </div>
+      </div>
+    </>
   );
 };
 
