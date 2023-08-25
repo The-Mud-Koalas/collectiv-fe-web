@@ -60,6 +60,7 @@ const Signup: React.FC<Props> = ({ form, onSubmit, onError, isLoading }) => {
                   value: EMAIL_REGEX,
                   message: "The email you entered is invalid.",
                 },
+                required: "This field should not be left empty."
               }}
             />
 

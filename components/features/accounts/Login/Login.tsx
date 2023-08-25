@@ -5,28 +5,16 @@ import {
   SubmitErrorHandler,
   SubmitHandler,
   UseFormReturn,
-  useForm,
 } from "react-hook-form";
-import { auth } from "@/config/firebase";
-import { signInWithEmailAndPassword } from "firebase/auth";
-import { toast } from "react-toastify";
-import { FirebaseError } from "firebase/app";
 import { Inter } from "next/font/google";
 import CollectivLogo from "@/components/shared/svg/CollectivLogo";
 import { Button } from "@/components/shared/elements";
 import AccountNavbar from "../AccountNavbar";
 import Link from "next/link";
 import { EMAIL_REGEX } from "@/utils/constants/regex";
-import { formatFirebaseAuthErrorMessage } from "@/utils/helpers/formatting/formatFirebaseAuthErrorMessage";
 import { exactLengthValidator } from "@/utils/helpers/validator/lengthValidator";
 import { numericValidator } from "@/utils/helpers/validator/numericValidator";
 import { useWindowSize } from "@/hooks/display";
-
-interface FormFields {
-  email: string;
-  password: string;
-}
-
 interface Props {
   form: UseFormReturn<LoginFormFields>;
   onSubmit: SubmitHandler<LoginFormFields>;
