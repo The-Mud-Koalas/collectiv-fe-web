@@ -7,7 +7,7 @@ import {
   UseFormReturn,
 } from "react-hook-form";
 import { Inter } from "next/font/google";
-import CollectivLogo from "@/components/shared/svg/CollectivLogo";
+import CollectivLogo from "@/components/shared/svg/logo/CollectivLogo";
 import { Button } from "@/components/shared/elements";
 import AccountNavbar from "../AccountNavbar";
 import Link from "next/link";
@@ -15,14 +15,14 @@ import { EMAIL_REGEX } from "@/utils/constants/regex";
 import { exactLengthValidator } from "@/utils/helpers/validator/lengthValidator";
 import { numericValidator } from "@/utils/helpers/validator/numericValidator";
 import { useWindowSize } from "@/hooks/display";
+import { inter } from "@/utils/constants/fonts";
+import CollectivLogoHorizontal from "@/components/shared/svg/logo/CollectivLogoHorizontal";
 interface Props {
   form: UseFormReturn<LoginFormFields>;
   onSubmit: SubmitHandler<LoginFormFields>;
   onError: SubmitErrorHandler<FieldError>;
   isLoading: boolean;
 }
-
-const inter = Inter({ subsets: ["latin"] });
 
 const Login: React.FC<Props> = ({ form, onSubmit, onError, isLoading }) => {
   const { register, handleSubmit } = form;
@@ -37,11 +37,8 @@ const Login: React.FC<Props> = ({ form, onSubmit, onError, isLoading }) => {
         >
           <div>
             <h1 className="text-2xl font-bold md:text-4xl">Sign In to</h1>
-            <div className="bg-tertiary w-fit px-1 my-1">
-              <CollectivLogo
-                color="black"
-                dimensions={{ width: windowWidth >= 768 ? 260 : 140 }}
-              />
+            <div className="bg-secondary-200 w-fit px-1 my-2">
+              <CollectivLogoHorizontal size={windowWidth >= 768 ? "xl" : "lg"} colorCode="slate-950"/>
             </div>
           </div>
           <form

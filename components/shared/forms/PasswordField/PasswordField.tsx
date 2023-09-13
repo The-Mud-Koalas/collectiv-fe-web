@@ -1,17 +1,35 @@
 import { COLORS } from "@/utils/constants/colors";
 import { Inter } from "next/font/google";
 import React, { useState, useId } from "react";
-import { FieldValues, Path, RegisterOptions, UseFormRegister } from "react-hook-form";
+import {
+  FieldError,
+  FieldValues,
+  Path,
+  RegisterOptions,
+  UseFormRegister,
+} from "react-hook-form";
 import Eye from "../../svg/icons/Eye";
+import { motion } from "framer-motion";
+import EyeClosed from "../../svg/icons/EyeClosed";
+import { inter } from "@/utils/constants/fonts";
+import { FieldErrorMessage } from "../FieldErrorMessage";
 
 interface Props<T> {
   field: Path<T & FieldValues>;
   register: UseFormRegister<T & FieldValues>;
   registerOptions?: RegisterOptions;
   label: string;
+  error?: FieldError;
 }
 
-const inter = Inter({subsets: ["latin"]})
+const inputFieldVariant = (error?: FieldError) => ({
+  focus: {
+    boxShadow: `0px 0px 0px 2px ${error == null ? COLORS.secondary[400] : COLORS.danger[400]}`,
+  },
+  blur: {
+    boxShadow: "1px 1px 1px 1px rgba(255,255,255,0.01)",
+  },
+});
 
 /**
  * A password input field component with label
@@ -26,6 +44,7 @@ const PasswordField = <T extends unknown>({
   register,
   registerOptions,
   label,
+  error,
 }: Props<T>) => {
   const [isVisible, setIsVisible] = useState(false);
   const [isFocus, setIsFocus] = useState(false);
@@ -33,20 +52,36 @@ const PasswordField = <T extends unknown>({
 
   return (
     <div className="flex flex-col gap-1">
-      <label htmlFor={inputId} className={`${inter.className} text-xs sm:text-sm font-medium`}>{label}</label>
-      <div className="flex flex-row gap-2 justify-between bg-gray-50 text-sm px-3 py-3 rounded-lg border-gray-300 border-[1.5px]">
+      <label
+        htmlFor={inputId}
+        className={`${inter.className} text-xs sm:text-sm font-medium`}
+      >
+        {label}
+      </label>
+      <motion.div
+        variants={inputFieldVariant(error)}
+        animate={isFocus ? "focus" : "blur"}
+        className="flex flex-row gap-2 justify-between bg-gray-50 text-sm px-3 py-3 rounded-lg border-gray-300 border-[1.5px]"
+      >
         <input
-          className={`${inter.className} bg-transparent w-full sm:text-base`}
+          onFocus={() => setIsFocus(true)}
+          className={`${inter.className} outline-none bg-transparent w-full sm:text-base`}
           type={isVisible ? "text" : "password"}
           id={inputId}
-          {...register(field, registerOptions ?? {})}
+          {...register(field, {
+            ...registerOptions,
+            onBlur: () => setIsFocus(false),
+          })}
         />
-        <button type="button" onClick={() => setIsVisible(prev => !prev)}>
-          {
-            isVisible ? <Eye color={COLORS.gray[400]} dimensions={{width: 20}}/> : <Eye color={COLORS.gray[400]} dimensions={{width: 20}}/>
-          }
+        <button type="button" onClick={() => setIsVisible((prev) => !prev)}>
+          {isVisible ? (
+            <EyeClosed color={COLORS.gray[400]} dimensions={{ width: 20 }} />
+          ) : (
+            <Eye color={COLORS.gray[400]} dimensions={{ width: 20 }} />
+          )}
         </button>
-      </div>
+      </motion.div>
+      {error && <FieldErrorMessage message={error.message} />}
     </div>
   );
 };

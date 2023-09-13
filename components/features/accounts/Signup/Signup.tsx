@@ -7,7 +7,7 @@ import {
 } from "react-hook-form";
 import AccountNavbar from "../AccountNavbar";
 import { Inter } from "next/font/google";
-import CollectivLogo from "@/components/shared/svg/CollectivLogo";
+import CollectivLogo from "@/components/shared/svg/logo/CollectivLogo";
 import { PasswordField, TextInputField } from "@/components/shared/forms";
 import { EMAIL_REGEX } from "@/utils/constants/regex";
 import { exactLengthValidator } from "@/utils/helpers/validator/lengthValidator";
@@ -15,6 +15,8 @@ import { numericValidator } from "@/utils/helpers/validator/numericValidator";
 import { Button } from "@/components/shared/elements";
 import Link from "next/link";
 import { useWindowSize } from "@/hooks/display";
+import { inter } from "@/utils/constants/fonts";
+import CollectivLogoHorizontal from "@/components/shared/svg/logo/CollectivLogoHorizontal";
 
 interface Props {
   form: UseFormReturn<SignupFormFields>;
@@ -23,10 +25,8 @@ interface Props {
   isLoading: boolean;
 }
 
-const inter = Inter({ subsets: ["latin"] });
-
 const Signup: React.FC<Props> = ({ form, onSubmit, onError, isLoading }) => {
-  const { handleSubmit, register } = form;
+  const { handleSubmit, register, formState: { errors } } = form;
   const { windowWidth } = useWindowSize();
 
   return (
@@ -38,18 +38,15 @@ const Signup: React.FC<Props> = ({ form, onSubmit, onError, isLoading }) => {
         >
           <div>
             <h1 className="text-2xl font-semibold md:text-4xl">Register to</h1>
-            <div className="bg-tertiary w-fit px-1">
-              <CollectivLogo
-                dimensions={{ width: windowWidth >= 768 ? 260 : 140 }}
-                color="black"
-              />
+            <div className="bg-secondary-200 w-fit px-1 my-2">
+              <CollectivLogoHorizontal size={windowWidth >= 768 ? "xl" : "lg"} colorCode="slate-950"/>
             </div>
           </div>
           <form
             className="flex flex-col gap-4 w-full"
             onSubmit={handleSubmit(onSubmit, onError)}
           >
-            <TextInputField field="name" label="Name" register={register} />
+            <TextInputField field="name" label="Name" register={register} error={errors.name}/>
 
             <TextInputField
               field="email"
@@ -60,12 +57,13 @@ const Signup: React.FC<Props> = ({ form, onSubmit, onError, isLoading }) => {
                   value: EMAIL_REGEX,
                   message: "The email you entered is invalid.",
                 },
-                required: "This field should not be left empty."
+                required: "This field should not be left empty.",
               }}
+              error={errors.email}
             />
 
             <PasswordField
-              label="Password"
+              label="Passcode"
               field="password"
               register={register}
               registerOptions={{
@@ -75,12 +73,13 @@ const Signup: React.FC<Props> = ({ form, onSubmit, onError, isLoading }) => {
                 },
                 required: "This field should not be left empty.",
               }}
+              error={errors.password}
             />
 
             <Button
               disabled={isLoading}
               type="submit"
-              className="bg-primary-700 flex justify-center items-center p-3 rounded-lg"
+              className="bg-primary-700 flex justify-center items-center p-3 rounded-3xl"
             >
               <p className="text-primary-200 font-semibold text-sm">Register</p>
             </Button>

@@ -1,4 +1,5 @@
-import CollectivLogo from "@/components/shared/svg/CollectivLogo";
+import CollectivLogo from "@/components/shared/svg/logo/CollectivLogo";
+import CollectivLogoHorizontal from "@/components/shared/svg/logo/CollectivLogoHorizontal";
 import { useWindowSize } from "@/hooks/display";
 import { COLORS } from "@/utils/constants/colors";
 import React from "react";
@@ -6,8 +7,8 @@ import React from "react";
 const AccountNavbar = () => {
   const { windowWidth } = useWindowSize();
   return (
-    <nav className="flex px-7 py-3.5 bg-primary-300">
-      <CollectivLogo color={COLORS.primary[700]} dimensions={{ width: windowWidth >= 768 ? 150 : 75 }} />
+    <nav className="flex px-7 py-2 bg-primary-300">
+      <CollectivLogoHorizontal size="sm" colorCode="primary-800"/>
     </nav>
   );
 };
