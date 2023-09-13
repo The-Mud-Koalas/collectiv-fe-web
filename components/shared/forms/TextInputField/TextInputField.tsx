@@ -1,11 +1,16 @@
+import { COLORS } from "@/utils/constants/colors";
+import { motion } from "framer-motion";
 import { Inter } from "next/font/google";
 import React, { useId, useEffect } from "react";
 import {
+  FieldError,
   FieldValues,
   Path,
   RegisterOptions,
   UseFormRegister,
 } from "react-hook-form";
+import { FieldErrorMessage } from "../FieldErrorMessage";
+import { inter } from "@/utils/constants/fonts";
 
 interface Props<T> {
   field: Path<T & FieldValues>;
@@ -13,9 +18,8 @@ interface Props<T> {
   registerOptions?: RegisterOptions;
   placeholder?: string;
   label: string;
+  error?: FieldError
 }
-
-const inter = Inter({ subsets: ["latin"] });
 
 /**
  * A text input field component with label
@@ -32,6 +36,7 @@ const TextInputField = <T extends unknown>({
   registerOptions,
   placeholder,
   label,
+  error
 }: Props<T>) => {
   const inputId = useId();
 
@@ -43,13 +48,15 @@ const TextInputField = <T extends unknown>({
       >
         {label}
       </label>
-      <input
-        className={`${inter.className} bg-gray-50 text-sm sm:text-base px-3 py-3 rounded-lg border-gray-300 border-[1.5px]`}
+      <motion.input
+        whileFocus={{ boxShadow: `0 0 0 2px ${error == null ? COLORS.secondary[400] : COLORS.danger[400]}` }}
+        className={`${inter.className} outline-none bg- bg-gray-50 text-sm sm:text-base px-3 py-3 rounded-lg border-gray-300 border-[1.5px]`}
         type="text"
         id={inputId}
         placeholder={placeholder}
         {...register(field, registerOptions ?? {})}
       />
+      { error && <FieldErrorMessage message={error.message}/>}
     </div>
   );
 };

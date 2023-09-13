@@ -3,17 +3,15 @@ import AccountNavbar from "../AccountNavbar";
 import Back from "@/components/shared/svg/icons/Back";
 import { COLORS } from "@/utils/constants/colors";
 import Link from "next/link";
-import { Inter } from "next/font/google";
 import { SubmitErrorHandler, SubmitHandler, useForm } from "react-hook-form";
 import { TextInputField } from "@/components/shared/forms";
 import { EMAIL_REGEX } from "@/utils/constants/regex";
 import { Button } from "@/components/shared/elements";
+import { inter } from "@/utils/constants/fonts";
 
 interface FormFields {
   email: string;
 }
-
-const inter = Inter({ subsets: ["latin"] });
 
 const ForgetPassword: React.FC = () => {
   const { handleSubmit, register } = useForm<FormFields>();
