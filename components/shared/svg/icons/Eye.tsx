@@ -20,14 +20,14 @@ const Eye: React.FC<SvgProps> = ({ color, dimensions }) => {
       <path
         d="M1.33337 16.0002C1.33337 16.0002 6.66671 5.3335 16 5.3335C25.3334 5.3335 30.6667 16.0002 30.6667 16.0002C30.6667 16.0002 25.3334 26.6668 16 26.6668C6.66671 26.6668 1.33337 16.0002 1.33337 16.0002Z"
         stroke={color}
-        strokeWidth="1.5"
+        strokeWidth="3"
         strokeLinecap="round"
         strokeLinejoin="round"
       />
       <path
         d="M16 20C18.2092 20 20 18.2091 20 16C20 13.7909 18.2092 12 16 12C13.7909 12 12 13.7909 12 16C12 18.2091 13.7909 20 16 20Z"
         stroke={color}
-        strokeWidth="1.5"
+        strokeWidth="3"
         strokeLinecap="round"
         strokeLinejoin="round"
       />

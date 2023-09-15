@@ -25,17 +25,17 @@ const useAuthContext = () => useContext(AuthContext);
 const AuthProvider: React.FC<PropsWithChildren> = ({ children }) => {
   const [user, setUser] = useState<User | null>(null);
   const logout = async () => await signOut(auth);
-  // const [isLoading, setLoading] = useState(true);
+  const [isLoading, setLoading] = useState(true);
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       setUser(user);
-      // setLoading(false);
+      setLoading(false);
     });
     return () => unsubscribe();
   }, []);
 
-  // if (isLoading) return <Loading />;
+  if (isLoading) return <Loading />;
 
   return (
     <AuthContext.Provider value={{ user, logout }}>{children}</AuthContext.Provider>

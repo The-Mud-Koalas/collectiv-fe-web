@@ -19,7 +19,7 @@ const Chevron: React.FC<SvgProps> = ({ color, dimensions }) => {
       <path
         d="M8 12L16 20L24 12"
         stroke={color}
-        strokeWidth="1.5"
+        strokeWidth="3"
         strokeLinecap="round"
         strokeLinejoin="round"
       />
