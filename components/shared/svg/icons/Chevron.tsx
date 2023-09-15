@@ -3,7 +3,7 @@ import React from "react";
 
 const ORIGINAL_SIDE = 32;
 
-const Back: React.FC<SvgProps> = ({ color, dimensions }) => {
+const Chevron: React.FC<SvgProps> = ({ color, dimensions }) => {
   const { getWidth, getHeight } = getProportionalDimension(
     ORIGINAL_SIDE,
     ORIGINAL_SIDE
@@ -16,21 +16,15 @@ const Back: React.FC<SvgProps> = ({ color, dimensions }) => {
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
     >
-      <circle cx="16" cy="16" r="12" stroke={color} stroke-width="2.66667" />
       <path
-        d="M14.6665 12L10.6665 16L14.6665 20"
+        d="M8 12L16 20L24 12"
         stroke={color}
-        strokeWidth="2.66667"
+        strokeWidth="1.5"
         strokeLinecap="round"
-      />
-      <path
-        d="M10.6665 16L19.9998 16"
-        stroke={color}
-        strokeWidth="2.66667"
-        strokeLinecap="round"
+        strokeLinejoin="round"
       />
     </svg>
   );
 };
 
-export default Back;
+export default Chevron;

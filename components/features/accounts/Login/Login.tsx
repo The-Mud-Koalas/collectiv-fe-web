@@ -6,8 +6,6 @@ import {
   SubmitHandler,
   UseFormReturn,
 } from "react-hook-form";
-import { Inter } from "next/font/google";
-import CollectivLogo from "@/components/shared/svg/logo/CollectivLogo";
 import { Button } from "@/components/shared/elements";
 import AccountNavbar from "../AccountNavbar";
 import Link from "next/link";
@@ -17,6 +15,7 @@ import { numericValidator } from "@/utils/helpers/validator/numericValidator";
 import { useWindowSize } from "@/hooks/display";
 import { inter } from "@/utils/constants/fonts";
 import CollectivLogoHorizontal from "@/components/shared/svg/logo/CollectivLogoHorizontal";
+import { BREAKPOINTS } from "@/utils/constants/breakpoints";
 interface Props {
   form: UseFormReturn<LoginFormFields>;
   onSubmit: SubmitHandler<LoginFormFields>;
@@ -38,7 +37,7 @@ const Login: React.FC<Props> = ({ form, onSubmit, onError, isLoading }) => {
           <div>
             <h1 className="text-2xl font-bold md:text-4xl">Sign In to</h1>
             <div className="bg-secondary-200 w-fit px-1 my-2">
-              <CollectivLogoHorizontal size={windowWidth >= 768 ? "xl" : "lg"} colorCode="slate-950"/>
+              <CollectivLogoHorizontal size={windowWidth >= BREAKPOINTS.md ? "xl" : "lg"} colorCode="slate-950"/>
             </div>
           </div>
           <form
