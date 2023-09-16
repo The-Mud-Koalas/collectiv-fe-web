@@ -8,7 +8,7 @@ interface Props {
 
 const StageToggler: React.FC<Props> = ({ stages }) => {
   return (
-    <div className="bg-slate-100 w-fit p-3 rounded-full flex gap-3 ">
+    <div className="bg-slate-100 w-fit p-2 md:p-3 rounded-full flex gap-1 md:gap-3 ">
       {
         stages.map(
           (stageItem, idx) => <StageButton name={stageItem.name} idx={idx} key={`stage-${idx}`} />

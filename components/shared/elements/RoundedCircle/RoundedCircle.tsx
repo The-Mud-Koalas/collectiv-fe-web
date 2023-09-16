@@ -1,12 +1,10 @@
 import React from 'react'
 
-interface Props extends React.PropsWithChildren {
-    width: number;
-}
 
-const RoundedCircle: React.FC<Props> = ({ children, width }) => {
+
+const RoundedCircle: React.FC<React.PropsWithChildren> = ({ children }) => {
   return (
-    <div className={`w-8 flex justify-center items-center aspect-square rounded-[50%] border-[3px] border-primary-800`}>{ children }</div>
+    <div className={`w-5 h-5 sm:w-8 sm:h-8 flex justify-center items-center rounded-[50%] border-[3px] border-primary-800`}>{ children }</div>
   )
 }
 
