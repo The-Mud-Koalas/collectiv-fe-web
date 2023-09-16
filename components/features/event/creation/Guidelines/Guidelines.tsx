@@ -68,7 +68,7 @@ const USER_GUIDELINES = [
 const Guidelines = () => {
   const { changeStage } = useEventCreationContext();
   return (
-    <>
+    <div className="w-fit flex flex-col gap-6 sm:gap-10">
       <section
         id="gl-title"
         className={`flex text-primary-800 flex-col gap-1 sm:gap-3 ${inter.className} font-bold text-2xl sm:text-5xl`}
@@ -116,7 +116,7 @@ const Guidelines = () => {
           <Button className="font-medium px-3 py-1 text-sm sm:text-base rounded-full bg-primary-800 text-primary-300" onClick={changeStage(1)}>I Agree</Button>
         </div>
       </section>
-    </>
+    </div>
   );
 };
 

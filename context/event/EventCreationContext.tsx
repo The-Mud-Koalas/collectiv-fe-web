@@ -4,7 +4,6 @@ import { UseFormReturn, useForm } from "react-hook-form";
 interface EventCreationFields {
   name: string;
   description?: string;
-  is_project: boolean;
   project_goal?: number;
   goal_measurement_unit?: string;
   min_num_of_volunteers: number;
@@ -17,7 +16,9 @@ interface EventCreationFields {
 interface EventContextProps {
   form: UseFormReturn<EventCreationFields>;
   stage: number;
+  isProject: boolean;
   changeStage: (newStage: number) => () => void;
+  changeIsProject: (newIsProject: boolean) => () => void;
   visitedStage: number[];
 }
 
@@ -31,6 +32,7 @@ const EventCreationProvider: React.FC<React.PropsWithChildren> = ({
   children,
 }) => {
   const form = useForm<EventCreationFields>();
+  const [isProject, setIsProject] = useState(false);
   const [stage, setStage] = useState(0);
   const [visitedStage, setVisitedStage] = useState<number[]>([0]);
 
@@ -41,8 +43,10 @@ const EventCreationProvider: React.FC<React.PropsWithChildren> = ({
     setVisitedStage([...visitedSet]);
   }
 
+  const changeIsProject = (newIsProject: boolean) => () => setIsProject(newIsProject);
+
   return (
-    <EventCreationContext.Provider value={{ form, stage, changeStage, visitedStage }}>
+    <EventCreationContext.Provider value={{ isProject, changeIsProject, form, stage, changeStage, visitedStage }}>
       {children}
     </EventCreationContext.Provider>
   );
