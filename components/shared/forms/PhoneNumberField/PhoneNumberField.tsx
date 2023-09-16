@@ -1,17 +1,11 @@
-import { COLORS } from "@/utils/constants/colors";
 import { Inter } from "next/font/google";
+import { useId } from "react";
+import {
+    Controller, FieldValues,
+    Path
+} from "react-hook-form";
 import { PhoneInput } from "react-international-phone";
 import "react-international-phone/style.css";
-import React, { useState, useId } from "react";
-import { Controller, Control } from "react-hook-form";
-import {
-    FieldValues,
-    Path,
-    RegisterOptions,
-    UseFormRegister,
-} from "react-hook-form";
-import Eye from "../../svg/icons/Eye";
-import { PHONE_REGEX } from "@/utils/constants/regex";
 
 interface Props<T> {
     field: Path<T & FieldValues>;
@@ -44,16 +38,32 @@ const PhoneNumberField = <T extends unknown>({
             >
                 {label}
             </label>
-            <div className="flex flex-row gap-2 justify-between bg-gray-50 text-sm px-3 py-3 rounded-lg border-gray-300 border-[1.5px]">
+            <div className="flex flex-row gap-2 justify-between">
                 <Controller
                     name={field}
                     control={control}
                     render={({ field: { onChange, value } }) => (
                         <PhoneInput
-                            className={`${inter.className} bg-transparent w-full sm:text-base mt-50`}
+                            className={`${inter.className} w-full sm:text-base`}
                             defaultCountry="au"
                             value={value}
                             onChange={onChange}
+                            inputStyle={{
+                                fontSize: "16px",
+                                height: "48px",
+                                borderRadius: "0 10px 10px 0",
+                                borderColor: "gray",
+                                width: "100%",
+                            }}
+                            countrySelectorStyleProps={{
+                                buttonStyle: {
+                                    fontSize: "16px",
+                                    height: "48px",
+                                    borderRadius: "10px 0 0 10px",
+                                    borderColor: "gray",
+                                    padding: "10px",
+                                },
+                            }}
                         />
                     )}
                 />

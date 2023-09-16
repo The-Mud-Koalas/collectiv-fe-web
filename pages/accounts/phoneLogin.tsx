@@ -23,8 +23,9 @@ declare global {
 }
 
 const phoneLoginPage: NextPage = () => {
-    const [showOTPModal, setShowOTPModal] = useState<boolean>(false);
-    const [isLoading, setIsLoading] = useState(false);
+    const [showOTPModal, setShowOTPModal] = useState<boolean>(true);
+    const [isLoading, setIsLoading] = useState<boolean>(false);
+    const [isOTPLoading, setIsOTPLoading] = useState<boolean>(false);
     const [phoneNumber, setPhoneNumber] = useState<string>("");
     const form = useForm<PhoneLoginFormFields>();
 
@@ -38,7 +39,6 @@ const phoneLoginPage: NextPage = () => {
                     // reCAPTCHA solved, allow signInWithPhoneNumber.
                     if (response) {
                         // reCAPTCHA solved, allow signInWithPhoneNumber
-                        //onSignInSubmit();
                         console.log(response);
                         form.reset();
 
@@ -54,7 +54,6 @@ const phoneLoginPage: NextPage = () => {
     const onSubmit: SubmitHandler<PhoneLoginFormFields> = async (data) => {
         setIsLoading(true);
         const { phoneNumber } = data;
-        console.log(phoneNumber);
         setPhoneNumber(phoneNumber);
         signIn(phoneNumber);
     };
@@ -62,7 +61,6 @@ const phoneLoginPage: NextPage = () => {
     const signIn = async (phoneNumber: string) => {
         const appVerifier = window.recaptchaVerifier;
         try {
-            // If the input contains '@', treat it as an email
             await signInWithPhoneNumber(auth, phoneNumber, appVerifier)
                 .then((confirmationResult) => {
                     console.log("Login success", confirmationResult);
@@ -75,7 +73,6 @@ const phoneLoginPage: NextPage = () => {
                 });
             form.reset();
         } catch (error) {
-            console.log("test");
             if (error instanceof FirebaseError) {
                 const errorMessage = formatFirebaseAuthErrorMessage(error);
                 toast.error(errorMessage);
@@ -95,21 +92,21 @@ const phoneLoginPage: NextPage = () => {
     };
 
     const handleOTPChange = (newOTP: string[]) => {
-        let otp = newOTP.join("");
+        const otp = newOTP.join("");
 
         if (otp.length === 6) {
-            console.log("code full");
+            setIsOTPLoading(true);
             // verifu otp
             let confirmationResult = window.confirmationResult;
             confirmationResult
                 .confirm(otp)
                 .then((result: any) => {
                     // User signed in successfully.
+                    setIsOTPLoading(false);
                     let user = result.user;
                     console.log(user);
                     alert("User signed in successfully");
                     setShowOTPModal(false);
-                    // ...
                 })
                 .catch((error: any) => {
                     // User couldn't sign in (bad verification code?)
@@ -121,23 +118,26 @@ const phoneLoginPage: NextPage = () => {
 
     return (
         <>
-            <AccountNavbar />
-            <div className="flex h-screen justify-center items-center">
-                {showOTPModal === true ? (
-                    <OTPpopup
-                        phoneNumber={phoneNumber}
-                        handleOTPChange={handleOTPChange}
-                    />
-                ) : (
-                    <PhoneLogin
-                        form={form}
-                        isLoading={isLoading}
-                        onError={onError}
-                        onSubmit={onSubmit}
-                    />
-                )}
+            <div className="flex flex-col h-screen">
+                <AccountNavbar />
+                <div className="flex justify-center items-center flex-grow">
+                    {showOTPModal === true ? (
+                        <OTPpopup
+                            phoneNumber={phoneNumber}
+                            handleOTPChange={handleOTPChange}
+                            isLoading={isOTPLoading}
+                        />
+                    ) : (
+                        <PhoneLogin
+                            form={form}
+                            isLoading={isLoading}
+                            onError={onError}
+                            onSubmit={onSubmit}
+                        />
+                    )}
 
-                <div id="recaptcha-container"></div>
+                    <div id="recaptcha-container"></div>
+                </div>
             </div>
         </>
     );

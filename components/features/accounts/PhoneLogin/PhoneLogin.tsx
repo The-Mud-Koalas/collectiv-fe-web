@@ -1,20 +1,17 @@
+import { Button } from "@/components/shared/elements";
 import { PhoneNumberField } from "@/components/shared/forms";
+import CollectivLogo from "@/components/shared/svg/CollectivLogo";
+import { useWindowSize } from "@/hooks/display";
+import { Inter } from "next/font/google";
+import Link from "next/link";
 import React from "react";
+import ClipLoader from "react-spinners/ClipLoader";
 import {
     FieldError,
     SubmitErrorHandler,
     SubmitHandler,
     UseFormReturn,
 } from "react-hook-form";
-import { Inter } from "next/font/google";
-import CollectivLogo from "@/components/shared/svg/CollectivLogo";
-import { Button } from "@/components/shared/elements";
-import AccountNavbar from "../AccountNavbar";
-import Link from "next/link";
-import { PHONE_REGEX } from "@/utils/constants/regex";
-import { exactLengthValidator } from "@/utils/helpers/validator/lengthValidator";
-import { numericValidator } from "@/utils/helpers/validator/numericValidator";
-import { useWindowSize } from "@/hooks/display";
 
 interface Props {
     form: UseFormReturn<PhoneLoginFormFields>;
@@ -36,10 +33,9 @@ const PhoneLogin: React.FC<Props> = ({
 
     return (
         <>
-            
-            <div className="grid place-items-center">
+            <div className="grid place-items-center lg:grow">
                 <div
-                    className={`${inter.className} flex flex-col px-5 py-8 md:py-[5%] gap-6 max-w-xl w-full`}
+                    className={`${inter.className} flex flex-col md:py-[5%] gap-6 max-w-xl w-full`}
                 >
                     <div>
                         <h1 className="text-2xl font-bold md:text-4xl">
@@ -67,9 +63,24 @@ const PhoneLogin: React.FC<Props> = ({
                         <Button
                             disabled={isLoading}
                             type="submit"
-                            className="bg-primary-700 flex justify-center items-center p-3 rounded-lg"
+                            className="bg-primary-700 flex justify-center items-center p-3 rounded-full"
                         >
-                            <p className="text-primary-200 font-semibold text-sm">
+                            <ClipLoader
+                                // className="py-3"
+                                color="#BAF67E"
+                                loading={isLoading}
+                                cssOverride={{
+                                    marginRight: "10px",
+                                }}
+                                size={20}
+                                aria-label="Loading Spinner"
+                                data-testid="loader"
+                            />
+                            <p
+                                className={`text-primary-200 font-semibold text-sm ${
+                                    isLoading ? "hidden" : "block"
+                                }`}
+                            >
                                 Sign In
                             </p>
                         </Button>
