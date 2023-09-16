@@ -3,7 +3,6 @@ import { useEventCreationContext } from "@/context/event/EventCreationContext";
 import { COLORS } from "@/utils/constants/colors";
 import { inter } from "@/utils/constants/fonts";
 import { motion } from "framer-motion";
-import { Unlock } from "next/font/google";
 import React from "react";
 
 interface Props {

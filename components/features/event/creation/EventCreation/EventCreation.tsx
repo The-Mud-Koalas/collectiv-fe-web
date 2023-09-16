@@ -1,35 +1,41 @@
-import { useEventCreationContext } from '@/context/event/EventCreationContext'
-import React, { useState } from 'react'
-import StageToggler from './StageToggler';
-import Guidelines from '../Guidelines';
-import EventRegistration from '../EventRegistration';
-import EventCreated from '../EventCreated';
+import { useEventCreationContext } from "@/context/event/EventCreationContext";
+import React, { useState } from "react";
+import StageToggler from "./StageToggler";
+import Guidelines from "../Guidelines";
+import EventRegistration from "../EventRegistration";
+import EventCreated from "../EventCreated";
+import { AnimatePresence, motion } from "framer-motion";
 
 const EVENT_CREATION_STAGES: EventCreationStages[] = [
   {
     name: "Guidelines",
-    StageComponent: Guidelines
+    StageComponent: Guidelines,
   },
   {
     name: "Event Registration",
-    StageComponent: EventRegistration
+    StageComponent: EventRegistration,
   },
   {
     name: "Event Created",
-    StageComponent: EventCreated
-  }
-]
+    StageComponent: EventCreated,
+  },
+];
 
 const EventCreation = () => {
-    const { stage } = useEventCreationContext();
-    const currentStage = EVENT_CREATION_STAGES[stage];
+  const { stage } = useEventCreationContext();
+  const currentStage = EVENT_CREATION_STAGES[stage];
   return (
-    <div className="px-4 py-7 flex flex-col items-center">
-      <StageToggler stages={EVENT_CREATION_STAGES}/>
-      
-      <currentStage.StageComponent/>
-    </div>
-  )
-}
+    <div className="p-7 flex flex-col items-center gap-12">
+      <StageToggler stages={EVENT_CREATION_STAGES} />
 
-export default EventCreation
+      <AnimatePresence mode="wait">
+        <motion.div className="w-full sm:w-fit self-start flex flex-col gap-10" transition={{ type: "tween", duration: 0.2}} key={currentStage.name} initial={{ x: -10, opacity: 0}} animate={{ x: 0, opacity: 1}} exit={{ x: 10, opacity: 0}}>
+          {/* <currentStage.StageComponent /> */}
+          <Guidelines/>
+        </motion.div>
+      </AnimatePresence>
+    </div>
+  );
+};
+
+export default EventCreation;
