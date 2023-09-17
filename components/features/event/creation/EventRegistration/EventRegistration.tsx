@@ -10,10 +10,15 @@ import EventDetails from "./EventDetails";
 
 const EventRegistration = () => {
   const { changeStage, form } = useEventCreationContext();
+  const { handleSubmit } = form;
   const [regisStage, setRegisStage] = useState<number>();
 
   const openRegisStage = (stage: number) => () => setRegisStage(stage);
   const closeStage = () => setRegisStage(0);
+
+  const createEvent = (data: EventCreationFields) => {
+    console.log(data)
+  }
 
   return (
     <>
@@ -27,7 +32,7 @@ const EventRegistration = () => {
           Register your event now!
         </h1>
       </section>
-      <form id="regis-form" className="flex flex-col gap-3 w-full">
+      <form id="regis-form" className="flex flex-col gap-3 w-full" onSubmit={handleSubmit(createEvent)}>
         <p className={`${inter.className} text-primary-800 font-medium text-2xl`}>Please fill out these form below to register your event on our community space.</p>
         <Card className="w-full">
           <EventType currentStage={regisStage} openRegisStage={openRegisStage(1)} closeStage={closeStage}/>

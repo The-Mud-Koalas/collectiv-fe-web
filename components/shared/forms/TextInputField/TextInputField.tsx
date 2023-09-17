@@ -1,5 +1,5 @@
 import { COLORS } from "@/utils/constants/colors";
-import { motion } from "framer-motion";
+import { MotionProps, motion } from "framer-motion";
 import React, { useId } from "react";
 import {
   FieldError,
@@ -11,9 +11,9 @@ import {
 import { FieldErrorMessage } from "../FieldErrorMessage";
 import { inter } from "@/utils/constants/fonts";
 
-interface Props<T> {
+interface Props<T> extends React.ComponentProps<"input"> {
   field: Path<T & FieldValues>;
-  register: UseFormRegister<T & FieldValues>;
+  register?: UseFormRegister<T & FieldValues>;
   registerOptions?: RegisterOptions;
   placeholder?: string;
   label: string;
@@ -35,7 +35,8 @@ const TextInputField = <T extends unknown>({
   registerOptions,
   placeholder,
   label,
-  error
+  error,
+  ...otherProps
 }: Props<T>) => {
   const inputId = useId();
 
@@ -53,7 +54,8 @@ const TextInputField = <T extends unknown>({
         type="text"
         id={inputId}
         placeholder={placeholder}
-        {...register(field, registerOptions ?? {})}
+        {...(register != null ? register(field, registerOptions ?? {}) : {})}
+        {...otherProps as MotionProps}
       />
       { error && <FieldErrorMessage message={error.message}/>}
     </div>
