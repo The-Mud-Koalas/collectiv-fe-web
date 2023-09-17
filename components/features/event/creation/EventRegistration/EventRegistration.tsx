@@ -5,10 +5,16 @@ import { COLORS } from "@/utils/constants/colors";
 import { inter } from "@/utils/constants/fonts";
 import React, { useState } from "react";
 import EventType from "./EventType";
+import { motion } from "framer-motion";
+import EventDetails from "./EventDetails";
 
 const EventRegistration = () => {
   const { changeStage, form } = useEventCreationContext();
-  const [regisStage, setRegisStage] = useState(0);
+  const [regisStage, setRegisStage] = useState<number>();
+
+  const openRegisStage = (stage: number) => () => setRegisStage(stage);
+  const closeStage = () => setRegisStage(0);
+
   return (
     <>
       <section id="regis-header" className="flex flex-col gap-3">
@@ -24,7 +30,9 @@ const EventRegistration = () => {
       <form id="regis-form" className="flex flex-col gap-3 w-full">
         <p className={`${inter.className} text-primary-800 font-medium text-2xl`}>Please fill out these form below to register your event on our community space.</p>
         <Card className="w-full">
-          <EventType currentStage={regisStage}/>
+          <EventType currentStage={regisStage} openRegisStage={openRegisStage(1)} closeStage={closeStage}/>
+          <motion.div className="w-full h-[2px] bg-black my-3"/>
+          <EventDetails currentStage={regisStage} openRegisStage={openRegisStage(2)} closeStage={closeStage}/>
         </Card>
       </form>
     </>

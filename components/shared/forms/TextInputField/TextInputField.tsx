@@ -1,7 +1,6 @@
 import { COLORS } from "@/utils/constants/colors";
 import { motion } from "framer-motion";
-import { Inter } from "next/font/google";
-import React, { useId, useEffect } from "react";
+import React, { useId } from "react";
 import {
   FieldError,
   FieldValues,
@@ -44,7 +43,7 @@ const TextInputField = <T extends unknown>({
     <div className="flex flex-col gap-1">
       <label
         htmlFor={inputId}
-        className={`${inter.className} text-xs sm:text-sm font-medium`}
+        className={`${inter.className} text-sm sm:text-base font-medium`}
       >
         {label}
       </label>

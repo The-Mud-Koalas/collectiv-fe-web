@@ -10,29 +10,32 @@ interface Props extends React.PropsWithChildren {
   description: string[];
   isCollapsibleEnabled: boolean;
   childrenIfCollapsed?: React.ReactNode;
-  initiallyOpened: boolean;
+  isOpened: boolean;
+  openCollapsible: () => void;
+  closeCollapsible: () => void;
 }
 
 const EventCollapsible: React.FC<Props> = ({
   sectionId,
-  initiallyOpened,
+  isOpened,
+  openCollapsible,
+  closeCollapsible,
   sectionTitle,
   children,
   childrenIfCollapsed,
   description,
   isCollapsibleEnabled,
 }) => {
-  const [isOpened, setIsOpened] = useState(initiallyOpened);
   return (
-    <section
+    <motion.section
       id={sectionId}
-      className="flex flex-col gap-4 w-full justify-between relative p-4"
+      className="flex flex-col gap-4 w-full relative py-4 px-16"
     >
       <Button
         disabled={!isCollapsibleEnabled}
         className="absolute right-4 top-4"
         type="button"
-        onClick={() => setIsOpened((prev) => !prev)}
+        onClick={isOpened ? closeCollapsible : openCollapsible}
       >
         <motion.div
           initial={{ rotate: 0 }}
@@ -42,7 +45,7 @@ const EventCollapsible: React.FC<Props> = ({
         </motion.div>
       </Button>
       <h2 className={`${garamond.className} text-5xl`}>{sectionTitle}</h2>
-      <div className="flex gap-8 w-full">
+      <div className="flex gap-[15%] w-full">
         <p className={`${inter.className} text-lg font-medium w-full`}>
           {description.map((desc, idx) =>
             idx % 2 === 0 ? (
@@ -78,7 +81,7 @@ const EventCollapsible: React.FC<Props> = ({
           </AnimatePresence>
         </div>
       </div>
-    </section>
+    </motion.section>
   );
 };
 
