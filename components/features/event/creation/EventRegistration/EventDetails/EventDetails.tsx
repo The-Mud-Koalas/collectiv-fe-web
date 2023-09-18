@@ -3,6 +3,9 @@ import EventCollapsible from "../EventCollapsible";
 import { useEventCreationContext } from "@/context/event/EventCreationContext";
 import { TextInputField } from "@/components/shared/forms";
 import SelectField from "@/components/shared/forms/SelectField";
+import { Button } from "@/components/shared/elements";
+import MultiselectInputField from "@/components/shared/forms/MultiselectInputField";
+import { FieldError } from "react-hook-form";
 
 interface Props {
   currentStage?: number;
@@ -23,7 +26,8 @@ const EventDetails: React.FC<Props> = ({
   currentStage,
 }) => {
   const { form, categories } = useEventCreationContext();
-  const { register, control } = form;
+  const { register, control, formState: {errors}, setValue, getValues } = form;
+  
   return (
     <EventCollapsible
       isCollapsibleEnabled
@@ -34,8 +38,9 @@ const EventDetails: React.FC<Props> = ({
       openCollapsible={openRegisStage}
       closeCollapsible={closeStage}
     >
-      <TextInputField label="Service Name" register={register} field="name" />
-      <SelectField control={control} field="category" label="Service Category" options={categories}/>
+      <TextInputField placeholder="e.g. Potluck Party" label="Service Name" register={register} field="name" />
+      <SelectField rules={{required: "Please select a category."}} control={control} field="category" label="Service Category" options={categories} error={errors.category}/>
+      <MultiselectInputField label="Service Tags" field="tags" control={control} error={errors.tags as FieldError} setValue={setValue} getValue={getValues}/>
     </EventCollapsible>
   );
 };

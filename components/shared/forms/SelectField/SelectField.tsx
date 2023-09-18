@@ -1,5 +1,3 @@
-import { useWindowSize } from "@/hooks/display";
-import { BREAKPOINTS } from "@/utils/constants/breakpoints";
 import { COLORS } from "@/utils/constants/colors";
 import { inter } from "@/utils/constants/fonts";
 import React, { useId } from "react";
@@ -29,9 +27,9 @@ const SelectField = <TForm extends unknown, TOption extends unknown>({
   options,
   error,
   control,
+  rules
 }: Props<TForm, TOption>) => {
   const inputId = useId();
-  const { windowWidth } = useWindowSize();
   return (
     <div className="flex flex-col gap-1">
       <label
@@ -43,6 +41,7 @@ const SelectField = <TForm extends unknown, TOption extends unknown>({
       <Controller
         control={control}
         name={field}
+        rules={rules}
         render={({
           field: { value, ref, onBlur, onChange },
           fieldState: { error },
