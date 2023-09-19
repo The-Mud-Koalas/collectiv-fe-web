@@ -5,6 +5,7 @@ import React, { useEffect } from "react";
 const ProtectedRoute: React.FC<React.PropsWithChildren> = ({ children }) => {
   const { user } = useAppContext();
   const router = useRouter();
+  console.log({ user })
 
   useEffect(() => {
     const url = router.asPath;

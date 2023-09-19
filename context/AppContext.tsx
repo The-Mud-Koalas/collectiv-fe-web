@@ -46,7 +46,7 @@ const AppProvider: React.FC<PropsWithChildren> = ({ children }) => {
     return () => unsubscribe();
   }, []);
 
-  if (!isMapsScriptLoaded && isAuthLoading) return <Loading />;
+  if (!isMapsScriptLoaded || isAuthLoading) return <Loading />;
 
   return (
     <AppContext.Provider value={{ user, logout }}>{children}</AppContext.Provider>
