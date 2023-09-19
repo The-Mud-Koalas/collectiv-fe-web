@@ -26,11 +26,6 @@ interface Props<TForm> {
   placeholder?: string;
 }
 
-interface Option {
-  label: string;
-  value: string;
-}
-
 const components = {
   ...makeAnimate(),
   DropdownIndicator: null,
@@ -61,7 +56,7 @@ const MultiselectInputField = <TForm extends unknown>({
     switch (e.key) {
       case "Enter":
       case "Tab":
-        const fieldValues = getValue()[field] as Option[];
+        const fieldValues = getValue()[field] as SelectOption<string>[];
         if (
           fieldValues != null &&
           fieldValues.some((value) => value.value === inputValue)
@@ -111,6 +106,7 @@ const MultiselectInputField = <TForm extends unknown>({
             }}
             unstyled
             classNames={{
+              placeholder: () => "text-gray-400",
               clearIndicator: (state) =>
               `${state.isFocused && "text-gray-800"} text-gray-300`,
               input: () => "cursor-text",

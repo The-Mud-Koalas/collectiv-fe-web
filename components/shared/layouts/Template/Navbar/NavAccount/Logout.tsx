@@ -1,11 +1,11 @@
-import { useAuthContext } from "@/context/AuthContext";
+import { useAppContext } from "@/context/AppContext";
 import { inter } from "@/utils/constants/fonts";
 import { motion } from "framer-motion";
 import React, { useState } from "react";
 
 const Logout = () => {
   const [isHover, setHover] = useState(false);
-  const { logout } = useAuthContext();
+  const { logout } = useAppContext();
   return (
     <button
       className={`w-full flex flex-col ${inter.className} text-base text-primary-800 font-medium`}

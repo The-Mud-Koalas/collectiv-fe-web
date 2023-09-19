@@ -9,7 +9,7 @@ import {
   Path,
   RegisterOptions,
 } from "react-hook-form";
-import Select, { Options } from "react-select";
+import Select from "react-select";
 import { FieldErrorMessage } from "../FieldErrorMessage";
 
 interface Props<TForm, TOption> extends React.ComponentProps<typeof Select> {
@@ -59,6 +59,7 @@ const SelectField = <TForm extends unknown, TOption extends unknown>({
               }),
             }}
             classNames={{
+              placeholder: () => "text-gray-400",
               container: () => `${inter.className} transition-all rounded-lg`,
               indicatorSeparator: () => "opacity-0",
               control: () =>
