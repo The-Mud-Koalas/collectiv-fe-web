@@ -16,6 +16,7 @@ import usePlacesAutocomplete, {
   getGeocode,
   getLatLng,
 } from "use-places-autocomplete";
+import { FieldErrorMessage } from "../FieldErrorMessage";
 
 interface Props<T> {
   field: Path<T & FieldValues>;
@@ -38,7 +39,7 @@ const LocationField = <T extends unknown>({
   rules,
   error,
   setValue: setFormValue,
-  placeholder
+  placeholder,
 }: Props<T>) => {
   const {
     ready,
@@ -82,8 +83,9 @@ const LocationField = <T extends unknown>({
         control={control}
         name={field}
         rules={rules}
-        render={() => (
+        render={({ field: { ref } }) => (
           <Select
+            ref={ref}
             placeholder={placeholder}
             unstyled
             styles={{
@@ -105,7 +107,7 @@ const LocationField = <T extends unknown>({
               indicatorSeparator: () => "opacity-0",
               control: () =>
                 `flex flex-row gap-2 justify-between bg-gray-50 text-sm sm:text-base px-3 py-3 rounded-lg border-gray-300 border-[1.5px]`,
-              input: () => `outline-none bg-transparent w-full `,
+              input: () => `cursor-text outline-none bg-transparent w-full `,
               valueContainer: () => "bg-transparent cursor-pointer",
               dropdownIndicator: (state) =>
                 `${state.isFocused && "text-gray-800"} text-gray-300`,
@@ -132,6 +134,7 @@ const LocationField = <T extends unknown>({
           />
         )}
       />
+      {error && <FieldErrorMessage message={error.message} />}
     </div>
   );
 };

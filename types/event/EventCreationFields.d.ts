@@ -1,12 +1,12 @@
 interface EventCreationFields {
   name: string;
-  category: string;
+  category: Option<string>;
   description?: string;
   project_goal?: number;
   goal_measurement_unit?: string;
   min_num_of_volunteers: number;
-  start_date_time: string;
-  end_date_time: string;
+  start_date_time: Date;
+  end_date_time: Date;
   location: {
     latitude: number;
     longitude: number;

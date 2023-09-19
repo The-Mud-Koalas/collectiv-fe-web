@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import EventCollapsible from "../EventCollapsible";
 import { useEventCreationContext } from "@/context/event/EventCreationContext";
 import { TextInputField } from "@/components/shared/forms";
@@ -7,6 +7,7 @@ import { Button } from "@/components/shared/elements";
 import MultiselectInputField from "@/components/shared/forms/MultiselectInputField";
 import { FieldError } from "react-hook-form";
 import LocationField from "@/components/shared/forms/LocationField";
+import DateField from "@/components/shared/forms/DateField";
 
 interface Props {
   currentStage?: number;
@@ -35,6 +36,10 @@ const EventDetails: React.FC<Props> = ({
     getValues,
   } = form;
 
+  useEffect(() => {
+    console.log(errors)
+  }, [errors])
+
   return (
     <EventCollapsible
       isCollapsibleEnabled
@@ -46,7 +51,7 @@ const EventDetails: React.FC<Props> = ({
       closeCollapsible={closeStage}
     >
       <TextInputField
-        registerOptions={{required: "This field should not be empty"}}
+        registerOptions={{ required: "This field should not be empty" }}
         placeholder="e.g. Potluck Party"
         label="Service Name"
         register={register}
@@ -78,6 +83,16 @@ const EventDetails: React.FC<Props> = ({
         setValue={setValue}
         control={control}
         error={errors.location as FieldError}
+      />
+      <DateField
+        field="start_date_time"
+        label="Service Date"
+        minDate={new Date()}
+        showTimeInput
+        dateFormat="MMMM d, yyyy hh:mm a"
+        control={control}
+        error={errors.start_date_time as FieldError}
+        rules={{ required: "Please select a start date."}}
       />
       <Button>Test</Button>
     </EventCollapsible>
