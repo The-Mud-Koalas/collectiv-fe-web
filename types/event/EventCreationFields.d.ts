@@ -1,6 +1,6 @@
 interface EventCreationFields {
   name: string;
-  category: Option<string>;
+  category: SelectOption<string>;
   description?: string;
   project_goal?: number;
   goal_measurement_unit?: string;

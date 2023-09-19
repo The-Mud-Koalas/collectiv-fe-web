@@ -1,13 +1,16 @@
-import React, { useEffect } from "react";
+import React from "react";
 import EventCollapsible from "../EventCollapsible";
 import { useEventCreationContext } from "@/context/event/EventCreationContext";
-import { TextInputField } from "@/components/shared/forms";
-import SelectField from "@/components/shared/forms/SelectField";
+import {
+  TextInputField,
+  SelectField,
+  MultiselectInputField,
+  LocationField,
+  DateField,
+} from "@/components/shared/forms";
 import { Button } from "@/components/shared/elements";
-import MultiselectInputField from "@/components/shared/forms/MultiselectInputField";
-import { FieldError } from "react-hook-form";
-import LocationField from "@/components/shared/forms/LocationField";
-import DateField from "@/components/shared/forms/DateField";
+
+import { FieldError, useWatch } from "react-hook-form";
 
 interface Props {
   currentStage?: number;
@@ -27,7 +30,7 @@ const EventDetails: React.FC<Props> = ({
   openRegisStage,
   currentStage,
 }) => {
-  const { form, categories } = useEventCreationContext();
+  const { form, categories, isProject } = useEventCreationContext();
   const {
     register,
     control,
@@ -35,10 +38,13 @@ const EventDetails: React.FC<Props> = ({
     setValue,
     getValues,
   } = form;
+  const startDate = useWatch({
+    control,
+    name: "start_date_time",
+    defaultValue: new Date(),
+  });
 
-  useEffect(() => {
-    console.log(errors)
-  }, [errors])
+  const eventType = isProject ? "Project" : "Initiative";
 
   return (
     <EventCollapsible
@@ -53,7 +59,7 @@ const EventDetails: React.FC<Props> = ({
       <TextInputField
         registerOptions={{ required: "This field should not be empty" }}
         placeholder="e.g. Potluck Party"
-        label="Service Name"
+        label={`${eventType} Name`}
         register={register}
         field="name"
         error={errors.name}
@@ -62,13 +68,13 @@ const EventDetails: React.FC<Props> = ({
         rules={{ required: "Please select a category." }}
         control={control}
         field="category"
-        label="Service Category"
+        label={`${eventType} Category`}
         options={categories}
-        error={errors.category}
+        error={errors.category as FieldError}
       />
       <MultiselectInputField
         placeholder="e.g. Food, Sports"
-        label="Service Tags"
+        label={`${eventType} Tags`}
         field="tags"
         control={control}
         error={errors.tags as FieldError}
@@ -78,7 +84,7 @@ const EventDetails: React.FC<Props> = ({
       <LocationField
         placeholder="e.g. Great Court"
         rules={{ required: "Please select a location." }}
-        label="Service Location"
+        label={`${eventType} Location`}
         field="location"
         setValue={setValue}
         control={control}
@@ -86,13 +92,31 @@ const EventDetails: React.FC<Props> = ({
       />
       <DateField
         field="start_date_time"
-        label="Service Date"
+        label={`${eventType} Start Date`}
         minDate={new Date()}
+        minTime={new Date()}
         showTimeInput
         dateFormat="MMMM d, yyyy hh:mm a"
         control={control}
         error={errors.start_date_time as FieldError}
-        rules={{ required: "Please select a start date."}}
+        rules={{ required: "Please select a start date." }}
+      />
+      <DateField
+        field="end_date_time"
+        label="Service End Date"
+        minDate={new Date()}
+        minTime={new Date()}
+        showTimeInput
+        dateFormat="MMMM d, yyyy hh:mm a"
+        control={control}
+        error={errors.start_date_time as FieldError}
+        rules={{ required: "Please select a start date." }}
+      />
+      <TextInputField
+        field="description"
+        label={`${eventType} Description`}
+        register={register}
+        placeholder="Describe your event's goals and objectives"
       />
       <Button>Test</Button>
     </EventCollapsible>
