@@ -62,7 +62,7 @@ const Login: React.FC<Props> = ({ form, onSubmit, onError, isLoading }) => {
               register={register}
               registerOptions={{
                 validate: {
-                  isNumeric: numericValidator,
+                  isNumeric: numericValidator("Your passcode should be numeric."),
                   isLengthSix: exactLengthValidator(6),
                 },
                 required: "This field should not be left empty.",
