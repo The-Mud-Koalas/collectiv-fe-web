@@ -1,4 +1,4 @@
-const numericValidator = (v: string) =>
-  !isNaN(Number(v)) || "Your passcode should be numeric.";
+const numericValidator = (message: string) => (v: string) =>
+  !isNaN(Number(v)) || message;
 
 export { numericValidator };

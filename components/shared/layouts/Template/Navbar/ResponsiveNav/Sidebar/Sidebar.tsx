@@ -1,7 +1,7 @@
 import React from "react";
 import SidebarElement from "./SidebarElement";
 import SidebarGroup from "./SidebarGroup";
-import { useAuthContext } from "@/context/AuthContext";
+import { useAppContext } from "@/context/AppContext";
 
 interface Props {
   links: NavLinksType;
@@ -23,7 +23,7 @@ const authUrls: NavLinkType[] = [
 ];
 
 const Sidebar: React.FC<Props> = ({ links }) => {
-  const { logout } = useAuthContext();
+  const { logout } = useAppContext();
   return (
     <ul className="bg-primary-800 h-screen w-screen p-8 flex flex-col gap-3">
       {links.map((link) => (

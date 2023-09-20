@@ -1,7 +1,6 @@
 import { COLORS } from "@/utils/constants/colors";
-import { motion } from "framer-motion";
-import { Inter } from "next/font/google";
-import React, { useId, useEffect } from "react";
+import { MotionProps, motion } from "framer-motion";
+import React, { useId } from "react";
 import {
   FieldError,
   FieldValues,
@@ -12,9 +11,9 @@ import {
 import { FieldErrorMessage } from "../FieldErrorMessage";
 import { inter } from "@/utils/constants/fonts";
 
-interface Props<T> {
+interface Props<T> extends React.ComponentProps<"input"> {
   field: Path<T & FieldValues>;
-  register: UseFormRegister<T & FieldValues>;
+  register?: UseFormRegister<T & FieldValues>;
   registerOptions?: RegisterOptions;
   placeholder?: string;
   label: string;
@@ -36,25 +35,27 @@ const TextInputField = <T extends unknown>({
   registerOptions,
   placeholder,
   label,
-  error
+  error,
+  ...otherProps
 }: Props<T>) => {
   const inputId = useId();
 
   return (
-    <div className="flex flex-col gap-1">
+    <div className="flex flex-col gap-1 w-full">
       <label
         htmlFor={inputId}
-        className={`${inter.className} text-xs sm:text-sm font-medium`}
+        className={`${inter.className} text-sm sm:text-base font-medium`}
       >
-        {label}
+        {label} { registerOptions?.required && <span className="text-red-600">*</span>}
       </label>
       <motion.input
         whileFocus={{ boxShadow: `0 0 0 2px ${error == null ? COLORS.secondary[400] : COLORS.danger[400]}` }}
-        className={`${inter.className} outline-none bg- bg-gray-50 text-sm sm:text-base px-3 py-3 rounded-lg border-gray-300 border-[1.5px]`}
+        className={`${inter.className} outline-none bg-gray-50 text-sm sm:text-base px-3 py-3 rounded-lg border-gray-300 border-[1.5px]`}
         type="text"
         id={inputId}
         placeholder={placeholder}
-        {...register(field, registerOptions ?? {})}
+        {...(register != null ? register(field, registerOptions ?? {}) : {})}
+        {...otherProps as MotionProps}
       />
       { error && <FieldErrorMessage message={error.message}/>}
     </div>
