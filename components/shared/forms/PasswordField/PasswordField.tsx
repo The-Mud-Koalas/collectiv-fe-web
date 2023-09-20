@@ -1,5 +1,4 @@
 import { COLORS } from "@/utils/constants/colors";
-import { Inter } from "next/font/google";
 import React, { useState, useId } from "react";
 import {
   FieldError,
@@ -14,9 +13,9 @@ import EyeClosed from "../../svg/icons/EyeClosed";
 import { inter } from "@/utils/constants/fonts";
 import { FieldErrorMessage } from "../FieldErrorMessage";
 
-interface Props<T> {
+interface Props<T> extends React.ComponentProps<"input"> {
   field: Path<T & FieldValues>;
-  register: UseFormRegister<T & FieldValues>;
+  register?: UseFormRegister<T & FieldValues>;
   registerOptions?: RegisterOptions;
   label: string;
   error?: FieldError;
@@ -24,7 +23,9 @@ interface Props<T> {
 
 const inputFieldVariant = (error?: FieldError) => ({
   focus: {
-    boxShadow: `0px 0px 0px 2px ${error == null ? COLORS.secondary[400] : COLORS.danger[400]}`,
+    boxShadow: `0px 0px 0px 2px ${
+      error == null ? COLORS.secondary[400] : COLORS.danger[400]
+    }`,
   },
   blur: {
     boxShadow: "1px 1px 1px 1px rgba(255,255,255,0.01)",
@@ -45,6 +46,7 @@ const PasswordField = <T extends unknown>({
   registerOptions,
   label,
   error,
+  ...otherProps
 }: Props<T>) => {
   const [isVisible, setIsVisible] = useState(false);
   const [isFocus, setIsFocus] = useState(false);
@@ -56,22 +58,28 @@ const PasswordField = <T extends unknown>({
         htmlFor={inputId}
         className={`${inter.className} text-xs sm:text-sm font-medium`}
       >
-        {label}
+        {label} { registerOptions?.required && <span className="text-red-600">*</span>}
       </label>
       <motion.div
         variants={inputFieldVariant(error)}
         animate={isFocus ? "focus" : "blur"}
-        className="flex flex-row gap-2 justify-between bg-gray-50 text-sm px-3 py-3 rounded-lg border-gray-300 border-[1.5px]"
+        className="flex flex-row gap-2 justify-between bg-gray-50 px-3 py-3 text-sm sm:text-base rounded-lg border-gray-300 border-[1.5px]"
       >
         <input
           onFocus={() => setIsFocus(true)}
-          className={`${inter.className} outline-none bg-transparent w-full sm:text-base`}
+          className={`${inter.className} outline-none bg-transparent w-full `}
           type={isVisible ? "text" : "password"}
           id={inputId}
-          {...register(field, {
-            ...registerOptions,
-            onBlur: () => setIsFocus(false),
-          })}
+          {...(register != null
+            ? register(
+                field,
+                {
+                  ...registerOptions,
+                  onBlur: () => setIsFocus(false),
+                } ?? {}
+              )
+            : {})}
+          {...otherProps}
         />
         <button type="button" onClick={() => setIsVisible((prev) => !prev)}>
           {isVisible ? (

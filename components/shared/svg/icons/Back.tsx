@@ -20,14 +20,14 @@ const Back: React.FC<SvgProps> = ({ color, dimensions }) => {
       <path
         d="M14.6665 12L10.6665 16L14.6665 20"
         stroke={color}
-        stroke-width="2.66667"
-        stroke-linecap="round"
+        strokeWidth="2.66667"
+        strokeLinecap="round"
       />
       <path
         d="M10.6665 16L19.9998 16"
         stroke={color}
-        stroke-width="2.66667"
-        stroke-linecap="round"
+        strokeWidth="2.66667"
+        strokeLinecap="round"
       />
     </svg>
   );

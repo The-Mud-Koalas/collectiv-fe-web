@@ -1,8 +1,7 @@
-"use client";
 import AccountNavbar from "@/components/features/accounts/AccountNavbar";
 import PhoneLogin from "@/components/features/accounts/PhoneLogin";
 import OTPpopup from "@/components/features/accounts/PhoneLogin/OTPpopup";
-import { auth } from "@/config/firebase";
+import { auth } from "@/lib/firebase";
 import { formatFirebaseAuthErrorMessage } from "@/utils/helpers/formatting/formatFirebaseAuthErrorMessage";
 import { FirebaseError } from "firebase/app";
 import { signInWithPhoneNumber, RecaptchaVerifier } from "firebase/auth";
@@ -22,8 +21,8 @@ declare global {
     }
 }
 
-const phoneLoginPage: NextPage = () => {
-    const [showOTPModal, setShowOTPModal] = useState<boolean>(true);
+const PhoneLoginPage: NextPage = () => {
+    const [showOTPModal, setShowOTPModal] = useState<boolean>(false);
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [isOTPLoading, setIsOTPLoading] = useState<boolean>(false);
     const [phoneNumber, setPhoneNumber] = useState<string>("");
@@ -143,4 +142,4 @@ const phoneLoginPage: NextPage = () => {
     );
 };
 
-export default phoneLoginPage;
+export default PhoneLoginPage;

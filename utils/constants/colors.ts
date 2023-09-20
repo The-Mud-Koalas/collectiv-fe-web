@@ -30,6 +30,7 @@ export const COLORS = {
   },
 
   gray: {
+    50: "#f9fafb",
     200: "#e5e7eb",
     300: "#d1d5db",
     400: "#9ca3af",

@@ -17,6 +17,7 @@ import Link from "next/link";
 import { useWindowSize } from "@/hooks/display";
 import { inter } from "@/utils/constants/fonts";
 import CollectivLogoHorizontal from "@/components/shared/svg/logo/CollectivLogoHorizontal";
+import { BREAKPOINTS } from "@/utils/constants/breakpoints";
 
 interface Props {
   form: UseFormReturn<SignupFormFields>;
@@ -39,7 +40,7 @@ const Signup: React.FC<Props> = ({ form, onSubmit, onError, isLoading }) => {
           <div>
             <h1 className="text-2xl font-semibold md:text-4xl">Register to</h1>
             <div className="bg-secondary-200 w-fit px-1 my-2">
-              <CollectivLogoHorizontal size={windowWidth >= 768 ? "xl" : "lg"} colorCode="slate-950"/>
+              <CollectivLogoHorizontal size={windowWidth >= BREAKPOINTS.md ? "xl" : "lg"} colorCode="slate-950"/>
             </div>
           </div>
           <form
@@ -68,7 +69,7 @@ const Signup: React.FC<Props> = ({ form, onSubmit, onError, isLoading }) => {
               register={register}
               registerOptions={{
                 validate: {
-                  isNumeric: numericValidator,
+                  isNumeric: numericValidator("Your passcode should be numeric"),
                   isLengthSix: exactLengthValidator(6),
                 },
                 required: "This field should not be left empty.",

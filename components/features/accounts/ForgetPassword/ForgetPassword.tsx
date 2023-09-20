@@ -1,6 +1,5 @@
 import React from "react";
 import AccountNavbar from "../AccountNavbar";
-import Back from "@/components/shared/svg/icons/Back";
 import { COLORS } from "@/utils/constants/colors";
 import Link from "next/link";
 import { SubmitErrorHandler, SubmitHandler, useForm } from "react-hook-form";
@@ -8,6 +7,7 @@ import { TextInputField } from "@/components/shared/forms";
 import { EMAIL_REGEX } from "@/utils/constants/regex";
 import { Button } from "@/components/shared/elements";
 import { inter } from "@/utils/constants/fonts";
+import { Back } from "@/components/shared/svg/icons";
 
 interface FormFields {
   email: string;

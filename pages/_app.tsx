@@ -3,7 +3,7 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import type { AppProps } from "next/app";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { AuthProvider } from "@/context/AuthContext";
+import { AppProvider } from "@/context/AppContext";
 import { NextComponentType } from "next/types";
 import { ProtectedRoute } from "@/components/shared/layouts";
 
@@ -16,7 +16,7 @@ const queryClient = new QueryClient();
 export default function App({ Component, pageProps }: AuthAppProps) {
   return (
     <>
-      <AuthProvider>
+      <AppProvider>
         <div className="bg-secondary min-h-screen">
           <QueryClientProvider client={queryClient}>
             {Component.auth ? (
@@ -28,7 +28,7 @@ export default function App({ Component, pageProps }: AuthAppProps) {
             )}
           </QueryClientProvider>
         </div>
-      </AuthProvider>
+      </AppProvider>
     </>
   );
 }

@@ -1,3 +1,4 @@
+import { inter } from "@/utils/constants/fonts";
 import { Inter } from "next/font/google";
 import { useId } from "react";
 import {
@@ -13,8 +14,6 @@ interface Props<T> {
     control: any;
 }
 
-const inter = Inter({ subsets: ["latin"] });
-
 /**
  * A phone number input field component with label
  *
@@ -29,7 +28,7 @@ const PhoneNumberField = <T extends unknown>({
     control,
 }: Props<T>) => {
     const inputId = useId();
-    //const [phone, setPhone] = useState<string>("");
+
     return (
         <div className="flex flex-col gap-1">
             <label

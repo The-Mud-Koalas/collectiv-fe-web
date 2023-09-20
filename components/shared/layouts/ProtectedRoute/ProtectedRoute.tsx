@@ -1,10 +1,11 @@
-import { useAuthContext } from "@/context/AuthContext";
+import { useAppContext } from "@/context/AppContext";
 import { useRouter } from "next/router";
 import React, { useEffect } from "react";
 
 const ProtectedRoute: React.FC<React.PropsWithChildren> = ({ children }) => {
-  const { user } = useAuthContext();
+  const { user } = useAppContext();
   const router = useRouter();
+  console.log({ user })
 
   useEffect(() => {
     const url = router.asPath;

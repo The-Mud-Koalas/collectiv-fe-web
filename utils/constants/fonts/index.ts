@@ -1,7 +1,8 @@
-import { Inter } from "next/font/google";
+import { Inter, Inter_Tight } from "next/font/google";
 import localFont from "next/font/local";
 
 const inter = Inter({ subsets: ["latin"] });
+const interItalics = Inter_Tight({ subsets: ["latin"], style: ["italic"] })
 const garamond = localFont({
   src: [
     {
@@ -14,7 +15,12 @@ const garamond = localFont({
       weight: "700",
       style: "normal",
     },
+    {
+      path: "./AppleGaramond-BoldItalic.ttf",
+      weight: "700",
+      style: "italic"
+    }
   ],
 });
 
-export { inter, garamond }
+export { inter, interItalics, garamond }
