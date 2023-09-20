@@ -7,5 +7,6 @@ import Locked from "./Locked";
 import Unlocked from "./Unlocked";
 import Location from "./Location";
 import Calendar from "./Calendar";
+import Upload from "./Upload";
 
-export { Back, Eye, EyeClosed, Arrow, Chevron, Unlocked, Locked, Location, Calendar }
+export { Back, Upload, Eye, EyeClosed, Arrow, Chevron, Unlocked, Locked, Location, Calendar }

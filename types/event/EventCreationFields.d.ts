@@ -13,4 +13,8 @@ interface EventCreationFields {
     name: string;
   };
   tags: string[];
+  image: {
+    url: string;
+    file: File;
+  }
 }

@@ -4,6 +4,11 @@ import { useQuery } from "@tanstack/react-query";
 import React, { createContext, useContext, useState } from "react";
 import { UseFormReturn, useForm } from "react-hook-form";
 
+interface Image {
+  file: File;
+  url: string;
+}
+
 interface EventContextProps {
   form: UseFormReturn<EventCreationFields>;
   stage: number;
@@ -11,7 +16,7 @@ interface EventContextProps {
   changeStage: (newStage: number) => () => void;
   changeIsProject: (newIsProject: boolean) => () => void;
   visitedStage: number[];
-  categories: CategoryOptions[]
+  categories: CategoryOptions[];
 }
 
 const EventCreationContext = createContext<EventContextProps>(
@@ -38,7 +43,7 @@ const EventCreationProvider: React.FC<React.PropsWithChildren> = ({
 
     const visitedSet = new Set(visitedStage).add(newStage);
     setVisitedStage([...visitedSet]);
-  }
+  };
 
   const changeIsProject = (newIsProject: boolean) => () => setIsProject(newIsProject);
 

@@ -58,7 +58,7 @@ const PasswordField = <T extends unknown>({
         htmlFor={inputId}
         className={`${inter.className} text-xs sm:text-sm font-medium`}
       >
-        {label}
+        {label} { registerOptions?.required && <span className="text-red-600">*</span>}
       </label>
       <motion.div
         variants={inputFieldVariant(error)}

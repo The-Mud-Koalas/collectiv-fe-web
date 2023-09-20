@@ -7,6 +7,7 @@ import React, { useState } from "react";
 import EventType from "./EventType";
 import { motion } from "framer-motion";
 import EventDetails from "./EventDetails";
+import Volunteers from "./Volunteers";
 
 const EventRegistration = () => {
   const { changeStage, form } = useEventCreationContext();
@@ -38,6 +39,8 @@ const EventRegistration = () => {
           <EventType currentStage={regisStage} openRegisStage={openRegisStage(1)} closeStage={closeStage}/>
           <motion.div className="w-full h-[2px] bg-black my-3"/>
           <EventDetails currentStage={regisStage} openRegisStage={openRegisStage(2)} closeStage={closeStage}/>
+          <motion.div className="w-full h-[2px] bg-black my-3"/>
+          <Volunteers currentStage={regisStage} openRegisStage={openRegisStage(3)} closeStage={closeStage}/>
         </Card>
       </form>
     </>

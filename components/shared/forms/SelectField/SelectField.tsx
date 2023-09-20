@@ -31,12 +31,12 @@ const SelectField = <TForm extends unknown, TOption extends unknown>({
 }: Props<TForm, TOption>) => {
   const inputId = useId();
   return (
-    <div className="flex flex-col gap-1">
+    <div className="flex flex-col gap-1 w-full">
       <label
         htmlFor={inputId}
         className={`${inter.className} text-sm sm:text-base font-medium`}
       >
-        {label}
+        {label} { rules?.required && <span className="text-red-600">*</span>}
       </label>
       <Controller
         control={control}
@@ -47,6 +47,7 @@ const SelectField = <TForm extends unknown, TOption extends unknown>({
           fieldState: { error },
         }) => (
           <Select
+            id={inputId}
             unstyled
             styles={{
               container: (baseStyle, state) => ({

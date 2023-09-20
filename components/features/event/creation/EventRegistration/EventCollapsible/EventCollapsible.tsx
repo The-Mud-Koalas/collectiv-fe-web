@@ -45,7 +45,7 @@ const EventCollapsible: React.FC<Props> = ({
         </motion.div>
       </Button>
       <h2 className={`${garamond.className} text-5xl`}>{sectionTitle}</h2>
-      <div className="flex gap-[15%] w-full">
+      <div className="flex flex-col md:flex-row gap-[15%] w-full">
         <p className={`${inter.className} text-lg font-medium w-full`}>
           {description.map((desc, idx) =>
             idx % 2 === 0 ? (

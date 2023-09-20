@@ -64,7 +64,7 @@ const DateField = <T extends unknown>({
         htmlFor={inputId}
         className={`${inter.className} text-sm sm:text-base font-medium`}
       >
-        {label}
+        {label} { rules?.required && <span className="text-red-600">*</span>}
       </label>
       <motion.div
         variants={inputFieldVariant(error)}
@@ -79,6 +79,7 @@ const DateField = <T extends unknown>({
             field: { value, ref: fieldRef, onBlur, onChange }
           }) => (
             <DatePicker
+              id={inputId}
               {...otherProps}
               onChange={onChange}
               onFocus={() => setFocus(true)}

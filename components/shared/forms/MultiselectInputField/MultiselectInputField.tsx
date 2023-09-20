@@ -81,7 +81,7 @@ const MultiselectInputField = <TForm extends unknown>({
         htmlFor={inputId}
         className={`${inter.className} text-sm sm:text-base font-medium`}
       >
-        {label}
+        {label} { rules?.required && <span className="text-red-600">*</span> }
       </label>
       <Controller
         control={control}
@@ -89,6 +89,7 @@ const MultiselectInputField = <TForm extends unknown>({
         rules={rules}
         render={({ field: { value } }) => (
           <Creatable
+            id={inputId}
             placeholder={placeholder}
             styles={{
               container: (baseStyle, state) => ({
@@ -108,7 +109,7 @@ const MultiselectInputField = <TForm extends unknown>({
             classNames={{
               placeholder: () => "text-gray-400",
               clearIndicator: (state) =>
-              `${state.isFocused && "text-gray-800"} text-gray-300`,
+                `${state.isFocused && "text-gray-800"} text-gray-300`,
               input: () => "cursor-text",
               valueContainer: () => "gap-1",
               multiValue: () =>

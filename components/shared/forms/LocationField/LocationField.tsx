@@ -77,7 +77,7 @@ const LocationField = <T extends unknown>({
         htmlFor={inputId}
         className={`${inter.className} text-sm sm:text-base font-medium`}
       >
-        {label}
+        {label} { rules?.required && <span className="text-red-600">*</span>}
       </label>
       <Controller
         control={control}
@@ -85,6 +85,7 @@ const LocationField = <T extends unknown>({
         rules={rules}
         render={({ field: { ref } }) => (
           <Select
+            id={inputId}
             ref={ref}
             placeholder={placeholder}
             unstyled
