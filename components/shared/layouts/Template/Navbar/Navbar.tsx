@@ -42,7 +42,7 @@ const ELEMENTS: NavLinksType = [
 const Navbar = () => {
   const { windowWidth } = useWindowSize();
   return (
-    <nav className="fixed w-full sm:static h-[60px] flex pl-7 pr-7 md:pr-14 py-3 items-center bg-primary-300 justify-between">
+    <nav className="fixed w-full sm:static h-[60px] flex pl-7 pr-7 md:pr-14 py-3 items-center bg-primary-300 justify-between z-20">
       <Link href="/">
         <CollectivLogoHorizontal size="md" colorCode="primary-800" />
       </Link>
