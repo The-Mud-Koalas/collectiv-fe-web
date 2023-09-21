@@ -6,6 +6,7 @@ interface Props {
     currentStage?: number;
     openRegisStage: () => void;
     closeStage: () => void;
+    visitedStages: React.MutableRefObject<Set<number>>;
   }
 
 const VOLUNTEERS_DESCRIPTION = [
@@ -18,18 +19,19 @@ const Volunteers: React.FC<Props> = ({
   closeStage,
   openRegisStage,
   currentStage,
+  visitedStages
 }) => {
   return (
     <EventCollapsible
-      isCollapsibleEnabled
+      isCollapsibleEnabled={Math.max(...visitedStages.current) + 1 >= 3}
       sectionId="volunteers"
       sectionTitle="Volunteers"
       description={VOLUNTEERS_DESCRIPTION}
-      isOpened={currentStage === 1}
+      isOpened={currentStage === 3}
       openCollapsible={openRegisStage}
       closeCollapsible={closeStage}
     >
-      
+        <p>Totem Poles</p>
     </EventCollapsible>
   )
 }

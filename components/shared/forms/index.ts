@@ -1,3 +1,4 @@
+import AsyncSelectField from "./AsyncSelectField";
 import DateField from "./DateField";
 import FileUploadField from "./FileUploadField";
 import LocationField from "./LocationField";
@@ -7,4 +8,4 @@ import PhoneNumberField from "./PhoneNumberField";
 import SelectField from "./SelectField";
 import TextInputField from "./TextInputField";
 
-export { FileUploadField, PhoneNumberField, TextInputField, PasswordField, DateField, LocationField, SelectField, MultiselectInputField }
+export { FileUploadField, AsyncSelectField, PhoneNumberField, TextInputField, PasswordField, DateField, LocationField, SelectField, MultiselectInputField }
