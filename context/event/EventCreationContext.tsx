@@ -3,14 +3,8 @@ import { getServiceCategories } from "@/utils/fetchers/event/creation";
 import { useQuery } from "@tanstack/react-query";
 import React, { createContext, useContext, useState } from "react";
 import { UseFormReturn, useForm } from "react-hook-form";
-
-interface Image {
-  file: File;
-  url: string;
-}
-
 interface EventContextProps {
-  form: UseFormReturn<EventCreationFields>;
+  eventDetailsForm: UseFormReturn<EventCreationFields>;
   stage: number;
   isProject: boolean;
   changeStage: (newStage: number) => () => void;
@@ -28,7 +22,7 @@ const useEventCreationContext = () => useContext(EventCreationContext);
 const EventCreationProvider: React.FC<React.PropsWithChildren> = ({
   children,
 }) => {
-  const form = useForm<EventCreationFields>();
+  const eventDetailsForm = useForm<EventCreationFields>();
   const { data: categories, isLoading, isError } = useQuery({
     queryKey: ["categories"],
     queryFn: getServiceCategories,
@@ -51,7 +45,7 @@ const EventCreationProvider: React.FC<React.PropsWithChildren> = ({
   if (isError) return <></>;
 
   return (
-    <EventCreationContext.Provider value={{ isProject, changeIsProject, form, stage, changeStage, visitedStage, categories }}>
+    <EventCreationContext.Provider value={{ isProject, changeIsProject, eventDetailsForm, stage, changeStage, visitedStage, categories }}>
       {children}
     </EventCreationContext.Provider>
   );
