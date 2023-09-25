@@ -39,7 +39,7 @@ const ForgetPassword: FC<Props> = ({ onSubmit, onError, isLoading }) => {
                         className={`flex flex-col px-5 py-8 gap-6 ${inter.className} md:py-[5%] max-w-xl w-full`}
                     >
                         <div className="flex flex-col gap-2">
-                            <Link href="/accounts/login">
+                            <Link href="/accounts/login" className="mb-5">
                                 <Back
                                     dimensions={{ width: 32 }}
                                     color={COLORS.primary[700]}
@@ -48,13 +48,12 @@ const ForgetPassword: FC<Props> = ({ onSubmit, onError, isLoading }) => {
                             <h1 className="text-3xl md:text-4xl font-semibold">
                                 Forgot Password
                             </h1>
-                            <p className="text-sm md:text-base font-medium">
-                                Enter the email you used when you joined and
-                                we&apos;ll{" "}
-                                <span className="bg-tertiary">
-                                    send you a link to reset
-                                </span>{" "}
-                                your password.
+                            <p className="text-sm md:text-base font-small">
+                                Enter the phone number or email you used when
+                                you joined and we’ll send you{" "}
+                                <span className="bg-pink-200">
+                                    &nbsp;link to reset your password.
+                                </span>
                             </p>
                         </div>
 
@@ -64,7 +63,7 @@ const ForgetPassword: FC<Props> = ({ onSubmit, onError, isLoading }) => {
                         >
                             <TextInputField
                                 field="email"
-                                label="Email"
+                                label="Email / Phone Number"
                                 register={register}
                                 registerOptions={{
                                     pattern: {
