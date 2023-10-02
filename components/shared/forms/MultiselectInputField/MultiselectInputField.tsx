@@ -14,8 +14,9 @@ import {
 import Creatable from "react-select/creatable";
 import makeAnimate from "react-select/animated";
 import { COLORS } from "@/utils/constants/colors";
+import { QueryFunction } from "@tanstack/react-query";
 
-interface Props<TForm> {
+interface Props<TForm, TOption> {
   field: Path<TForm & FieldValues>;
   label: string;
   control?: Control<TForm & FieldValues>;
@@ -23,6 +24,7 @@ interface Props<TForm> {
   error?: FieldError;
   setValue: UseFormSetValue<TForm & FieldValues>;
   getValue: UseFormGetValues<TForm & FieldValues>;
+  fetcher?: QueryFunction<SelectOption<TOption>[], string[], any>;
   placeholder?: string;
 }
 
@@ -31,7 +33,7 @@ const components = {
   DropdownIndicator: null,
 };
 
-const MultiselectInputField = <TForm extends unknown>({
+const MultiselectInputField = <TForm extends unknown, TOption extends unknown>({
   field,
   label,
   error,
@@ -40,7 +42,7 @@ const MultiselectInputField = <TForm extends unknown>({
   setValue,
   getValue,
   placeholder,
-}: Props<TForm>) => {
+}: Props<TForm, TOption>) => {
   const inputId = useId();
   const [inputValue, setInputValue] = useState("");
   placeholder ??= "";

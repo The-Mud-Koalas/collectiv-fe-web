@@ -23,6 +23,7 @@ import { inter } from "@/utils/constants/fonts";
 import { getProjectUnitGoals } from "@/utils/fetchers/event/creation";
 import { Arrow } from "@/components/shared/svg/icons";
 import { COLORS } from "@/utils/constants/colors";
+import useUpload from "@/hooks/utils/useUpload";
 
 interface Props {
   currentStage?: number;
@@ -56,6 +57,9 @@ const EventDetails: React.FC<Props> = ({
     categories,
     isProject,
   } = useEventCreationContext();
+
+  const { isLoading, uploadFile, uploadProgress } = useUpload({ endpoint: "/event/image/upload", method: "POST" })
+
   const {
     register,
     control,
@@ -89,8 +93,8 @@ const EventDetails: React.FC<Props> = ({
   const onDrop = async (file: File[]) => {
     const url = URL.createObjectURL(file[0]);
     const imageObject = { url, file: file[0] };
+    
     setValue("image", imageObject);
-    clearErrors("image");
   };
 
   const onSuccess: SubmitHandler<EventCreationFields> = (data) => {
@@ -235,8 +239,8 @@ const EventDetails: React.FC<Props> = ({
           error={errors.image as FieldError}
           field="image"
           file={image}
-          uploadProgress={50}
-          isUploading={false}
+          uploadProgress={uploadProgress}
+          isUploading={isLoading}
           onDrop={onDrop}
           label={`${eventType} Image`}
           description="Upload your event image here"
