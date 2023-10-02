@@ -56,7 +56,6 @@ const getProjectUnitGoals: QueryFunction<
 const createEvent = async (values: NewEventFields) => {
   const { eventValues, volunteerValues, isProject } = values;
 
-  console.log(volunteerValues)
   const idToken = await auth.currentUser?.getIdToken();
 
   const newLocation = await postRequest({
