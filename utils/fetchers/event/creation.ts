@@ -1,4 +1,4 @@
-import { postRequest } from "@/lib/fetch";
+import { getRequest, postRequest } from "@/lib/fetch";
 import { auth } from "@/lib/firebase";
 import { QueryFunction } from "@tanstack/react-query";
 
@@ -22,13 +22,25 @@ const getServiceCategories = async () => {
   return CATEGORIES.map((cat) => ({ value: cat.id, label: cat.name }));
 };
 
+const getTags: QueryFunction<SelectOption<string>[], string[], any> = async ({
+  queryKey,
+}) => {
+  const [_, __, searchParam] = queryKey;
+  const idToken = await auth.currentUser?.getIdToken();
+
+  const result = await getRequest({ endpoint: "/event/tags", token: idToken });
+  return result.map((tag: { id: string; name: string }) => ({
+    value: tag.name,
+    label: tag.name,
+  }));
+};
+
 const getProjectUnitGoals: QueryFunction<
   SelectOption<string>[],
   string[],
   any
 > = async ({ queryKey }) => {
   const [_, __, searchParam] = queryKey;
-  console.log(searchParam);
 
   const UNITS = [
     {
@@ -60,13 +72,16 @@ const createEvent = async (values: NewEventFields) => {
 
   const newLocation = await postRequest({
     endpoint: "/space/get-or-create",
-    body: {...eventValues.location, name: eventValues.location.name.split(",")[0]},
+    body: {
+      ...eventValues.location,
+      name: eventValues.location.name.split(",")[0],
+    },
     token: idToken,
   });
 
-  const tagList: { id: string, name: string }[] = await postRequest({
+  const tagList: { id: string; name: string }[] = await postRequest({
     endpoint: "/event/tags/get-or-create/multiple",
-    body: { tags: eventValues.tags.map(tag => tag.value) },
+    body: { tags: eventValues.tags.map((tag) => tag.value) },
     token: idToken,
   });
 
@@ -80,17 +95,16 @@ const createEvent = async (values: NewEventFields) => {
     start_date_time: eventValues.start_date_time.toISOString(),
     end_date_time: eventValues.end_date_time.toISOString(),
     location_id: newLocation.id,
-    tags: tagList.map(tag => tag.id)
+    tags: tagList.map((tag) => tag.id),
   };
 
   const newEvent = await postRequest({
     endpoint: "/event/create",
     body: eventFields,
-    token: idToken
+    token: idToken,
   });
 
   return newEvent;
-
 };
 
-export { getServiceCategories, getProjectUnitGoals, createEvent };
+export { getServiceCategories, getProjectUnitGoals, createEvent, getTags };

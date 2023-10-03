@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import EventCollapsible from "../EventCollapsible";
 import { useEventCreationContext } from "@/context/event/EventCreationContext";
 import { TextInputField } from "@/components/shared/forms";
@@ -12,6 +12,7 @@ import { createEvent } from "@/utils/fetchers/event/creation";
 import { SubmitHandler } from "react-hook-form";
 import useUpload from "@/hooks/utils/useUpload";
 import { auth } from "@/lib/firebase";
+import VolunteerToggle from "./VolunteerToggle";
 
 interface Props {
   currentStage?: number;
@@ -38,6 +39,8 @@ const Volunteers: React.FC<Props> = ({
     mutationFn: createEvent,
     onSuccess: () => {},
   });
+
+  const [needVolunteers, setNeedVolunteers] = useState<boolean | null>(null);
   const { isLoading: isUploading, uploadFile } = useUpload({endpoint: "/event/image/upload", method: "POST"});
 
   const onSubmit: SubmitHandler<VolunteerFields> = async (volunteerValues) => {
@@ -57,7 +60,7 @@ const Volunteers: React.FC<Props> = ({
     formData.append("event_image", image.file)
     await uploadFile(formData, idToken);
     
-    changeStage(3)();
+    changeStage(2)();
    
   };
   return (
@@ -70,10 +73,16 @@ const Volunteers: React.FC<Props> = ({
       openCollapsible={openRegisStage}
       closeCollapsible={closeStage}
     >
+      <div className="mb-4">
+        <h4 className={`${inter.className} font-semibold`}>Do you need any volunteers?</h4>
+        <VolunteerToggle isSelected={needVolunteers === true} label="Yes" onClick={() => setNeedVolunteers(true)}/>
+        <VolunteerToggle isSelected={needVolunteers === false} label="No" onClick={() => setNeedVolunteers(false)}/>
+      </div>
       <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
         <TextInputField
+          disabled={needVolunteers !== true}
           field="min_num_of_volunteers"
-          label="How many volunteers do you need?"
+          label="Number of volunteers needed"
           register={register}
           registerOptions={{
             validate: {

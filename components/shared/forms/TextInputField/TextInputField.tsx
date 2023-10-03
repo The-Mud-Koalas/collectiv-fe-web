@@ -50,7 +50,7 @@ const TextInputField = <T extends unknown>({
       </label>
       <motion.input
         whileFocus={{ boxShadow: `0 0 0 2px ${error == null ? COLORS.secondary[400] : COLORS.danger[400]}` }}
-        className={`${inter.className} outline-none bg-gray-50 text-sm sm:text-base px-3 py-3 rounded-lg border-gray-300 border-[1.5px]`}
+        className={`${inter.className} outline-none bg-gray-50 text-sm sm:text-base px-3 py-3 rounded-lg border-gray-300 border-[1.5px] disabled:text-gray-400`}
         type="text"
         id={inputId}
         placeholder={placeholder}

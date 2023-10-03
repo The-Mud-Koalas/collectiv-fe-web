@@ -20,13 +20,13 @@ const EventTypeChoice: React.FC<Props> = ({
     <Button
       onClick={clickHandler}
       type="button"
-      className="bg-slate-200 border-2 p-3 border-black rounded-xl"
+      className="bg-slate-200 border-2 p-4 sm:p-3 border-black rounded-xl"
     >
-      <div className="flex gap-2 items-center">
+      <div className="flex gap-2 items-center mb-2">
         <EventRadioButton isSelected={selectedWhen} />
-        <h4 className={`${inter.className} font-semibold text-lg`}>{title}</h4>
+        <h4 className={`${inter.className} font-semibold text-base sm:text-lg`}>{title}</h4>
       </div>
-      <p className={`${inter.className} text-base font-medium text-start`}>
+      <p className={`${inter.className} font-medium text-sm sm:text-base text-start`}>
         {description}
       </p>
     </Button>

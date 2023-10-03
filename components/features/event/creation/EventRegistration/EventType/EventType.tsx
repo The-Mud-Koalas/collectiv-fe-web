@@ -53,7 +53,7 @@ const EventType: React.FC<Props> = ({
       closeCollapsible={closeStage}
     >
       <div className="flex flex-col gap-3 w-full">
-        <h3 className={`${inter.className} font-semibold text-2xl`}>
+        <h3 className={`${inter.className} font-semibold text-lg sm:text-2xl`}>
           I host this event as:
         </h3>
         <EventTypeChoice
