@@ -20,7 +20,7 @@ import {
 } from "react-hook-form";
 import { numericValidator } from "@/utils/helpers/validator/numericValidator";
 import { inter } from "@/utils/constants/fonts";
-import { getProjectUnitGoals } from "@/utils/fetchers/event/creation";
+import { getProjectUnitGoals, getTags } from "@/utils/fetchers/event/creation";
 import { Arrow } from "@/components/shared/svg/icons";
 import { COLORS } from "@/utils/constants/colors";
 import useUpload from "@/hooks/utils/useUpload";
@@ -149,6 +149,7 @@ const EventDetails: React.FC<Props> = ({
           placeholder="e.g. Food, Sports"
           label={`${eventType} Tags`}
           field="tags"
+          fetcher={getTags}
           control={control}
           error={errors.tags as FieldError}
           setValue={setValue}
@@ -156,7 +157,7 @@ const EventDetails: React.FC<Props> = ({
         />
         <LocationField
           placeholder="e.g. Great Court"
-          // rules={{ required: "Please select a location." }}
+          rules={{ required: "Please select a location." }}
           label={`${eventType} Location`}
           field="location"
           setValue={setValue}

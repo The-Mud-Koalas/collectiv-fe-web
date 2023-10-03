@@ -20,9 +20,6 @@ const EventRegistration = () => {
     visitedStages.current.add(stage);
   }
 
-  const createEvent = (data: EventCreationFields) => {
-    console.log(data)
-  }
 
   return (
     <>
@@ -31,14 +28,14 @@ const EventRegistration = () => {
           <Back dimensions={{ width: 32 }} color={COLORS.primary[800]} />
         </Button>
         <h1
-          className={`${inter.className} text-primary-800 font-bold text-5xl`}
+          className={`${inter.className} text-primary-800 font-bold text-2xl sm:text-5xl`}
         >
           Register your event now!
         </h1>
       </section>
       <div id="regis-form" className="flex flex-col gap-3 w-full">
-        <p className={`${inter.className} text-primary-800 font-medium text-2xl`}>Please fill out these form below to register your event on our community space.</p>
-        <Card className="w-full">
+        <p className={`${inter.className} text-primary-800 font-medium text-base sm:text-2xl`}>Please fill out these form below to register your event on our community space.</p>
+        <Card className="w-full my-3">
           <EventType currentStage={regisStage} openRegisStage={openRegisStage(1)} closeStage={closeStage}/>
           <motion.div className="w-full h-[2px] bg-black my-3"/>
           <EventDetails currentStage={regisStage} openRegisStage={openRegisStage(2)} closeStage={closeStage} nextStage={openRegisStage(3)} visitedStages={visitedStages}/>
