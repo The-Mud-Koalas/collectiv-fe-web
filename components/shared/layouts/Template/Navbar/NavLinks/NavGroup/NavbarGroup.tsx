@@ -30,7 +30,7 @@ const NavbarGroup: React.FC<NavGroupType> = ({ name, group }) => {
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -10 }}
-            className="absolute top-[100%]"
+            className="absolute top-[100%] z-30"
             key={`group-${name}`}
           >
             <ul className="flex flex-col gap-4 mt-6 bg-primary-300 w-52 px-4 pt-2 pb-4">
