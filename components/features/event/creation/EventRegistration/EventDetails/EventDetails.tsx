@@ -50,7 +50,7 @@ const EventDetails: React.FC<Props> = ({
   openRegisStage,
   currentStage,
   nextStage,
-  visitedStages
+  visitedStages,
 }) => {
   const {
     eventDetailsForm: form,
@@ -58,7 +58,10 @@ const EventDetails: React.FC<Props> = ({
     isProject,
   } = useEventCreationContext();
 
-  const { isLoading, uploadFile, uploadProgress } = useUpload({ endpoint: "/event/image/upload", method: "POST" })
+  const { isLoading, uploadFile, uploadProgress } = useUpload({
+    endpoint: "/event/image/upload",
+    method: "POST",
+  });
 
   const {
     register,
@@ -68,7 +71,7 @@ const EventDetails: React.FC<Props> = ({
     setError,
     getValues,
     handleSubmit,
-    clearErrors
+    clearErrors,
   } = form;
 
   const startDate = useWatch({
@@ -93,7 +96,7 @@ const EventDetails: React.FC<Props> = ({
   const onDrop = async (file: File[]) => {
     const url = URL.createObjectURL(file[0]);
     const imageObject = { url, file: file[0] };
-    
+
     setValue("image", imageObject);
   };
 
@@ -107,13 +110,13 @@ const EventDetails: React.FC<Props> = ({
   };
 
   const onError: SubmitErrorHandler<EventCreationFields> = (errors) => {
-    const image = getValues()["image"]
+    const image = getValues()["image"];
 
     if (image == null) {
       setError("image", { message: "This field should not be empty." });
       return;
     }
-  }
+  };
 
   return (
     <EventCollapsible
@@ -236,7 +239,12 @@ const EventDetails: React.FC<Props> = ({
           </div>
         )}
         <FileUploadField
-          // registerOptions={{ required: "This field should not be empty." }}
+          dropzoneOptions={{
+            maxFiles: 1,
+            accept: {
+              "image/*": [".png", ".gif", ".jpeg", ".jpg", ".bmp"],
+            },
+          }}
           error={errors.image as FieldError}
           field="image"
           file={image}
