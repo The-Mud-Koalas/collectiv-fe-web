@@ -174,7 +174,6 @@ const MultiselectInputField = <TForm extends unknown, TOption extends unknown>({
                       } transition-all px-4 py-2`,
                   }
             }
-            isLoading={isLoading}
             options={options as any}
             isMulti
             isClearable

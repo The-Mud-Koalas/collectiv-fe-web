@@ -46,7 +46,7 @@ const EventType: React.FC<Props> = ({
       sectionTitle="Event Type"
       description={EVENT_DESCRIPTION}
       childrenIfCollapsed={
-        currentStage != null ? <EventTypeCard {...chosenType} /> : <></>
+        isProject != null ? <EventTypeCard {...chosenType} /> : <></>
       }
       isOpened={currentStage === 1}
       openCollapsible={openRegisStage}
@@ -64,7 +64,7 @@ const EventType: React.FC<Props> = ({
         <EventTypeChoice
           {...COMMUNITY_PROJECTS}
           clickHandler={changeIsProject(true)}
-          selectedWhen={isProject}
+          selectedWhen={isProject as boolean}
         />
       </div>
     </EventCollapsible>

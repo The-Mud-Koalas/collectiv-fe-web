@@ -7,9 +7,10 @@ interface EventContextProps {
   eventDetailsForm: UseFormReturn<EventCreationFields>;
   volunteersForm: UseFormReturn<VolunteerFields>;
   stage: number;
-  isProject: boolean;
+  isProject: boolean | null;
   changeStage: (newStage: number) => () => void;
   changeIsProject: (newIsProject: boolean) => () => void;
+  populateFormValues: (event: NewEventFields) => void;
   visitedStage: number[];
   categories: CategoryOptions[];
 }
@@ -37,7 +38,7 @@ const EventCreationProvider: React.FC<React.PropsWithChildren> = ({
     queryFn: getServiceCategories,
     staleTime: Infinity,
   });
-  const [isProject, setIsProject] = useState(false);
+  const [isProject, setIsProject] = useState<boolean | null>(null);
   const [stage, setStage] = useState(0);
   const [visitedStage, setVisitedStage] = useState<number[]>([0]);
 
@@ -50,6 +51,25 @@ const EventCreationProvider: React.FC<React.PropsWithChildren> = ({
 
   const changeIsProject = (newIsProject: boolean) => () =>
     setIsProject(newIsProject);
+
+  const populateFormValues = (event: NewEventFields) => {
+    const {eventValues, volunteerValues, isProject} = event;
+    
+    const eventKeys = Object.keys(eventValues);
+
+    eventKeys.forEach((key) => {
+      const eventKey = key as keyof EventCreationFields;
+      eventDetailsForm.setValue(eventKey, eventValues[eventKey]);
+    });
+
+    const volunteerKeys = Object.keys(volunteerValues);
+    volunteerKeys.forEach((key) => {
+      const volunteerKey = key as keyof VolunteerFields;
+      volunteersForm.setValue(volunteerKey, volunteerValues[volunteerKey]);
+    });
+
+    setIsProject(isProject);
+  }
 
   if (isLoading) return <Loading />;
   if (isError) return <></>;
@@ -65,6 +85,7 @@ const EventCreationProvider: React.FC<React.PropsWithChildren> = ({
         changeStage,
         visitedStage,
         categories,
+        populateFormValues
       }}
     >
       {children}

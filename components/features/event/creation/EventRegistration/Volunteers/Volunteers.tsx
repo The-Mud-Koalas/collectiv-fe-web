@@ -33,35 +33,42 @@ const Volunteers: React.FC<Props> = ({
   currentStage,
   visitedStages,
 }) => {
-  const { volunteersForm, eventDetailsForm, isProject, changeStage } = useEventCreationContext();
+  const { volunteersForm, eventDetailsForm, isProject, changeStage } =
+    useEventCreationContext();
   const { register, handleSubmit } = volunteersForm;
   const { mutateAsync, isLoading } = useMutation({
     mutationFn: createEvent,
     onSuccess: () => {},
   });
 
-  const [needVolunteers, setNeedVolunteers] = useState<boolean | null>(null);
-  const { isLoading: isUploading, uploadFile } = useUpload({endpoint: "/event/image/upload", method: "POST"});
+  const noOfVolunteers = volunteersForm.getValues("min_num_of_volunteers");
+
+  const [needVolunteers, setNeedVolunteers] = useState<boolean>(
+    noOfVolunteers !== 0
+  );
+  const { isLoading: isUploading, uploadFile } = useUpload({
+    endpoint: "/event/image/upload",
+    method: "POST",
+  });
 
   const onSubmit: SubmitHandler<VolunteerFields> = async (volunteerValues) => {
     const newEvent = {
       eventValues: eventDetailsForm.getValues(),
       volunteerValues,
-      isProject
+      isProject: isProject as boolean,
     };
 
     const event = await mutateAsync(newEvent);
-    
+
     const idToken = await auth.currentUser?.getIdToken();
-    
+
     const formData = new FormData();
-    const image = eventDetailsForm.getValues()["image"]
+    const image = eventDetailsForm.getValues()["image"];
     formData.append("event_id", event.id);
-    formData.append("event_image", image.file)
+    formData.append("event_image", image.file);
     await uploadFile(formData, idToken);
-    
+
     changeStage(2)();
-   
   };
   return (
     <EventCollapsible
@@ -74,9 +81,22 @@ const Volunteers: React.FC<Props> = ({
       closeCollapsible={closeStage}
     >
       <div className="mb-4">
-        <h4 className={`${inter.className} font-semibold`}>Do you need any volunteers?</h4>
-        <VolunteerToggle isSelected={needVolunteers === true} label="Yes" onClick={() => setNeedVolunteers(true)}/>
-        <VolunteerToggle isSelected={needVolunteers === false} label="No" onClick={() => setNeedVolunteers(false)}/>
+        <h4 className={`${inter.className} font-semibold`}>
+          Do you need any volunteers?
+        </h4>
+        <VolunteerToggle
+          isSelected={needVolunteers === true}
+          label="Yes"
+          onClick={() => setNeedVolunteers(true)}
+        />
+        <VolunteerToggle
+          isSelected={needVolunteers === false}
+          label="No"
+          onClick={() => {
+            setNeedVolunteers(false);
+            volunteersForm.setValue("min_num_of_volunteers", 0);
+          }}
+        />
       </div>
       <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
         <TextInputField
