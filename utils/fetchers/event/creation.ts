@@ -81,7 +81,7 @@ const createEvent = async (values: NewEventFields) => {
 
   const tagList: { id: string; name: string }[] = await postRequest({
     endpoint: "/event/tags/get-or-create/multiple",
-    body: { tags: eventValues.tags.map((tag) => tag.value) },
+    body: { tags: eventValues.tags?.map((tag) => tag.value) ?? [] },
     token: idToken,
   });
 
