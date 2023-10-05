@@ -2,7 +2,7 @@ import { FC } from "react";
 import HostingCard from "./HostingCard";
 import { Button } from "@/components/shared/elements";
 import { garamond, inter } from "@/utils/constants/fonts";
-import CollectivLogoHorizontal from "../../shared/svg/logo/CollectivLogoHorizontal";
+import CollectivLogoHorizontal from "../../../shared/svg/logo/CollectivLogoHorizontal";
 import { Arrow } from "@/components/shared/svg/icons";
 import { COLORS } from "@/utils/constants/colors";
 
