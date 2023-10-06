@@ -6,6 +6,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { AppProvider } from "@/context/AppContext";
 import { NextComponentType } from "next/types";
 import { ProtectedRoute } from "@/components/shared/layouts";
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 
 type AuthAppProps = AppProps & {
   Component: NextComponentType & { auth?: boolean };
@@ -16,9 +17,9 @@ const queryClient = new QueryClient();
 export default function App({ Component, pageProps }: AuthAppProps) {
   return (
     <>
-      <AppProvider>
-        <div className="bg-secondary min-h-screen">
-          <QueryClientProvider client={queryClient}>
+      <QueryClientProvider client={queryClient}>
+        <AppProvider>
+          <div className="bg-secondary min-h-screen">
             {Component.auth ? (
               <ProtectedRoute>
                 <Component {...pageProps} />
@@ -26,9 +27,10 @@ export default function App({ Component, pageProps }: AuthAppProps) {
             ) : (
               <Component {...pageProps} />
             )}
-          </QueryClientProvider>
-        </div>
-      </AppProvider>
+          </div>
+        </AppProvider>
+        {/* <ReactQueryDevtools/> */}
+      </QueryClientProvider>
     </>
   );
 }
