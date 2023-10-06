@@ -1,9 +1,6 @@
 import { inter } from "@/utils/constants/fonts";
 import { useId } from "react";
-import {
-    Controller, FieldValues,
-    Path
-} from "react-hook-form";
+import { Controller, FieldValues, Path } from "react-hook-form";
 import { PhoneInput } from "react-international-phone";
 import "react-international-phone/style.css";
 
@@ -21,7 +18,7 @@ interface Props<T> {
  * @param [registerOptions] - Register Options, which can consist of validators
  * @param label - The label for the input
  */
-const PhoneNumberField = <T extends unknown>({
+const EmailOrPhoneNumberField = <T extends unknown>({
     field,
     label,
     control,
@@ -70,4 +67,4 @@ const PhoneNumberField = <T extends unknown>({
     );
 };
 
-export default PhoneNumberField;
+export default EmailOrPhoneNumberField;
