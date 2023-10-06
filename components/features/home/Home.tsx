@@ -1,9 +1,16 @@
-import React from 'react'
+import { Button } from "@/components/shared/elements";
+import { useAppContext } from "@/context/AppContext";
+import { auth } from "@/lib/firebase";
+import React, { useEffect } from "react";
 
 const Home = () => {
-  return (
-    <div>Home</div>
-  )
-}
+  const { sendMessageToRN } = useAppContext();
 
-export default Home
+  return (
+    <>
+      <div>Home</div>
+    </>
+  );
+};
+
+export default Home;
