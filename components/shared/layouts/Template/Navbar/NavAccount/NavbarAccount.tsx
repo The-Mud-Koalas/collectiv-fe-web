@@ -26,7 +26,7 @@ const NavbarAccount = () => {
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -10 }}
-            className="absolute"
+            className="absolute z-30"
             key="nav-acc"
           >
             <ul className="flex flex-col gap-5 mt-6 bg-primary-300 px-4 pt-2 pb-4  w-44">

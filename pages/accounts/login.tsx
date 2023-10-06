@@ -16,16 +16,19 @@ import {
   useForm,
 } from "react-hook-form";
 import { toast } from "react-toastify";
+import { useAppContext } from "@/context/AppContext";
 
 const LoginPage: NextPage = () => {
+  const { sendMessageToRN } = useAppContext();
   const form = useForm<LoginFormFields>();
   const router = useRouter();
   const searchParams = useSearchParams();
 
   const { mutateAsync, isLoading } = useMutation({
     mutationFn: loginWithEmail,
-    onSuccess: () => {
+    onSuccess: (user) => {
       form.reset();
+      sendMessageToRN({ type: "auth-token", token: user.user.refreshToken })
       const next = searchParams.get("next");
       router.push(next ?? "/");
     },

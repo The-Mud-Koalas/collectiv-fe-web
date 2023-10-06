@@ -46,14 +46,14 @@ const EventType: React.FC<Props> = ({
       sectionTitle="Event Type"
       description={EVENT_DESCRIPTION}
       childrenIfCollapsed={
-        currentStage != null ? <EventTypeCard {...chosenType} /> : <></>
+        isProject != null ? <EventTypeCard {...chosenType} /> : <></>
       }
       isOpened={currentStage === 1}
       openCollapsible={openRegisStage}
       closeCollapsible={closeStage}
     >
       <div className="flex flex-col gap-3 w-full">
-        <h3 className={`${inter.className} font-semibold text-2xl`}>
+        <h3 className={`${inter.className} font-semibold text-lg sm:text-2xl`}>
           I host this event as:
         </h3>
         <EventTypeChoice
@@ -64,7 +64,7 @@ const EventType: React.FC<Props> = ({
         <EventTypeChoice
           {...COMMUNITY_PROJECTS}
           clickHandler={changeIsProject(true)}
-          selectedWhen={isProject}
+          selectedWhen={isProject as boolean}
         />
       </div>
     </EventCollapsible>
