@@ -1,6 +1,7 @@
 import React from "react";
 import cn from "clsx";
 import { inter } from "@/utils/constants/fonts";
+import { capitalize } from "@/utils/helpers/formatting/capitalize";
 
 interface StatusPillProps extends React.HTMLAttributes<HTMLDivElement> {
   status: "scheduled" | "ongoing" | "completed" | "cancelled";
@@ -27,7 +28,7 @@ const StatusPill = (props: StatusPillProps) => {
     >   
         <div className="w-2 h-2 rounded-full" />
         <span>
-            {status.charAt(0).toUpperCase() + status.substring(1)}
+            {capitalize(status)}
         </span>
     </div>
   );
