@@ -23,12 +23,15 @@ interface Transaction {
   transaction_value: number;
 }
 
-interface Event {
+interface ServiceEvent {
   id: string;
   name: string;
   description: string;
+  status: "Scheduled" | "Ongoing" | "Completed" | "Cancelled";
+  event_type: "project";
+  event_category: Category;
   min_num_of_volunteers: number;
-  event_location: Location;
+  event_location: EventLocation;
   event_creator_id: string;
   event_start_date_time: string;
   event_end_date_time: string;

@@ -1,4 +1,5 @@
 import { Button } from "@/components/shared/elements";
+import { EventList } from "@/components/shared/elements/EventList";
 import { Filter } from "@/components/shared/elements/Filter";
 import { Arrow } from "@/components/shared/svg/icons";
 import CollectivLogo from "@/components/shared/svg/logo/CollectivLogo";
@@ -61,7 +62,7 @@ const DiscoverEvents: React.FC<Props> = ({ filters, changeFilterParam, options }
       <section id="health">
         {/* Rashad's Health Part */}
       </section>
-      <section id="events-in" className="w-full px-10">
+      <section id="events-in" className="w-full px-10 flex flex-col gap-2">
         <div className="flex items-center gap-2">
           <h2 className={`${garamond.className} text-3xl italic`}>
             Events in <span className="font-bold">Collectiv</span>
@@ -75,6 +76,7 @@ const DiscoverEvents: React.FC<Props> = ({ filters, changeFilterParam, options }
             }
         </div>
       </section>
+      <EventList fetchType="event" filters={filters}/>
     </div>
   );
 };

@@ -15,17 +15,27 @@ const DiscoverPage = () => {
     location: null,
   });
 
-  const changeFilterParam = (
-    key: keyof EventFilters
-  ) => (value: SelectOption<string> | null) => setFilters((prev) => ({ ...prev, [key]: value }));
+  const changeFilterParam =
+    (key: keyof EventFilters) => (value: SelectOption<string> | null) =>
+      setFilters((prev) => ({ ...prev, [key]: value }));
 
   const options: FilterOptions = {
     category: [],
     location: [],
-    status: [{ label: "Scheduled", value: "Scheduled"}, { label: "Cancelled", value: "Cancelled" }, { label: "Ongoing", value: "Ongoing" }, { label: "Completed", value: "Completed"}],
+    status: [
+      { label: "Scheduled", value: "Scheduled" },
+      { label: "Cancelled", value: "Cancelled" },
+      { label: "Ongoing", value: "Ongoing" },
+      { label: "Completed", value: "Completed" },
+    ],
     tag: [],
-    type: [],
+    type: [
+      { label: "Project", value: "Project" },
+      { label: "Initiative", value: "Initiative" },
+    ],
   };
+
+
   return (
     <Template>
       <DiscoverEvents
