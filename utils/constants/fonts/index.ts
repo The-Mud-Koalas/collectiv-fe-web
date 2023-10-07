@@ -16,6 +16,11 @@ const garamond = localFont({
       style: "normal",
     },
     {
+      path: "./AppleGaramond-Italic.ttf",
+      weight: "400",
+      style: "italic"
+    },
+    {
       path: "./AppleGaramond-BoldItalic.ttf",
       weight: "700",
       style: "italic"
