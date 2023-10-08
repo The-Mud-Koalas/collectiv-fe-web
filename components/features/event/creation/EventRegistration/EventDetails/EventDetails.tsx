@@ -20,10 +20,16 @@ import {
 } from "react-hook-form";
 import { numericValidator } from "@/utils/helpers/validator/numericValidator";
 import { inter } from "@/utils/constants/fonts";
-import { getProjectUnitGoals, getTags } from "@/utils/fetchers/event/creation";
+import {
+  createEvent,
+  getProjectUnitGoals,
+  getTags,
+} from "@/utils/fetchers/event/creation";
 import { Arrow } from "@/components/shared/svg/icons";
 import { COLORS } from "@/utils/constants/colors";
 import useUpload from "@/hooks/utils/useUpload";
+import { useMutation } from "@tanstack/react-query";
+import { auth } from "@/lib/firebase";
 
 interface Props {
   currentStage?: number;
@@ -58,9 +64,9 @@ const EventDetails: React.FC<Props> = ({
     isProject,
   } = useEventCreationContext();
 
-  const { isLoading, uploadFile, uploadProgress } = useUpload({
-    endpoint: "/event/image/upload",
-    method: "POST",
+  const { mutateAsync, isLoading: isLoadingSubmission } = useMutation({
+    mutationFn: createEvent,
+    onSuccess: () => {},
   });
 
   const {
@@ -91,6 +97,15 @@ const EventDetails: React.FC<Props> = ({
     }
   }, [startDate, getValues, setValue]);
 
+  const {
+    isLoading: isUploading,
+    uploadFile,
+    uploadProgress,
+  } = useUpload({
+    endpoint: "/event/image/upload",
+    method: "POST",
+  });
+
   const eventType = isProject ? "Project" : "Initiative";
 
   const onDrop = async (file: File[]) => {
@@ -100,11 +115,26 @@ const EventDetails: React.FC<Props> = ({
     setValue("image", imageObject);
   };
 
-  const onSuccess: SubmitHandler<EventCreationFields> = (data) => {
+  const onSuccess: SubmitHandler<EventCreationFields> = async (data) => {
     if (data.image == null) {
       setError("image", { message: "This field should not be empty." });
       return;
     }
+
+    const newEvent = {
+      eventValues: data,
+      isProject: isProject as boolean,
+    };
+
+    const event = await mutateAsync(newEvent);
+
+    const idToken = await auth.currentUser?.getIdToken();
+
+    const formData = new FormData();
+    const image = data.image;
+    formData.append("event_id", event.id);
+    formData.append("event_image", image.file);
+    await uploadFile(formData, idToken);
 
     nextStage();
   };
@@ -249,7 +279,7 @@ const EventDetails: React.FC<Props> = ({
           field="image"
           file={image}
           uploadProgress={uploadProgress}
-          isUploading={isLoading}
+          isUploading={isUploading}
           onDrop={onDrop}
           label={`${eventType} Image`}
           description="Upload your event image here"
@@ -257,11 +287,10 @@ const EventDetails: React.FC<Props> = ({
         <Button
           className={`${inter.className} items-center flex gap-2 justify-between rounded-full text-primary-300 bg-primary-800 px-3 py-1 w-fit justify-self-start`}
           type="submit"
+          disabled={isUploading || isLoadingSubmission}
         >
           <p>Continue</p>
-          <div className="rotate-90">
-            <Arrow color={COLORS.primary[300]} dimensions={{ width: 20 }} />
-          </div>
+          <Arrow color={COLORS.primary[300]} dimensions={{ width: 20 }} />
         </Button>
       </form>
     </EventCollapsible>

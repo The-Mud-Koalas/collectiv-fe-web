@@ -5,7 +5,6 @@ import React, { createContext, useContext, useState } from "react";
 import { UseFormReturn, useForm } from "react-hook-form";
 interface EventContextProps {
   eventDetailsForm: UseFormReturn<EventCreationFields>;
-  volunteersForm: UseFormReturn<VolunteerFields>;
   stage: number;
   isProject: boolean | null;
   changeStage: (newStage: number) => () => void;
@@ -25,9 +24,6 @@ const EventCreationProvider: React.FC<React.PropsWithChildren> = ({
   children,
 }) => {
   const eventDetailsForm = useForm<EventCreationFields>();
-  const volunteersForm = useForm<VolunteerFields>({
-    values: { min_num_of_volunteers: 0 },
-  });
 
   const {
     data: categories,
@@ -53,19 +49,13 @@ const EventCreationProvider: React.FC<React.PropsWithChildren> = ({
     setIsProject(newIsProject);
 
   const populateFormValues = (event: NewEventFields) => {
-    const {eventValues, volunteerValues, isProject} = event;
+    const {eventValues, isProject} = event;
     
     const eventKeys = Object.keys(eventValues);
 
     eventKeys.forEach((key) => {
       const eventKey = key as keyof EventCreationFields;
       eventDetailsForm.setValue(eventKey, eventValues[eventKey]);
-    });
-
-    const volunteerKeys = Object.keys(volunteerValues);
-    volunteerKeys.forEach((key) => {
-      const volunteerKey = key as keyof VolunteerFields;
-      volunteersForm.setValue(volunteerKey, volunteerValues[volunteerKey]);
     });
 
     setIsProject(isProject);
@@ -80,7 +70,6 @@ const EventCreationProvider: React.FC<React.PropsWithChildren> = ({
         isProject,
         changeIsProject,
         eventDetailsForm,
-        volunteersForm,
         stage,
         changeStage,
         visitedStage,

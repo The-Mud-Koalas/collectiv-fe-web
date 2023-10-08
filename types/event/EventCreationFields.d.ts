@@ -19,12 +19,7 @@ interface EventCreationFields {
   }
 }
 
-interface VolunteerFields {
-  min_num_of_volunteers: number;
-}
-
 interface NewEventFields {
   eventValues: EventCreationFields;
-  volunteerValues: VolunteerFields;
   isProject: boolean;
 }
