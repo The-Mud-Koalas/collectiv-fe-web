@@ -1,10 +1,7 @@
 import { inter } from "@/utils/constants/fonts";
 import { Inter } from "next/font/google";
 import { useId } from "react";
-import {
-    Controller, FieldValues,
-    Path
-} from "react-hook-form";
+import { Controller, FieldValues, Path } from "react-hook-form";
 import { PhoneInput } from "react-international-phone";
 import "react-international-phone/style.css";
 
@@ -44,7 +41,9 @@ const PhoneNumberField = <T extends unknown>({
                     render={({ field: { onChange, value } }) => (
                         <PhoneInput
                             className={`${inter.className} w-full sm:text-base`}
+                            placeholder="Enter phone number"
                             defaultCountry="au"
+                            // placeholder="Mobile Number"
                             value={value}
                             onChange={onChange}
                             inputStyle={{
@@ -60,8 +59,18 @@ const PhoneNumberField = <T extends unknown>({
                                     height: "48px",
                                     borderRadius: "10px 0 0 10px",
                                     borderColor: "gray",
+                                    borderRight: "none",
                                     padding: "10px",
                                 },
+                                dropdownStyleProps: {
+                                    style: {
+                                        padding: "5px",
+                                        borderRadius: "10px",
+                                    },
+                                    listItemStyle: {
+                                        padding: "5px 0",
+                                    },
+                                }
                             }}
                         />
                     )}

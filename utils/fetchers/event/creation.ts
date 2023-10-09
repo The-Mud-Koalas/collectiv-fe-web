@@ -1,25 +1,15 @@
 import { getRequest, postRequest } from "@/lib/fetch";
 import { auth } from "@/lib/firebase";
+import { capitalize } from "@/utils/helpers/formatting/capitalize";
 import { QueryFunction } from "@tanstack/react-query";
 
 const getServiceCategories = async () => {
-  const CATEGORIES = [
-    {
-      id: "1",
-      name: "Cultural",
-    },
-    {
-      id: "2",
-      name: "Education",
-    },
-    {
-      id: "3",
-      name: "Services",
-    },
-  ];
-
-  await new Promise((res: any) => setTimeout(res, 1000));
-  return CATEGORIES.map((cat) => ({ value: cat.id, label: cat.name }));
+  const token = await auth.currentUser?.getIdToken();
+  const categories: Category[] = await getRequest({
+    endpoint: "/event/category/all",
+    token,
+  });
+  return categories.map((cat) => ({ value: cat.id, label: capitalize(cat.name) }));
 };
 
 const getTags: QueryFunction<SelectOption<string>[], string[], any> = async ({
@@ -95,6 +85,7 @@ const createEvent = async (values: NewEventFields) => {
     start_date_time: eventValues.start_date_time.toISOString(),
     end_date_time: eventValues.end_date_time.toISOString(),
     location_id: newLocation.id,
+    category_id: eventValues.category.value,
     tags: tagList.map((tag) => tag.id),
   };
 
