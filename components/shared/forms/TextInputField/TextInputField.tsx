@@ -44,7 +44,7 @@ const TextInputField = <T extends unknown>({
     <div className="flex flex-col gap-1 w-full">
       <label
         htmlFor={inputId}
-        className={`${inter.className} text-sm sm:text-base font-medium`}
+        className={`${inter.className} text-sm sm:text-base font-small`}
       >
         {label} { registerOptions?.required && <span className="text-red-600">*</span>}
       </label>
