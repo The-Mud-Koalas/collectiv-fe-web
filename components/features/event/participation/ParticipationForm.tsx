@@ -10,7 +10,7 @@ import {
 } from "react-hook-form";
 import { useMutation } from "@tanstack/react-query";
 import { useRouter } from "next/router";
-import EmailOrPhoneNumberField from "@/components/shared/forms/EmailOrPhoneNumberField/EmailOrPhoneNumberField";
+import { EMAIL_REGEX } from "@/utils/constants/regex";
 
 interface ParticipationFormProps {
     setShowModal: React.Dispatch<React.SetStateAction<boolean>>;
@@ -60,17 +60,28 @@ const ParticipationForm: FC<ParticipationFormProps> = ({ setShowModal }) => {
 
     return (
         <form className="flex flex-col gap-4">
-            <TextInputField
-                field="name"
-                label="Enter your name"
-                // register={register}
-                // error={errors.name}
-            />
-            {/* <EmailOrPhoneNumberField
-                field={""}
-                label={""}
-                control={undefined}
-            /> */}
+            <div className="my-10">
+                <div className="mb-6">
+                    <TextInputField
+                        field="name"
+                        label="Enter your name"
+                        // register={register}
+                        // error={errors.name}
+                    />
+                </div>
+                <TextInputField
+                    field="email"
+                    label="Enter your email"
+                    register={register}
+                    registerOptions={{
+                        pattern: {
+                            value: EMAIL_REGEX,
+                            message: "The email you entered is invalid",
+                        },
+                    }}
+                />
+            </div>
+
             <div className="flex flex-row justify-center gap-3">
                 <Button
                     onClick={(e) => handleClose(e)}
