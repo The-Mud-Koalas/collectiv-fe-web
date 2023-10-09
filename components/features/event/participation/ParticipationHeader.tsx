@@ -1,3 +1,4 @@
+import GreenTick from "@/components/shared/svg/icons/GreenTick";
 import { inter, garamond } from "@/utils/constants/fonts";
 import { FC } from "react";
 
@@ -5,7 +6,10 @@ interface ParticipationHeaderProps {}
 
 const ParticipationHeader: FC<ParticipationHeaderProps> = ({}) => {
     return (
-        <div className="text-center">
+        <div className="text-center mx-auto">
+            <div className="flex justify-center items-center">
+                <GreenTick />
+            </div>
             <h1
                 className={`${garamond.className} text-7xl text-primary-900 my-4`}
             >
