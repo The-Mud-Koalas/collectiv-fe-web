@@ -18,7 +18,7 @@ interface Props<T> {
  * @param [registerOptions] - Register Options, which can consist of validators
  * @param label - The label for the input
  */
-const PhoneNumberField = <T extends unknown>({
+const EmailOrPhoneNumberField = <T extends unknown>({
     field,
     label,
     control,
@@ -40,9 +40,7 @@ const PhoneNumberField = <T extends unknown>({
                     render={({ field: { onChange, value } }) => (
                         <PhoneInput
                             className={`${inter.className} w-full sm:text-base`}
-                            placeholder="Enter phone number"
                             defaultCountry="au"
-                            // placeholder="Mobile Number"
                             value={value}
                             onChange={onChange}
                             inputStyle={{
@@ -58,18 +56,8 @@ const PhoneNumberField = <T extends unknown>({
                                     height: "48px",
                                     borderRadius: "10px 0 0 10px",
                                     borderColor: "gray",
-                                    borderRight: "none",
                                     padding: "10px",
                                 },
-                                dropdownStyleProps: {
-                                    style: {
-                                        padding: "5px",
-                                        borderRadius: "10px",
-                                    },
-                                    listItemStyle: {
-                                        padding: "5px 0",
-                                    },
-                                }
                             }}
                         />
                     )}
@@ -79,4 +67,4 @@ const PhoneNumberField = <T extends unknown>({
     );
 };
 
-export default PhoneNumberField;
+export default EmailOrPhoneNumberField;

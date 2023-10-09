@@ -1,16 +1,10 @@
-import Image from 'next/image'
-import { Inter } from 'next/font/google'
-import { Home } from '@/components/features/home';
-import { Template } from '@/components/shared/layouts';
+import EventParticipationPopup from "@/components/features/event/participation/EventParticipationPopup";
+import { Inter } from "next/font/google";
 
-const inter = Inter({ subsets: ['latin'] })
+const inter = Inter({ subsets: ["latin"] });
 
 function HomePage() {
-  return (
-    <Template>
-      <Home/>
-    </Template>
-  )
+    return <EventParticipationPopup />;
 }
 
 HomePage.auth = false;
