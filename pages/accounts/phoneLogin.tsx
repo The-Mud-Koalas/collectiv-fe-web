@@ -14,6 +14,9 @@ import {
     useForm,
 } from "react-hook-form";
 import { toast } from "react-toastify";
+import { PhoneNumberUtil } from "google-libphonenumber";
+
+const phoneUtil = PhoneNumberUtil.getInstance();
 declare global {
     interface Window {
         recaptchaVerifier: any;
@@ -50,11 +53,26 @@ const PhoneLoginPage: NextPage = () => {
         ); // Add a <div> with id 'recaptcha-container' in your HTML
     }, []);
 
+    const isPhoneValid = (phone: string) => {
+        try {
+            return phoneUtil.isValidNumber(
+                phoneUtil.parseAndKeepRawInput(phone)
+            );
+        } catch (error) {
+            return false;
+        }
+    };
+
     const onSubmit: SubmitHandler<PhoneLoginFormFields> = async (data) => {
         setIsLoading(true);
         const { phoneNumber } = data;
-        setPhoneNumber(phoneNumber);
-        signIn(phoneNumber);
+        if (isPhoneValid(phoneNumber)) {
+            setPhoneNumber(phoneNumber);
+            signIn(phoneNumber);
+        } else {
+            console.log("invalid number");
+            setIsLoading(false)
+        }
     };
 
     const signIn = async (phoneNumber: string) => {
