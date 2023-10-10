@@ -7,7 +7,6 @@ import React, { useEffect, useRef, useState } from "react";
 import EventType from "./EventType";
 import { motion } from "framer-motion";
 import EventDetails from "./EventDetails";
-import Volunteers from "./Volunteers";
 
 interface Props {
   event?: NewEventFields;
@@ -67,14 +66,7 @@ const EventRegistration: React.FC<Props> = ({ event }) => {
             currentStage={regisStage}
             openRegisStage={openRegisStage(2)}
             closeStage={closeStage}
-            nextStage={openRegisStage(3)}
-            visitedStages={visitedStages}
-          />
-          <motion.div className="w-full h-[2px] bg-black my-3" />
-          <Volunteers
-            currentStage={regisStage}
-            openRegisStage={openRegisStage(3)}
-            closeStage={closeStage}
+            nextStage={changeStage(2)}
             visitedStages={visitedStages}
           />
         </Card>

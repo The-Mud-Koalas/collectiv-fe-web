@@ -9,7 +9,7 @@ interface Props {
   label: string;
 }
 
-const VolunteerToggle: React.FC<Props> = ({ onClick, isSelected, label }) => {
+const Checkbox: React.FC<Props> = ({ onClick, isSelected, label }) => {
   return (
     <Button onClick={onClick} className="flex items-center gap-2">
       <motion.svg
@@ -36,4 +36,4 @@ const VolunteerToggle: React.FC<Props> = ({ onClick, isSelected, label }) => {
   );
 };
 
-export default VolunteerToggle;
+export default Checkbox;
