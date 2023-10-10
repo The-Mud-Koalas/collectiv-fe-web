@@ -23,12 +23,11 @@ interface Transaction {
   transaction_value: number;
 }
 
-interface EventDetail {
+interface BaseEventDetail {
   id: string;
   name: string;
   description: string;
   status: "Scheduled" | "Ongoing" | "Completed" | "Cancelled";
-  event_type: "project" | "initiative";
   event_category: Category;
   min_num_of_volunteers: number;
   event_location: EventLocation;
@@ -40,7 +39,7 @@ interface EventDetail {
   current_num_of_volunteers: number;
 }
 
-interface ProjectDetail extends EventDetail {
+interface ProjectDetail extends BaseEventDetail {
   event_type: "project";
   goal: number;
   measurement_unit: string;
@@ -48,6 +47,8 @@ interface ProjectDetail extends EventDetail {
   transactions: Transaction[];
 }
 
-interface InitativeDetail extends EventDetail {
+interface InitativeDetail extends BaseEventDetail {
   event_type: "initiative";
 }
+
+type EventDetail = ProjectDetail | InitiativeDetail;
