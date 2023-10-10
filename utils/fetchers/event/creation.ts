@@ -11,7 +11,11 @@ const getServiceCategories = async () => {
   });
   return categories.map((cat) => ({
     value: cat.id,
+<<<<<<< HEAD
+    label: capitalize(cat.name),
+=======
     label: capitalize(cat.name, true),
+>>>>>>> bf5ef959c40cdd6b369754e9ec2f08a674b02f32
   }));
 };
 
@@ -23,8 +27,22 @@ const getTags: QueryFunction<SelectOption<string>[], string[], any> = async ({
 
   const result = await getRequest({ endpoint: "/event/tags", token: idToken });
   return result.map((tag: { id: string; name: string }) => ({
-    value: tag.name,
+    value: tag.id,
     label: tag.name,
+  }));
+};
+
+const getLocations: QueryFunction<
+  SelectOption<string>[],
+  string[],
+  any
+> = async () => {
+  const idToken = await auth.currentUser?.getIdToken();
+
+  const result = await getRequest({ endpoint: "/space/all", token: idToken });
+  return result.map((location: { id: string; name: string }) => ({
+    value: location.id,
+    label: location.name,
   }));
 };
 
@@ -102,4 +120,4 @@ const createEvent = async (values: NewEventFields) => {
   return newEvent;
 };
 
-export { getServiceCategories, getProjectUnitGoals, createEvent, getTags };
+export { getServiceCategories, getProjectUnitGoals, createEvent, getTags, getLocations };

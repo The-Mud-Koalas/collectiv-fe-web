@@ -1,11 +1,12 @@
 import { Button } from "@/components/shared/elements";
+import { EventList } from "@/components/shared/elements/EventList";
 import { Filter } from "@/components/shared/elements/Filter";
 import { Arrow } from "@/components/shared/svg/icons";
 import CollectivLogo from "@/components/shared/svg/logo/CollectivLogo";
 import { COLORS } from "@/utils/constants/colors";
 import { garamond, inter, interItalics } from "@/utils/constants/fonts";
 import Link from "next/link";
-import React from "react";
+import React, { useEffect } from "react";
 
 type FilterOptions = {
   [Property in keyof EventFilters]: SelectOption<string>[];
@@ -20,6 +21,11 @@ interface Props {
 }
 
 const DiscoverEvents: React.FC<Props> = ({ filters, changeFilterParam, options }) => {
+  
+  useEffect(() => {
+    console.log(filters)
+  }, [filters])
+  
   return (
     <div className="flex flex-col items-center">
       <section
@@ -61,7 +67,7 @@ const DiscoverEvents: React.FC<Props> = ({ filters, changeFilterParam, options }
       <section id="health">
         {/* Rashad's Health Part */}
       </section>
-      <section id="events-in" className="w-full px-10">
+      <section id="events-in" className="w-full px-10 flex flex-col gap-3 mb-8">
         <div className="flex items-center gap-2">
           <h2 className={`${garamond.className} text-3xl italic`}>
             Events in <span className="font-bold">Collectiv</span>
@@ -75,6 +81,7 @@ const DiscoverEvents: React.FC<Props> = ({ filters, changeFilterParam, options }
             }
         </div>
       </section>
+      <EventList fetchType="event" filters={filters}/>
     </div>
   );
 };
