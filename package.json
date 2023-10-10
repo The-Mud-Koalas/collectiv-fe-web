@@ -21,6 +21,7 @@
     "eslint-config-next": "13.4.16",
     "firebase": "^10.2.0",
     "framer-motion": "^10.16.0",
+    "google-libphonenumber": "^3.2.33",
     "next": "13.4.16",
     "postcss": "8.4.28",
     "react": "18.2.0",
@@ -38,6 +39,7 @@
     "use-places-autocomplete": "^4.0.1"
   },
   "devDependencies": {
+    "@types/google-libphonenumber": "^7.4.27",
     "@types/google.maps": "^3.54.1",
     "@types/react-datepicker": "^4.15.0"
   }
