@@ -1,8 +1,11 @@
 import { inter } from "@/utils/constants/fonts";
 import React from "react";
-import { StatusPill } from "..";
-import { LocationSVG } from "../../svg/icons";
+import { Button, StatusPill } from "..";
+import { Arrow, Clock, LocationSVG, People } from "../../svg/icons";
 import { COLORS } from "@/utils/constants/colors";
+import { occurInSameDate } from "@/utils/helpers/others/dates";
+import Link from "next/link";
+import { useRouter } from "next/router";
 
 interface Props {
   event: ServiceEvent;
@@ -11,11 +14,25 @@ interface Props {
 type EventStatus = "scheduled" | "ongoing" | "completed" | "cancelled";
 
 const EventCard: React.FC<Props> = ({ event }) => {
-  const { name, event_start_date_time, event_end_date_time, status, event_location } = event;
+  const {
+    name,
+    event_start_date_time,
+    event_end_date_time,
+    status,
+    event_location,
+    current_num_of_participants,
+    id,
+  } = event;
   const eventStatus = status.toLowerCase();
+  const router = useRouter();
 
   const eventStartDate = new Date(event_start_date_time);
   const eventEndDate = new Date(event_end_date_time);
+  const isInSameDate = occurInSameDate(eventStartDate, eventEndDate);
+
+  const handleForumReroute = () => {
+    router.push(`/router/${id}`);
+  };
 
   return (
     <article
@@ -34,11 +51,60 @@ const EventCard: React.FC<Props> = ({ event }) => {
           <StatusPill status={eventStatus as EventStatus} />
         </div>
       </div>
-      <h2 className="font-semibold text-base bg-secondary-200 w-fit">{ name }</h2>
+      <h2 className="font-semibold text-base bg-secondary-200 w-fit">{name}</h2>
       <div className="flex flex-col gap-2 mt-3">
         <div className="flex gap-2 items-center">
-          <LocationSVG color={COLORS.gray[600]} dimensions={{ width: 20 }}/>
+          <Clock color={COLORS.gray[600]} dimensions={{ width: 20 }} />
+          <p className="text-gray-600 font-semibold">
+            {Intl.DateTimeFormat("en-AU", {
+              hour: "2-digit",
+              minute: "2-digit",
+              hour12: true,
+            })
+              .format(eventStartDate)
+              .toUpperCase()}{" "}
+            -{" "}
+            {Intl.DateTimeFormat("en-AU", {
+              hour: "2-digit",
+              minute: "2-digit",
+              hour12: true,
+              day: isInSameDate ? undefined : "numeric",
+              month: isInSameDate ? undefined : "short",
+            })
+              .format(eventEndDate)
+              .replace(",", "")
+              .replace("pm", "PM")}
+          </p>
+        </div>
+        <div className="flex gap-2 items-center">
+          <LocationSVG color={COLORS.gray[600]} dimensions={{ width: 20 }} />
           <p className="text-gray-600 font-semibold">{event_location.name}</p>
+        </div>
+        <div className="flex gap-2 items-center">
+          <People color={COLORS.gray[600]} dimensions={{ width: 20 }} />
+          <p className="text-gray-600 font-semibold">
+            {current_num_of_participants >= 40
+              ? "40"
+              : current_num_of_participants}{" "}
+            user{current_num_of_participants > 1 && "s"} have registered
+          </p>
+        </div>
+        <div className="flex gap-2 items-center self-center">
+          <Button
+            onClick={handleForumReroute}
+            className="border-2 border-primary-800 flex gap-3 py-2 px-4 rounded-full"
+          >
+            <p className="medium text-base text-primary-800">View Forums</p>
+            <div className="-rotate-45">
+              <Arrow color={COLORS.primary[800]} dimensions={{ width: 25 }} />
+            </div>
+          </Button>
+          <Link
+            href={`/event/${id}/forum`}
+            className="bg-primary-800 py-2 px-4 rounded-full medium text-base text-primary-300"
+          >
+            Check Events
+          </Link>
         </div>
       </div>
     </article>

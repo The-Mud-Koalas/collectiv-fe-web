@@ -8,5 +8,7 @@ import Unlocked from "./Unlocked";
 import LocationSVG from "./Location";
 import Calendar from "./Calendar";
 import Upload from "./Upload";
+import People from "./People";
+import Clock from "./Clock";
 
-export { Back, Upload, Eye, EyeClosed, Arrow, Chevron, Unlocked, Locked, LocationSVG, Calendar }
+export { Back, Clock, Upload, Eye, EyeClosed, Arrow, Chevron, Unlocked, Locked, LocationSVG, Calendar, People }

@@ -1,5 +1,6 @@
-import React from "react";
+import React, { useState } from "react";
 import EventCard from "./EventCard";
+import { useQuery } from "@tanstack/react-query";
 
 interface Props {
   filters: EventFilters;
@@ -7,6 +8,13 @@ interface Props {
 }
 
 const EventList: React.FC<Props> = ({ filters, fetchType }) => {
+  const [page, setPage] = useState(0);
+  // const { data, isLoading, isError, error, isPreviousData} = useQuery({
+  //   queryKey: ["events", page],
+  //   // queryFn: 
+  // })
+  // const data = [] as any;
+
   const data: ServiceEvent[] = [
     {
       id: "7f28cd70-17c7-4a7d-9ba1-002b44fb0208",
@@ -38,6 +46,8 @@ const EventList: React.FC<Props> = ({ filters, fetchType }) => {
       measurement_unit: "baloons",
       progress: 0.0,
       transactions: [],
+      current_num_of_participants: 25,
+      current_num_of_volunteers: 10
     },
   ];
   

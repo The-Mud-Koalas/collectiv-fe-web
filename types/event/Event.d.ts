@@ -40,4 +40,6 @@ interface ServiceEvent {
   measurement_unit: string;
   progress: number;
   transactions: Transaction[];
+  current_num_of_participants: number;
+  current_num_of_volunteers: number;
 }
