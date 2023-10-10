@@ -66,7 +66,7 @@ const EventRegistration: React.FC<Props> = ({ event }) => {
             currentStage={regisStage}
             openRegisStage={openRegisStage(2)}
             closeStage={closeStage}
-            nextStage={openRegisStage(3)}
+            nextStage={changeStage(2)}
             visitedStages={visitedStages}
           />
         </Card>

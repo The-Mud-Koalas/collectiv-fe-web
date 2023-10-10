@@ -9,6 +9,7 @@ const useUpload = ({ endpoint, method }: Props) => {
   const [isLoading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [uploadProgress, setUploadProgress] = useState(0);
+  console.log({ isLoading, uploadProgress })
 
   const uploadFile = async (formData: FormData, token?: string) =>
     new Promise((resolve, reject) => {

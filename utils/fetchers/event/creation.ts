@@ -9,7 +9,10 @@ const getServiceCategories = async () => {
     endpoint: "/event/category/all",
     token,
   });
-  return categories.map((cat) => ({ value: cat.id, label: capitalize(cat.name) }));
+  return categories.map((cat) => ({
+    value: cat.id,
+    label: capitalize(cat.name, true),
+  }));
 };
 
 const getTags: QueryFunction<SelectOption<string>[], string[], any> = async ({
@@ -86,6 +89,8 @@ const createEvent = async (values: NewEventFields) => {
     location_id: newLocation.id,
     category_id: eventValues.category.value,
     tags: tagList.map((tag) => tag.id),
+    min_num_of_volunteers: 1,
+    goal_kind: eventValues.goal_kind?.value,
   };
 
   const newEvent = await postRequest({
