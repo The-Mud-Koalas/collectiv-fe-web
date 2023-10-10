@@ -47,7 +47,7 @@ interface ProjectDetail extends BaseEventDetail {
   transactions: Transaction[];
 }
 
-interface InitativeDetail extends BaseEventDetail {
+interface InitiativeDetail extends BaseEventDetail {
   event_type: "initiative";
 }
 
