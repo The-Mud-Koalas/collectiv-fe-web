@@ -9,7 +9,10 @@ const getServiceCategories = async () => {
     endpoint: "/event/category/all",
     token,
   });
-  return categories.map((cat) => ({ value: cat.id, label: capitalize(cat.name) }));
+  return categories.map((cat) => ({
+    value: cat.id,
+    label: capitalize(cat.name, true),
+  }));
 };
 
 const getTags: QueryFunction<SelectOption<string>[], string[], any> = async ({
@@ -56,7 +59,7 @@ const getProjectUnitGoals: QueryFunction<
 };
 
 const createEvent = async (values: NewEventFields) => {
-  const { eventValues, volunteerValues, isProject } = values;
+  const { eventValues, isProject } = values;
 
   const idToken = await auth.currentUser?.getIdToken();
 
@@ -81,12 +84,13 @@ const createEvent = async (values: NewEventFields) => {
     is_project: isProject,
     project_goal: Number(eventValues.project_goal),
     goal_measurement_unit: eventValues.goal_measurement_unit?.value ?? "",
-    min_num_of_volunteers: Number(volunteerValues.min_num_of_volunteers),
     start_date_time: eventValues.start_date_time.toISOString(),
     end_date_time: eventValues.end_date_time.toISOString(),
     location_id: newLocation.id,
     category_id: eventValues.category.value,
     tags: tagList.map((tag) => tag.id),
+    min_num_of_volunteers: 1,
+    goal_kind: eventValues.goal_kind?.value,
   };
 
   const newEvent = await postRequest({

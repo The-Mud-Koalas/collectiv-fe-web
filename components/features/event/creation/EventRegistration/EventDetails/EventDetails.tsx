@@ -20,10 +20,17 @@ import {
 } from "react-hook-form";
 import { numericValidator } from "@/utils/helpers/validator/numericValidator";
 import { inter } from "@/utils/constants/fonts";
-import { getProjectUnitGoals, getTags } from "@/utils/fetchers/event/creation";
+import {
+  createEvent,
+  getProjectUnitGoals,
+  getTags,
+} from "@/utils/fetchers/event/creation";
 import { Arrow } from "@/components/shared/svg/icons";
 import { COLORS } from "@/utils/constants/colors";
 import useUpload from "@/hooks/utils/useUpload";
+import { useMutation } from "@tanstack/react-query";
+import { auth } from "@/lib/firebase";
+import { BeatLoader, ClipLoader } from "react-spinners";
 
 interface Props {
   currentStage?: number;
@@ -58,9 +65,9 @@ const EventDetails: React.FC<Props> = ({
     isProject,
   } = useEventCreationContext();
 
-  const { isLoading, uploadFile, uploadProgress } = useUpload({
-    endpoint: "/event/image/upload",
-    method: "POST",
+  const { mutateAsync, isLoading: isLoadingSubmission } = useMutation({
+    mutationFn: createEvent,
+    onSuccess: () => {},
   });
 
   const {
@@ -91,6 +98,15 @@ const EventDetails: React.FC<Props> = ({
     }
   }, [startDate, getValues, setValue]);
 
+  const {
+    isLoading: isUploading,
+    uploadFile,
+    uploadProgress,
+  } = useUpload({
+    endpoint: "/event/image/upload",
+    method: "POST",
+  });
+
   const eventType = isProject ? "Project" : "Initiative";
 
   const onDrop = async (file: File[]) => {
@@ -98,13 +114,30 @@ const EventDetails: React.FC<Props> = ({
     const imageObject = { url, file: file[0] };
 
     setValue("image", imageObject);
+    clearErrors("image");
   };
 
-  const onSuccess: SubmitHandler<EventCreationFields> = (data) => {
+  const onSuccess: SubmitHandler<EventCreationFields> = async (data) => {
+    console.log(data)
     if (data.image == null) {
       setError("image", { message: "This field should not be empty." });
       return;
     }
+
+    const newEvent = {
+      eventValues: data,
+      isProject: isProject as boolean,
+    };
+
+    const event = await mutateAsync(newEvent);
+
+    const idToken = await auth.currentUser?.getIdToken();
+
+    const formData = new FormData();
+    const image = data.image;
+    formData.append("event_id", event.id);
+    formData.append("event_image", image.file);
+    await uploadFile(formData, idToken);
 
     nextStage();
   };
@@ -230,9 +263,9 @@ const EventDetails: React.FC<Props> = ({
               </div>
               <AsyncSelectField
                 fetcher={getProjectUnitGoals}
-                field="goal_measurement"
+                field="goal_kind"
                 label=""
-                placeholder="e.g. bottles collected"
+                placeholder="e.g. food packs"
                 control={control}
               />
             </div>
@@ -249,19 +282,30 @@ const EventDetails: React.FC<Props> = ({
           field="image"
           file={image}
           uploadProgress={uploadProgress}
-          isUploading={isLoading}
+          isUploading={isUploading || isLoadingSubmission}
           onDrop={onDrop}
           label={`${eventType} Image`}
           description="Upload your event image here"
         />
         <Button
-          className={`${inter.className} items-center flex gap-2 justify-between rounded-full text-primary-300 bg-primary-800 px-3 py-1 w-fit justify-self-start`}
+          className={`${(isUploading || isLoadingSubmission) && "px-12"} ${inter.className} items-center flex gap-2 justify-between rounded-full text-primary-300 bg-primary-800 px-3 py-1 w-fit justify-self-start`}
           type="submit"
+          disabled={isUploading || isLoadingSubmission}
         >
-          <p>Continue</p>
-          <div className="rotate-90">
-            <Arrow color={COLORS.primary[300]} dimensions={{ width: 20 }} />
-          </div>
+          {isUploading || isLoadingSubmission ? (
+            <ClipLoader
+              size={20}
+              color={COLORS.primary[300]}
+              loading={isUploading || isLoadingSubmission}
+              aria-label="Loading Spinner"
+              data-testid="loader"
+            />
+          ) : (
+            <>
+              <p>Continue</p>
+              <Arrow color={COLORS.primary[300]} dimensions={{ width: 20 }} />
+            </>
+          )}
         </Button>
       </form>
     </EventCollapsible>
