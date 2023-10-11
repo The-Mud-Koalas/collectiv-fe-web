@@ -19,8 +19,9 @@ const getRequest = async ({ url, endpoint, token }: FetchProps) => {
   });
 
   if (!response.ok) {
+    const error = await response.json();
     throw new Error(`Response failed with status ${response.status}`, {
-      cause: response,
+      cause: error,
     });
   }
 
@@ -44,8 +45,9 @@ const postRequest = async <T>({
   });
 
   if (!response.ok) {
+    const error = await response.json();
     throw new Error(`Response failed with status ${response.status}`, {
-      cause: response,
+      cause: error,
     });
   }
 
