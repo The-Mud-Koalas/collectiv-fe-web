@@ -2,14 +2,15 @@ interface FetchProps {
   endpoint?: string;
   url?: string;
   token?: string;
+  searchParams?: URLSearchParams;
 }
 
 interface MutateProps<T> extends FetchProps {
   body: T;
 }
 
-const getRequest = async ({ url, endpoint, token }: FetchProps) => {
-  url ??= `${process.env.NEXT_PUBLIC_BACKEND_URL}${endpoint}/`;
+const getRequest = async ({ url, endpoint, token, searchParams }: FetchProps) => {
+  url ??= `${process.env.NEXT_PUBLIC_BACKEND_URL}${endpoint}/${searchParams != null ? `?${searchParams.toString()}` : ""}`;
 
   const response = await fetch(url, {
     headers: {
