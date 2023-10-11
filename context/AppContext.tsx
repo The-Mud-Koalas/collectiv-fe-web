@@ -102,7 +102,7 @@ const AppProvider: React.FC<PropsWithChildren> = ({ children }) => {
       setAuthLoading(false);
 
       // if (window.ReactNativeWebView == null) return;
-      setShowModal(true);
+      // setShowModal(true);
     });
     return () => unsubscribe();
   }, [queryClient]);

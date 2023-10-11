@@ -4,18 +4,12 @@ import { capitalize } from "@/utils/helpers/formatting/capitalize";
 import { QueryFunction } from "@tanstack/react-query";
 
 const getServiceCategories = async () => {
-  const token = await auth.currentUser?.getIdToken();
   const categories: Category[] = await getRequest({
-    endpoint: "/event/category/all",
-    token,
+    endpoint: "/event/category/all"
   });
   return categories.map((cat) => ({
     value: cat.id,
-<<<<<<< HEAD
-    label: capitalize(cat.name),
-=======
     label: capitalize(cat.name, true),
->>>>>>> bf5ef959c40cdd6b369754e9ec2f08a674b02f32
   }));
 };
 
@@ -23,9 +17,8 @@ const getTags: QueryFunction<SelectOption<string>[], string[], any> = async ({
   queryKey,
 }) => {
   const [_, __, searchParam] = queryKey;
-  const idToken = await auth.currentUser?.getIdToken();
 
-  const result = await getRequest({ endpoint: "/event/tags", token: idToken });
+  const result = await getRequest({ endpoint: "/event/tags"});
   return result.map((tag: { id: string; name: string }) => ({
     value: tag.id,
     label: tag.name,
@@ -37,9 +30,8 @@ const getLocations: QueryFunction<
   string[],
   any
 > = async () => {
-  const idToken = await auth.currentUser?.getIdToken();
 
-  const result = await getRequest({ endpoint: "/space/all", token: idToken });
+  const result = await getRequest({ endpoint: "/space/all" });
   return result.map((location: { id: string; name: string }) => ({
     value: location.id,
     label: location.name,
