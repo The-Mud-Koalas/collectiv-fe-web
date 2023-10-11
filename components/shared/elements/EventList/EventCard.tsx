@@ -8,7 +8,7 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 
 interface Props {
-  event: ServiceEvent;
+  event: EventDetail;
 }
 
 type EventStatus = "scheduled" | "ongoing" | "completed" | "cancelled";

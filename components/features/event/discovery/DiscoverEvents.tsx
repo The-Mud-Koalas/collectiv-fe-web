@@ -5,6 +5,7 @@ import { Arrow } from "@/components/shared/svg/icons";
 import CollectivLogo from "@/components/shared/svg/logo/CollectivLogo";
 import { COLORS } from "@/utils/constants/colors";
 import { garamond, inter, interItalics } from "@/utils/constants/fonts";
+import { getListOfEvents } from "@/utils/fetchers/event/discovery";
 import Link from "next/link";
 import React, { useEffect } from "react";
 
@@ -21,10 +22,6 @@ interface Props {
 }
 
 const DiscoverEvents: React.FC<Props> = ({ filters, changeFilterParam, options }) => {
-  
-  useEffect(() => {
-    console.log(filters)
-  }, [filters])
   
   return (
     <div className="flex flex-col items-center">

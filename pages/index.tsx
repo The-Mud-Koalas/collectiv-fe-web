@@ -1,4 +1,5 @@
 import EventParticipationPopup from "@/components/features/event/participation/EventParticipationPopup";
+import { Home } from "@/components/features/home";
 import { Template } from "@/components/shared/layouts";
 import { Inter } from "next/font/google";
 
@@ -7,7 +8,7 @@ const inter = Inter({ subsets: ["latin"] });
 function HomePage() {
   return (
     <Template>
-      <p>Test</p>
+      <Home/>
     </Template>
   );
 }
