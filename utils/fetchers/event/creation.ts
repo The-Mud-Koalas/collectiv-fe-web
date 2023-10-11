@@ -4,10 +4,8 @@ import { capitalize } from "@/utils/helpers/formatting/capitalize";
 import { QueryFunction } from "@tanstack/react-query";
 
 const getServiceCategories = async () => {
-  const token = await auth.currentUser?.getIdToken();
   const categories: Category[] = await getRequest({
-    endpoint: "/event/category/all",
-    token,
+    endpoint: "/event/category/all"
   });
   return categories.map((cat) => ({
     value: cat.id,
@@ -19,12 +17,24 @@ const getTags: QueryFunction<SelectOption<string>[], string[], any> = async ({
   queryKey,
 }) => {
   const [_, __, searchParam] = queryKey;
-  const idToken = await auth.currentUser?.getIdToken();
 
-  const result = await getRequest({ endpoint: "/event/tags", token: idToken });
+  const result = await getRequest({ endpoint: "/event/tags"});
   return result.map((tag: { id: string; name: string }) => ({
-    value: tag.name,
+    value: tag.id,
     label: tag.name,
+  }));
+};
+
+const getLocations: QueryFunction<
+  SelectOption<string>[],
+  string[],
+  any
+> = async () => {
+
+  const result = await getRequest({ endpoint: "/space/all" });
+  return result.map((location: { id: string; name: string }) => ({
+    value: location.id,
+    label: location.name,
   }));
 };
 
@@ -102,4 +112,4 @@ const createEvent = async (values: NewEventFields) => {
   return newEvent;
 };
 
-export { getServiceCategories, getProjectUnitGoals, createEvent, getTags };
+export { getServiceCategories, getProjectUnitGoals, createEvent, getTags, getLocations };
