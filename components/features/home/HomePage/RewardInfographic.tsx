@@ -8,7 +8,10 @@ const RewardInfographic: FC<RewardInfographicProps> = ({}) => {
         <div className={`${inter.className} bg-secondary-200 rounded-lg p-5`}>
             <div className="flex flex-wrap items-center gap-2 justify-center">
                 <div className="w-[677px]">
-                    <p>emoji</p>
+                    <span className="w-10 h-10 bg-white rounded-full p-2 flex items-center justify-center">
+                        ❇️
+                    </span>
+
                     <p className={`${garamond.className} text-xl`}>
                         Get your benefits
                     </p>
