@@ -52,3 +52,40 @@ interface InitiativeDetail extends BaseEventDetail {
 }
 
 type EventDetail = ProjectDetail | InitiativeDetail;
+
+type EventParticipation =
+  | {
+      is_registered: false;
+    }
+  | {
+      is_registered: true;
+      data: EventParticipationData;
+    };
+
+interface BaseEventParticipation {
+  participant: string;
+  registration_time: string;
+  has_left_forum: boolean;
+  rewarded: boolean;
+  submitted_review: boolean;
+  total_contribution: number;
+  activities: { timestamp: string; contribution: number }[];
+}
+
+interface ContributorEventParticipation extends BaseEventParticipation {
+  type: "contributor";
+}
+
+interface ParticipantEventParticipation extends BaseEventParticipation {
+  type: "participant";
+}
+
+interface VolunteerEventParticipation extends BaseEventParticipation {
+  type: "volunteer";
+  has_manager_access: boolean;
+}
+
+type EventParticipationData =
+  | ContributorEventParticipation
+  | ParticipantEventParticipation
+  | VolunteerEventParticipation;
