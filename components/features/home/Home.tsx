@@ -2,7 +2,7 @@ import { Button, Modal } from "@/components/shared/elements";
 import { useAppContext } from "@/context/AppContext";
 import { auth } from "@/lib/firebase";
 import React, { useEffect, useState } from "react";
-import VolunteerAttendanceModal from "../event/attendance/VolunteerAttendanceModal";
+import { AttendanceModal } from "../event/attendance/AttendanceModal";
 
 const Home = () => {
   const { sendMessageToRN } = useAppContext();
@@ -12,7 +12,7 @@ const Home = () => {
     <>
       {/* <div>Home</div> */}
       <Modal open={showModal}>
-        <VolunteerAttendanceModal
+        <AttendanceModal
           eventId="1234"
           onCheckInComplete={() => console.log("Check in complete")}
           onClose={() => setShowModal(false)}

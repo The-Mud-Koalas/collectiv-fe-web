@@ -47,6 +47,7 @@ const postRequest = async <T>({
 
   if (!response.ok) {
     const error = await response.json();
+    console.error(error)
     throw new Error(`Response failed with status ${response.status}`, {
       cause: error,
     });

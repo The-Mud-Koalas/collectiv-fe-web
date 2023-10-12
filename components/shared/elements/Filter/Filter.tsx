@@ -7,6 +7,8 @@ interface Props {
   filterOptions: SelectOption<string>[];
   filterName: string;
   onChange: (value: SelectOption<string> | null) => void;
+  isClearable?: boolean;
+  firstDefault?: boolean;
 }
 
 const getSVComponent = (fieldName: string) => {
@@ -16,7 +18,7 @@ const getSVComponent = (fieldName: string) => {
   }: SingleValueProps<SelectOption<string>>) => {
     return (
       <components.SingleValue {...props} className="!max-w-[14ch] !overflow-hidden !text-ellipsis">
-        {capitalize(fieldName)}: {children}
+        {fieldName === "" ? "" : `${capitalize(fieldName)}`} {children}
       </components.SingleValue>
     );
   };
@@ -26,7 +28,7 @@ const getSVComponent = (fieldName: string) => {
   return SingleValue;
 };
 
-const Filter: React.FC<Props> = ({ filterOptions, filterName, onChange }) => {
+const Filter: React.FC<Props> = ({ filterOptions, filterName, onChange, isClearable, firstDefault }) => {
   return (
     <Select
       unstyled
@@ -47,9 +49,10 @@ const Filter: React.FC<Props> = ({ filterOptions, filterName, onChange }) => {
         SingleValue: getSVComponent(filterName),
         IndicatorSeparator: null,
       }}
+      defaultValue={firstDefault ? filterOptions?.[0] : null}
       onChange={onChange as any}
       placeholder={`All ${capitalize(filterName)}`}
-      isClearable={true}
+      isClearable={isClearable ?? true}
       isSearchable={false}
       options={filterOptions}
     />
