@@ -18,11 +18,14 @@ interface Props {
     key: keyof EventFilters
   ) => (value: SelectOption<string> | null) => void;
   filters: EventFilters;
-  options: FilterOptions
+  options: FilterOptions;
 }
 
-const DiscoverEvents: React.FC<Props> = ({ filters, changeFilterParam, options }) => {
-  
+const DiscoverEvents: React.FC<Props> = ({
+  filters,
+  changeFilterParam,
+  options,
+}) => {
   return (
     <div className="flex flex-col items-center">
       <section
@@ -61,24 +64,29 @@ const DiscoverEvents: React.FC<Props> = ({ filters, changeFilterParam, options }
           </Button>
         </Link>
       </section>
-      <section id="health">
-        {/* Rashad's Health Part */}
-      </section>
+      <section id="health">{/* Rashad's Health Part */}</section>
       <section id="events-in" className="w-full px-10 flex flex-col gap-3 mb-8">
         <div className="flex items-center gap-2">
           <h2 className={`${garamond.className} text-3xl italic`}>
             Events in <span className="font-bold">Collectiv</span>
           </h2>
-          <CollectivLogo color="black" dimensions={{ width: 27 }}/>
+          <CollectivLogo color="black" dimensions={{ width: 27 }} />
         </div>
         <div className="flex gap-3 items-center">
-            <p className={`${interItalics.className} font-medium text-base`}>Filter by</p>
-            {
-                Object.keys(filters).map(filter => <Filter key={filter} filterOptions={options[filter as keyof FilterOptions]} filterName={filter} onChange={changeFilterParam(filter as keyof EventFilters)}/>)
-            }
+          <p className={`${interItalics.className} font-medium text-base`}>
+            Filter by
+          </p>
+          {Object.keys(filters).map((filter) => (
+            <Filter
+              key={filter}
+              filterOptions={options[filter as keyof FilterOptions]}
+              filterName={filter}
+              onChange={changeFilterParam(filter as keyof EventFilters)}
+            />
+          ))}
         </div>
       </section>
-      <EventList fetchType="event" filters={filters}/>
+      <EventList fetchType="event" filters={filters} />
     </div>
   );
 };

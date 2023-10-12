@@ -28,7 +28,7 @@ const LoginPage: NextPage = () => {
     mutationFn: loginWithEmail,
     onSuccess: (user) => {
       form.reset();
-      sendMessageToRN({ type: "auth-token", token: user.user.refreshToken })
+      sendMessageToRN({ type: "auth-token", token: user.user.refreshToken });
       const next = searchParams.get("next");
       router.push(next ?? "/");
     },
@@ -44,7 +44,12 @@ const LoginPage: NextPage = () => {
   });
 
   const onSubmit: SubmitHandler<LoginFormFields> = async (data) => {
-    mutateAsync(data);
+    try {
+      mutateAsync(data);
+    } catch (error) {
+      const err = error as Error;
+      toast.error(err.cause as string);
+    }
   };
 
   const onError: SubmitErrorHandler<FieldError> = (error) => {
