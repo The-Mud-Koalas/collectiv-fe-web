@@ -37,6 +37,7 @@ interface BaseEventDetail {
   event_tags: Tag[];
   current_num_of_participants: number;
   current_num_of_volunteers: number;
+  volunteer_registration_enabled: boolean;
 }
 
 interface ProjectDetail extends BaseEventDetail {
@@ -49,6 +50,7 @@ interface ProjectDetail extends BaseEventDetail {
 
 interface InitiativeDetail extends BaseEventDetail {
   event_type: "initiative";
+  participation_registration_enabled: boolean;
 }
 
 type EventDetail = ProjectDetail | InitiativeDetail;
@@ -82,7 +84,7 @@ interface ParticipantEventParticipation extends BaseEventParticipation {
 
 interface VolunteerEventParticipation extends BaseEventParticipation {
   type: "volunteer";
-  has_manager_access: boolean;
+  granted_manager_access: boolean;
 }
 
 type EventParticipationData =
