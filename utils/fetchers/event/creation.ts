@@ -11,11 +11,7 @@ const getServiceCategories = async () => {
   });
   return categories.map((cat) => ({
     value: cat.id,
-<<<<<<< HEAD
-    label: capitalize(cat.name),
-=======
     label: capitalize(cat.name, true),
->>>>>>> bf5ef959c40cdd6b369754e9ec2f08a674b02f32
   }));
 };
 
