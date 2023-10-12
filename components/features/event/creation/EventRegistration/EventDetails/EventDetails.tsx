@@ -5,7 +5,6 @@ import {
   TextInputField,
   SelectField,
   MultiselectInputField,
-  LocationField,
   DateField,
   FileUploadField,
   AsyncSelectField,
@@ -31,6 +30,8 @@ import useUpload from "@/hooks/utils/useUpload";
 import { useMutation } from "@tanstack/react-query";
 import { auth } from "@/lib/firebase";
 import { BeatLoader, ClipLoader } from "react-spinners";
+import { capitalize } from "@/utils/helpers/formatting/capitalize";
+import { toast } from "react-toastify";
 
 interface Props {
   currentStage?: number;
@@ -62,7 +63,9 @@ const EventDetails: React.FC<Props> = ({
   const {
     eventDetailsForm: form,
     categories,
+    locations,
     isProject,
+    tags
   } = useEventCreationContext();
 
   const { mutateAsync, isLoading: isLoadingSubmission } = useMutation({
@@ -118,7 +121,6 @@ const EventDetails: React.FC<Props> = ({
   };
 
   const onSuccess: SubmitHandler<EventCreationFields> = async (data) => {
-    console.log(data)
     if (data.image == null) {
       setError("image", { message: "This field should not be empty." });
       return;
@@ -129,17 +131,23 @@ const EventDetails: React.FC<Props> = ({
       isProject: isProject as boolean,
     };
 
-    const event = await mutateAsync(newEvent);
+    try {
 
-    const idToken = await auth.currentUser?.getIdToken();
-
-    const formData = new FormData();
-    const image = data.image;
-    formData.append("event_id", event.id);
-    formData.append("event_image", image.file);
-    await uploadFile(formData, idToken);
-
-    nextStage();
+      
+      const event = await mutateAsync(newEvent);
+      
+      const idToken = await auth.currentUser?.getIdToken();
+      
+      const formData = new FormData();
+      const image = data.image;
+      formData.append("event_id", event.id);
+      formData.append("event_image", image.file);
+      await uploadFile(formData, idToken);
+      
+      nextStage();
+    } catch (error) {
+      toast.error((error as Error).cause as string);
+    }
   };
 
   const onError: SubmitErrorHandler<EventCreationFields> = (errors) => {
@@ -178,26 +186,29 @@ const EventDetails: React.FC<Props> = ({
           control={control}
           field="category"
           label={`${eventType} Category`}
-          options={categories}
+          options={categories.map((cat) => ({
+            value: cat.id,
+            label: capitalize(cat.name, true),
+          }))}
           error={errors.category as FieldError}
         />
         <MultiselectInputField
           placeholder="e.g. Food, Sports"
           label={`${eventType} Tags`}
           field="tags"
-          fetcher={getTags}
           control={control}
           error={errors.tags as FieldError}
           setValue={setValue}
           getValue={getValues}
+          options={tags.map(tag => ({value: tag.id, label: tag.name}))}
         />
-        <LocationField
+        <SelectField
           placeholder="e.g. Great Court"
           rules={{ required: "Please select a location." }}
           label={`${eventType} Location`}
           field="location"
-          setValue={setValue}
           control={control}
+          options={locations.map((loc) => ({ value: loc.id, label: loc.name }))}
           error={errors.location as FieldError}
         />
         <DateField
@@ -288,7 +299,9 @@ const EventDetails: React.FC<Props> = ({
           description="Upload your event image here"
         />
         <Button
-          className={`${(isUploading || isLoadingSubmission) && "px-12"} ${inter.className} items-center flex gap-2 justify-between rounded-full text-primary-300 bg-primary-800 px-3 py-1 w-fit justify-self-start`}
+          className={`${(isUploading || isLoadingSubmission) && "px-12"} ${
+            inter.className
+          } items-center flex gap-2 justify-between rounded-full text-primary-300 bg-primary-800 px-3 py-1 w-fit justify-self-start`}
           type="submit"
           disabled={isUploading || isLoadingSubmission}
         >

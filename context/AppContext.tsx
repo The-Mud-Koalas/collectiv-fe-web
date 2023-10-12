@@ -35,12 +35,14 @@ interface AuthContextProps {
   user: User | null;
   logout: () => void;
   sendMessageToRN: (msg: Record<string, any>) => void;
+  isInRN: () => boolean;
 }
 
 const AppContext = createContext<AuthContextProps>({
   user: null,
   logout: () => {},
   sendMessageToRN: () => {},
+  isInRN: () => false
 });
 const useAppContext = () => useContext(AppContext);
 
@@ -54,6 +56,8 @@ const AppProvider: React.FC<PropsWithChildren> = ({ children }) => {
     router.push("/accounts/login");
   };
   const queryClient = useQueryClient();
+
+  const isInRN = () => window.ReactNativeWebView != null;
 
   const {
     data: userData,
@@ -110,7 +114,7 @@ const AppProvider: React.FC<PropsWithChildren> = ({ children }) => {
   if (!isMapsScriptLoaded || isAuthLoading) return <Loading />;
 
   return (
-    <AppContext.Provider value={{ user, logout, sendMessageToRN }}>
+    <AppContext.Provider value={{ user, logout, sendMessageToRN, isInRN }}>
       {children}
       <LocationModal onAccept={onAccept} setShowModal={setShowModal} showModal={showModal} />
     </AppContext.Provider>

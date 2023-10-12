@@ -16,9 +16,11 @@ const EventList: React.FC<Props> = ({ filters, fetchType }) => {
     PaginatedResults<EventDetail[]>
   >({
     queryFn: () => getListOfEvents(filters)(page),
-    queryKey: ["event", page],
+    queryKey: ["event", page, filters],
     keepPreviousData: true,
   });
+
+  useEffect(() => {console.log(data)}, [data])
 
   // const data = [] as any;
 

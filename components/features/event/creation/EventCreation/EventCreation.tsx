@@ -29,7 +29,14 @@ const EventCreation = () => {
       <StageToggler stages={EVENT_CREATION_STAGES} />
 
       <AnimatePresence mode="wait">
-        <motion.div className="px-4 sm:p-0 w-full self-start flex flex-col gap-6 sm:gap-10" transition={{ type: "tween", duration: 0.2}} key={currentStage.name} initial={{ x: -10, opacity: 0}} animate={{ x: 0, opacity: 1}} exit={{ x: 10, opacity: 0}}>
+        <motion.div
+          className="px-4 sm:p-0 w-full self-start flex flex-col gap-6 sm:gap-10"
+          transition={{ type: "tween", duration: 0.2 }}
+          key={currentStage.name}
+          initial={{ x: -10, opacity: 0 }}
+          animate={{ x: 0, opacity: 1 }}
+          exit={{ x: 10, opacity: 0 }}
+        >
           <currentStage.StageComponent />
         </motion.div>
       </AnimatePresence>
