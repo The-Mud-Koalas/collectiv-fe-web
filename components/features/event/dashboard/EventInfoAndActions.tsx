@@ -115,7 +115,8 @@ const EventInfoAndActions = ({ eventDetails }: Props) => {
     participation.data?.is_registered &&
     participation.data.data.type === "volunteer" &&
     participation.data.data.granted_manager_access;
-  const isManagerInInitiative = eventDetails.event_type === "initiative" && isManager;
+  const isManagerInInitiative =
+    eventDetails.event_type === "initiative" && isManager;
   const isManagerInProject = eventDetails.event_type === "project" && isManager;
   const canCheckOut =
     eventDetails.id === currentEvent.data?.id && (isParticipant || isVolunteer);
@@ -223,7 +224,8 @@ const EventInfoAndActions = ({ eventDetails }: Props) => {
                     shallow
                     className="flex items-center gap-2 bg-secondary-500 text-secondary-100 text-sm border-[2px] border-secondary-500 px-5 py-2 rounded-md font-medium"
                   >
-                    Check In {eventDetails.event_type === "initiative"
+                    Check In{" "}
+                    {eventDetails.event_type === "initiative"
                       ? "Participant/Volunteer"
                       : "Volunteer"}
                     <BsPersonCheckFill className="text-lg" />
@@ -296,21 +298,28 @@ const EventInfoAndActions = ({ eventDetails }: Props) => {
           onClose={closeModal}
         />
       </Modal>
-      <Modal
-        open={router.query.recordContribution === "true"}
-        onOverlayTap={closeModal}
-      >
-        <RecordContributionModal
-          onClose={closeModal}
-          eventDetails={eventDetails}
-        />
-      </Modal>
-      <Modal
-        open={router.query.viewVolunteers === "true"}
-        onOverlayTap={closeModal}
-      >
-        <ViewVolunteersModal onClose={closeModal} eventDetails={eventDetails} />
-      </Modal>
+      {isManagerInProject && (
+        <Modal
+          open={router.query.recordContribution === "true"}
+          onOverlayTap={closeModal}
+        >
+          <RecordContributionModal
+            onClose={closeModal}
+            eventDetails={eventDetails}
+          />
+        </Modal>
+      )}
+      {isManager && (
+        <Modal
+          open={router.query.viewVolunteers === "true"}
+          onOverlayTap={closeModal}
+        >
+          <ViewVolunteersModal
+            onClose={closeModal}
+            eventDetails={eventDetails}
+          />
+        </Modal>
+      )}
     </>
   );
 };
