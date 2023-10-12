@@ -4,14 +4,14 @@ import { inter } from "@/utils/constants/fonts";
 import { capitalize } from "@/utils/helpers/formatting/capitalize";
 
 interface StatusPillProps extends React.HTMLAttributes<HTMLDivElement> {
-  status: "scheduled" | "ongoing" | "completed" | "cancelled";
+  status: "scheduled" | "on going" | "completed" | "cancelled";
 }
 
 const StatusPill = (props: StatusPillProps) => {
   const { status, ...rest } = props;
   
   const variants = {
-    "[&>div]:bg-primary-500 bg-primary-200 text-primary-700": status === "ongoing",
+    "[&>div]:bg-primary-500 bg-primary-200 text-primary-700": status === "on going",
     "[&>div]:bg-secondary-500 bg-secondary-200 text-secondary-400": status === "completed",
     "[&>div]:bg-danger-500 bg-danger-200 text-danger-100": status === "cancelled",
     "[&>div]:bg-gray-600 bg-gray-300": status === "scheduled",

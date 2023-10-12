@@ -26,7 +26,7 @@ const Modal = ({ children, open, onOverlayTap }: ModalProps) => {
             animate={{ opacity: 0.5 }}
             exit={{ opacity: 0 }}
             onTap={onOverlayTap}
-            className={cn("z-[999] bg-slate-500 fixed top-0 left-0 w-screen h-screen", onOverlayTap && "cursor-pointer")}
+            className={cn("z-[999] bg-slate-500 fixed top-0 left-0 w-full h-full", onOverlayTap && "cursor-pointer")}
           />
           <motion.div
             style={{ top: "50%", left: "50%", translateX: "-50%", translateY: "-50%" }}
