@@ -8,11 +8,7 @@ interface EventCreationFields {
   goal_kind?: SelectOption<string>;
   start_date_time: Date;
   end_date_time: Date;
-  location: {
-    latitude: number;
-    longitude: number;
-    name: string;
-  };
+  location: SelectOption<string>;
   tags: SelectOption<string>[];
   image: {
     url: string;

@@ -1,5 +1,5 @@
 import { Loading } from "@/components/shared/layouts";
-import { getServiceCategories } from "@/utils/fetchers/event/creation";
+import { getLocations, getServiceCategories, getTags } from "@/utils/fetchers/event/creation";
 import { useQuery } from "@tanstack/react-query";
 import React, { createContext, useContext, useState } from "react";
 import { UseFormReturn, useForm } from "react-hook-form";
@@ -11,7 +11,9 @@ interface EventContextProps {
   changeIsProject: (newIsProject: boolean) => () => void;
   populateFormValues: (event: NewEventFields) => void;
   visitedStage: number[];
-  categories: CategoryOptions[];
+  categories: Category[];
+  locations: EventLocation[];
+  tags: Tag[];
 }
 
 const EventCreationContext = createContext<EventContextProps>(
@@ -27,13 +29,35 @@ const EventCreationProvider: React.FC<React.PropsWithChildren> = ({
 
   const {
     data: categories,
-    isLoading,
-    isError,
+    isLoading: isCategoriesLoading,
+    isError: isCategoriesError,
   } = useQuery({
     queryKey: ["categories"],
     queryFn: getServiceCategories,
     staleTime: Infinity,
   });
+
+  const {
+    data: locations,
+    isLoading: isLocationLoading,
+    isError: isLocationError
+  } = useQuery({
+    queryKey: ["locations"],
+    queryFn: getLocations
+  });
+
+  const {
+    data: tags,
+    isLoading: isTagsLoading,
+    isError: isTagsError
+  } = useQuery({
+    queryKey: ["tags"],
+    queryFn: getTags
+  });
+
+  const isLoading = isCategoriesLoading || isLocationLoading || isTagsLoading;
+  const isError = isCategoriesError || isLocationError || isTagsError
+
   const [isProject, setIsProject] = useState<boolean | null>(null);
   const [stage, setStage] = useState(0);
   const [visitedStage, setVisitedStage] = useState<number[]>([0]);
@@ -61,8 +85,8 @@ const EventCreationProvider: React.FC<React.PropsWithChildren> = ({
     setIsProject(isProject);
   }
 
-  if (isLoading) return <Loading />;
-  if (isError) return <></>;
+  if (isCategoriesLoading || isLocationLoading || isTagsLoading) return <Loading />;
+  if (isCategoriesError || isLocationError || isTagsError) return <></>;
 
   return (
     <EventCreationContext.Provider
@@ -74,7 +98,9 @@ const EventCreationProvider: React.FC<React.PropsWithChildren> = ({
         changeStage,
         visitedStage,
         categories,
-        populateFormValues
+        locations,
+        populateFormValues,
+        tags
       }}
     >
       {children}

@@ -1,6 +1,10 @@
 import { DiscoverEvents } from "@/components/features/event/discovery";
 import { Loading, Template } from "@/components/shared/layouts";
-import { getLocations, getServiceCategories, getTags } from "@/utils/fetchers/event/creation";
+import {
+  getLocations,
+  getServiceCategories,
+  getTags,
+} from "@/utils/fetchers/event/creation";
 import { useQuery } from "@tanstack/react-query";
 import React, { useState } from "react";
 
@@ -21,44 +25,60 @@ const DiscoverPage = () => {
     (key: keyof EventFilters) => (value: SelectOption<string> | null) =>
       setFilters((prev) => ({ ...prev, [key]: value }));
 
-  const { data: tags, isLoading: isTagsLoading, isError: isTagsError, error: tagsError } = useQuery({
+  const {
+    data: tags,
+    isLoading: isTagsLoading,
+    isError: isTagsError,
+    error: tagsError,
+  } = useQuery({
     queryKey: ["tags"],
-    queryFn: getTags
+    queryFn: getTags,
   });
 
-  const { data: categories, isLoading: isCategoriesLoading, isError: isCategoriesError, error: categoriesError} = useQuery({
+  const {
+    data: categories,
+    isLoading: isCategoriesLoading,
+    isError: isCategoriesError,
+    error: categoriesError,
+  } = useQuery({
     queryKey: ["categories"],
     queryFn: getServiceCategories,
-    staleTime: Infinity
+    staleTime: Infinity,
   });
 
-  const { data: locations, isLoading: isLocationsLoading, isError: isLocationsError, error: locationsError} = useQuery({
+  const {
+    data: locations,
+    isLoading: isLocationsLoading,
+    isError: isLocationsError,
+    error: locationsError,
+  } = useQuery({
     queryKey: ["locations"],
-    queryFn: getLocations
-  })
+    queryFn: getLocations,
+  });
 
   const isLoading = isCategoriesLoading || isTagsLoading || isLocationsLoading;
   const isError = isCategoriesError || isTagsError || isLocationsError;
   const error = categoriesError || tagsError || locationsError;
 
-
   const options: FilterOptions = {
-    category: categories ?? [],
-    location: locations ?? [],
+    category:
+      categories?.map((cat) => ({ label: cat.name, value: cat.id })) ?? [],
+    location:
+      locations?.map((loc) => ({ label: loc.name, value: loc.id })) ?? [],
     status: [
       { label: "Scheduled", value: "Scheduled" },
       { label: "Cancelled", value: "Cancelled" },
       { label: "Ongoing", value: "On going" },
       { label: "Completed", value: "Completed" },
     ],
-    tag: tags ?? [],
+    tag: tags?.map((tag) => ({ label: tag.name, value: tag.id })) ?? [],
     type: [
       { label: "Project", value: "Project" },
       { label: "Initiative", value: "Initiative" },
     ],
   };
 
-  if (isLoading) return <Loading/>;
+  if (isLoading) return <Loading />;
 
   return (
     <Template>

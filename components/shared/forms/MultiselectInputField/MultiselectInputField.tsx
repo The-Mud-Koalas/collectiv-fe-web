@@ -27,7 +27,7 @@ interface Props<TForm, TOption> {
   error?: FieldError;
   setValue: UseFormSetValue<TForm & FieldValues>;
   getValue: UseFormGetValues<TForm & FieldValues>;
-  fetcher?: QueryFunction<SelectOption<TOption>[], string[], any>;
+  options: SelectOption<string>[];
   placeholder?: string;
 }
 
@@ -40,11 +40,10 @@ const MultiselectInputField = <TForm extends unknown, TOption extends unknown>({
   setValue,
   getValue,
   placeholder,
-  fetcher,
+  options
 }: Props<TForm, TOption>) => {
   const inputId = useId();
   const [inputValue, setInputValue] = useState("");
-  const debouncedInputValue = useDebounce(inputValue);
 
   const { windowWidth } = useWindowSize();
   const isSmallScreen = windowWidth < BREAKPOINTS.sm;
@@ -52,41 +51,8 @@ const MultiselectInputField = <TForm extends unknown, TOption extends unknown>({
     ? { ...makeAnimate(), DropdownIndicator: null, ClearIndicator: null }
     : { ...makeAnimate(), DropdownIndicator: null };
 
-  const { data: options, isLoading } = useQuery(
-    ["async-multi-select", field, debouncedInputValue],
-    { queryFn: fetcher }
-  );
   placeholder ??= "";
 
-  const createOption = (label: string) => ({
-    label,
-    value: label,
-  });
-
-  const handleKeyDown: React.KeyboardEventHandler = (e) => {
-    if (!inputValue) return;
-
-    switch (e.key) {
-      case "Enter":
-      case "Tab":
-        const fieldValues = getValue()[field] as SelectOption<string>[];
-        if (
-          fieldValues != null &&
-          fieldValues.some((value) => value.value === inputValue)
-        ) {
-          setInputValue("");
-          return;
-        }
-
-        const newValuesList = [
-          ...(fieldValues ?? []),
-          createOption(inputValue),
-        ] as PathValue<TForm & FieldValues, Path<TForm & FieldValues>>;
-        setValue(field, newValuesList);
-        setInputValue("");
-        e.preventDefault();
-    }
-  };
 
   return (
     <div className="flex flex-col gap-1">
@@ -181,7 +147,6 @@ const MultiselectInputField = <TForm extends unknown, TOption extends unknown>({
             inputValue={inputValue}
             value={value}
             onInputChange={(newVal) => setInputValue(newVal)}
-            onKeyDown={handleKeyDown}
             onChange={(newValue) =>
               setValue(
                 field,

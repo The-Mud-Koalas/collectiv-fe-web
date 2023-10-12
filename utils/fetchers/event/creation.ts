@@ -1,45 +1,26 @@
 import { getRequest, postRequest } from "@/lib/fetch";
 import { auth } from "@/lib/firebase";
-import { capitalize } from "@/utils/helpers/formatting/capitalize";
 import { QueryFunction } from "@tanstack/react-query";
 
 const getServiceCategories = async () => {
-  const token = await auth.currentUser?.getIdToken();
   const categories: Category[] = await getRequest({
     endpoint: "/event/category/all",
-    token,
   });
-  return categories.map((cat) => ({
-    value: cat.id,
-    label: capitalize(cat.name, true),
-  }));
+  return categories;
 };
 
-const getTags: QueryFunction<SelectOption<string>[], string[], any> = async ({
-  queryKey,
-}) => {
-  const [_, __, searchParam] = queryKey;
-  const idToken = await auth.currentUser?.getIdToken();
-
-  const result = await getRequest({ endpoint: "/event/tags", token: idToken });
-  return result.map((tag: { id: string; name: string }) => ({
-    value: tag.id,
-    label: tag.name,
-  }));
+const getTags: QueryFunction<Tag[], string[], any> = async ({ queryKey }) => {
+  const result = await getRequest({ endpoint: "/event/tags" });
+  return result;
 };
 
 const getLocations: QueryFunction<
-  SelectOption<string>[],
+  EventLocation[],
   string[],
   any
 > = async () => {
-  const idToken = await auth.currentUser?.getIdToken();
-
-  const result = await getRequest({ endpoint: "/space/all", token: idToken });
-  return result.map((location: { id: string; name: string }) => ({
-    value: location.id,
-    label: location.name,
-  }));
+  const result = await getRequest({ endpoint: "/space/all" });
+  return result;
 };
 
 const getProjectUnitGoals: QueryFunction<
@@ -77,18 +58,9 @@ const createEvent = async (values: NewEventFields) => {
 
   const idToken = await auth.currentUser?.getIdToken();
 
-  const newLocation = await postRequest({
-    endpoint: "/space/get-or-create",
-    body: {
-      ...eventValues.location,
-      name: eventValues.location.name.split(",")[0],
-    },
-    token: idToken,
-  });
-
   const tagList: { id: string; name: string }[] = await postRequest({
     endpoint: "/event/tags/get-or-create/multiple",
-    body: { tags: eventValues.tags?.map((tag) => tag.value) ?? [] },
+    body: { tags: eventValues.tags?.map((tag) => tag.label) ?? [] },
     token: idToken,
   });
 
@@ -100,7 +72,7 @@ const createEvent = async (values: NewEventFields) => {
     goal_measurement_unit: eventValues.goal_measurement_unit?.value ?? "",
     start_date_time: eventValues.start_date_time.toISOString(),
     end_date_time: eventValues.end_date_time.toISOString(),
-    location_id: newLocation.id,
+    location_id: eventValues.location.value,
     category_id: eventValues.category.value,
     tags: tagList.map((tag) => tag.id),
     min_num_of_volunteers: 1,
@@ -116,4 +88,10 @@ const createEvent = async (values: NewEventFields) => {
   return newEvent;
 };
 
-export { getServiceCategories, getProjectUnitGoals, createEvent, getTags, getLocations };
+export {
+  getServiceCategories,
+  getProjectUnitGoals,
+  createEvent,
+  getTags,
+  getLocations,
+};

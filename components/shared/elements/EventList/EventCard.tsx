@@ -8,7 +8,7 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 
 interface Props {
-  event: ServiceEvent;
+  event: EventDetail;
 }
 
 type EventStatus = "scheduled" | "ongoing" | "completed" | "cancelled";
@@ -48,7 +48,7 @@ const EventCard: React.FC<Props> = ({ event }) => {
           )}
         </p>
         <div>
-          <StatusPill status={eventStatus as EventStatus} />
+          <StatusPill status={(eventStatus.split(" ").reduce((prev, curr) => `${prev}${curr}`, "")) as EventStatus} />
         </div>
       </div>
       <h2 className="font-semibold text-base bg-secondary-200 w-fit">{name}</h2>
