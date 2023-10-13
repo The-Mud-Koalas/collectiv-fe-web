@@ -124,7 +124,7 @@ const VolunteersTable = ({
 
   const [currentPage, setCurrentPage] = useState(0);
   const volunteersPerPage = 5;
-  const maxPages = Math.ceil(filtered.length / 5) - 1;
+  const maxPages = Math.max(0, Math.ceil(filtered.length / 5) - 1);
   const startIndex = Math.min(currentPage, maxPages) * volunteersPerPage;
   const endIndex = startIndex + volunteersPerPage;
 
@@ -158,11 +158,12 @@ const VolunteersTable = ({
           <tbody>
             {filtered.slice(startIndex, endIndex).map((volunteer) => (
               <VolunteerTableRow
+                key={volunteer.user_id}
                 eventDetails={eventDetails}
                 volunteer={volunteer}
               />
             ))}
-            {(!filtered.length && !isLoading) && (
+            {!filtered.length && !isLoading && (
               <tr>
                 <td
                   className="font-medium text-gray-500 italic text-center p-4"

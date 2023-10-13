@@ -7,6 +7,8 @@ import EventInfoAndActions from "./EventInfoAndActions";
 import EventAnalytics from "./EventAnalytics";
 import EventInfoAndActionsEditable from "./editable";
 import { useAppContext } from "@/context/AppContext";
+import { useQuery } from "@tanstack/react-query";
+import { getRequest } from "@/lib/fetch";
 
 interface EventDashboardProps extends React.PropsWithChildren {
   eventDetails: EventDetail;
@@ -14,7 +16,22 @@ interface EventDashboardProps extends React.PropsWithChildren {
 
 const EventDashboard = (props: EventDashboardProps) => {
   const { user } = useAppContext();
-  const { eventDetails } = props;
+  const { data: eventDetails, isFetching } = useQuery(
+    ["event-details", props.eventDetails.id],
+    {
+      queryFn: async () => {
+        const event = (await getRequest({
+          endpoint: `/event/detail/${props.eventDetails.id}`,
+        })) as EventDetail;
+
+        return event;
+      },
+      initialData: props.eventDetails,
+      staleTime: 1000 * 60 * 15,
+      refetchOnWindowFocus: false,
+    }
+  );
+
   const router = useRouter();
   const isCreator = user?.uid === eventDetails.event_creator_id;
 
@@ -35,7 +52,7 @@ const EventDashboard = (props: EventDashboardProps) => {
         />
       </section>
       {isCreator ? (
-        <EventInfoAndActionsEditable eventDetails={eventDetails} />
+        <EventInfoAndActionsEditable eventDetails={eventDetails} isFetching={isFetching} />
       ) : (
         <EventInfoAndActions eventDetails={eventDetails} />
       )}

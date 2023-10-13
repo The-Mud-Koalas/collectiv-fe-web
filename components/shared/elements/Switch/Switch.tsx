@@ -18,7 +18,7 @@ const Switch = ({ isToggledOn, onToggle, disabled, label }: Props) => {
   };
 
   return (
-    <div className="flex items-center gap-2">
+    <div key={disabled + ""} className="flex items-center gap-2">
       {label && (
         <label
           htmlFor={id}
@@ -73,7 +73,7 @@ const UncontrolledSwitch = ({
   };
 
   return (
-    <div className="flex items-center gap-2">
+    <div key={disabled + ""} className="flex items-center gap-2">
       {label && (
         <label
           htmlFor={id}

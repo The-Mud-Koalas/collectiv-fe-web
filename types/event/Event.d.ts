@@ -27,7 +27,7 @@ interface BaseEventDetail {
   id: string;
   name: string;
   description: string;
-  status: "Scheduled" | "Ongoing" | "Completed" | "Cancelled";
+  status: "Scheduled" | "On Going" | "Completed" | "Cancelled";
   event_category: Category;
   min_num_of_volunteers: number;
   event_location: EventLocation;
@@ -43,6 +43,7 @@ interface BaseEventDetail {
 interface ProjectDetail extends BaseEventDetail {
   event_type: "project";
   goal: number;
+  goal_kind: string;
   measurement_unit: string;
   progress: number;
   transactions: Transaction[];
@@ -91,3 +92,18 @@ type EventParticipationData =
   | ContributorEventParticipation
   | ParticipantEventParticipation
   | VolunteerEventParticipation;
+
+interface BaseUpdateEventDetail {
+  volunteer_registration_enabled: boolean;
+  start_date_time: Date;
+  end_date_time: Date;
+  tags: Array<SelectOption<string>>;
+  goal: number;
+  measurement_unit: string;
+  progress: number;
+}
+
+
+interface UpdateInitiativeEventDetail extends BaseUpdateEventDetail {
+  participant_registration_enabled: boolean;
+}
