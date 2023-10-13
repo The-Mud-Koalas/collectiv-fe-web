@@ -11,7 +11,7 @@ const Home = () => {
     const { sendMessageToRN } = useAppContext();
 
     return (
-        <div className="flex flex-col gap-20 m-10">
+        <div className="p-5 md:p-10">
             <Header />
             <RewardInfographic />
             <LocationInfographic />

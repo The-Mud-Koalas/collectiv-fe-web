@@ -7,7 +7,7 @@ interface LocationSubscriptionProps {}
 
 const LocationSubscription: FC<LocationSubscriptionProps> = ({}) => {
     return (
-        <div className="m-10">
+        <div className="flex flex-col gap-40 m-10">
             <Header />
             <LocationList />
             <InformUser />

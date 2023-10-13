@@ -18,7 +18,7 @@ const SelectableButton: FC<SelectableButtonProps> = ({
     return (
         <div>
             <Button
-                className={`px-4 py-1 rounded-full flex gap-3 items-center ${
+                className={`my-1 px-4 py-1 rounded-full flex gap-3 items-center ${
                     selected
                         ? "bg-secondary-200 text-secondary-500 font-semibold"
                         : "text-sky-500"

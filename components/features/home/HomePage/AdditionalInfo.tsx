@@ -28,21 +28,21 @@ const AdditionalInfo: FC<AdditionalInfoProps> = ({}) => {
     };
 
     return (
-        <div className="flex flex-row gap-20 justify-center">
-            <div className="w-[468px]">
-                <h1 className={`${inter.className} text-6xl mb-5`}>
-                    And so much more`
+        <div className="flex flex-wrap gap-10 justify-center">
+            <div className="max-w-[468px] max-h-[519px]">
+                <h1
+                    className={`${inter.className} text-5xl md:text-6xl font-semibold leading-snug mb-5`}
+                >
+                    And so much more
                 </h1>
-                <div>
-                    {Object.keys(buttonContentMap).map((label) => (
-                        <SelectableButton
-                            key={label}
-                            label={label}
-                            selected={label === selectedButton}
-                            onClick={() => handleButtonClick(label)}
-                        />
-                    ))}
-                </div>
+                {Object.keys(buttonContentMap).map((label) => (
+                    <SelectableButton
+                        key={label}
+                        label={label}
+                        selected={label === selectedButton}
+                        onClick={() => handleButtonClick(label)}
+                    />
+                ))}
             </div>
             <DynamicInfo
                 badgeLabel={selectedButton || ""}

@@ -6,7 +6,7 @@ interface InformUserProps {}
 
 const InformUser: FC<InformUserProps> = ({}) => {
     return (
-        <div className="bg-primary-100 rounded-xl p-10">
+        <div className="bg-primary-100 rounded-xl p-12">
             <div className="my-10">
                 <div className="my-5">
                     <span className="w-10 h-10 bg-primary-900 rounded-full p-2 flex items-center justify-center">
@@ -21,7 +21,7 @@ const InformUser: FC<InformUserProps> = ({}) => {
                 </p>
             </div>
 
-            <div className="flex items-center justify-center gap-20">
+            <div className="flex flex-wrap items-center justify-center gap-20">
                 <InfoCard
                     title={"Arrive at a location in our Community Space"}
                     content={""}

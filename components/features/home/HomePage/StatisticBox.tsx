@@ -10,7 +10,7 @@ interface StatisticBoxProps {
 const StatisticBox: FC<StatisticBoxProps> = ({ value, label }) => {
     return (
         <div
-            className={`${inter.className} rounded-lg p-5 bg-white w-[442px] h-[191px]`}
+            className={`${inter.className} rounded-lg p-5 bg-white max-w-[442px] max-h-[191px]`}
         >
             <div className="flex justify-end">
                 <div className="bg-secondary-200 rounded-full p-3">
