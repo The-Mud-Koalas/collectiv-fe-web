@@ -2,7 +2,7 @@
 const nextConfig = {
   reactStrictMode: true,
   images: {
-    domains: ["127.0.0.1", "localhost"]
+    domains: [`${process.env.NEXT_PUBLIC_BACKEND_URL}`.replace("https://", "")]
   }
 }
 
