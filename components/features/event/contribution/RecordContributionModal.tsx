@@ -45,10 +45,10 @@ const RecordContributionModal = ({ eventDetails, onClose }: Props) => {
         token
       });
     },
-    onSuccess: () => {
+    onSuccess: async () => {
       toast.success('Contribution successfully recorded!')
+      queryClient.invalidateQueries(['event-details', eventDetails.id])
       reset();
-      queryClient.invalidateQueries(['event-analytics', eventDetails.id])
     },
     onError: (e: any) => {
       toast.error(e.cause.message)

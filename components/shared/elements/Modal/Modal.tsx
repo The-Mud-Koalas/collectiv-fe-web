@@ -18,7 +18,7 @@ const Modal = ({ children, open, onOverlayTap }: ModalProps) => {
   }, [open]);
 
   return createPortal(
-    <AnimatePresence>
+    <AnimatePresence initial={false}>
       {open && (
         <>
           <motion.div
