@@ -23,6 +23,8 @@ import { getParticipation } from "@/utils/fetchers/event/participation";
 import RecordContributionModal from "../contribution";
 import ViewVolunteersModal from "./ViewVolunteersModal";
 import { AttendanceModal } from "../attendance/AttendanceModal";
+import ParticipantQRModal from "../attendance/ParticipantQRModal";
+import { ReviewModal } from "../attendance/ReviewModal";
 
 interface Props {
   eventDetails: EventDetail;
@@ -119,8 +121,13 @@ const EventInfoAndActions = ({ eventDetails }: Props) => {
     eventDetails.event_type === "initiative" && isManager;
   const isManagerInProject = eventDetails.event_type === "project" && isManager;
   const canCheckOut =
-    eventDetails.id === currentEvent.data?.id && (isParticipant || isVolunteer);
-  const canCheckIn = isParticipant && eventDetails.id === currentEvent.data?.id;
+    eventDetails.id === currentEvent.data?.id &&
+    (isParticipant || isVolunteer) &&
+    eventDetails.status === "Ongoing";
+  const canCheckIn =
+    (isParticipant || isVolunteer) &&
+    !currentEvent.data.is_currently_attending_event &&
+    eventDetails.status === "Ongoing";
 
   return (
     <>
@@ -258,7 +265,7 @@ const EventInfoAndActions = ({ eventDetails }: Props) => {
                 </Link>
                 {canCheckIn && (
                   <Link
-                    href={"#"}
+                    href={BASE_URL + "?showRegisterQR=true"}
                     className="flex items-center gap-2 text-primary-500 text-xs border-[2px] border-primary-300 px-4 py-2 rounded-3xl font-medium"
                   >
                     Check-in
@@ -267,8 +274,8 @@ const EventInfoAndActions = ({ eventDetails }: Props) => {
                 )}
                 {canCheckOut && (
                   <Link
-                    href={"#"}
-                    className="flex items-center gap-2 text-danger-300 text-xs border-[2px] border-danger-300 px-4 py-2 rounded-3xl font-medium"
+                    href={BASE_URL + "?showCheckOut=true"}
+                    className="flex items-center gap-2 text-danger-400 text-xs border-[2px] border-danger-400 px-4 py-2 rounded-3xl font-medium"
                   >
                     Check-out
                     <BiExit className="text-xl" />
@@ -289,6 +296,15 @@ const EventInfoAndActions = ({ eventDetails }: Props) => {
         </div>
       </section>
       <Modal
+        open={router.query.showCheckOut === "true"}
+        onOverlayTap={closeModal}
+      >
+        <ReviewModal
+          isParticipant={isParticipant!}
+          eventId={eventDetails?.id}
+        />
+      </Modal>
+      <Modal
         open={router.query.checkInParticipantOrVolunteer === "true"}
         onOverlayTap={closeModal}
       >
@@ -297,6 +313,12 @@ const EventInfoAndActions = ({ eventDetails }: Props) => {
           onCheckInComplete={() => {}}
           onClose={closeModal}
         />
+      </Modal>
+      <Modal
+        open={router.query.showRegisterQR === "true"}
+        onOverlayTap={closeModal}
+      >
+        <ParticipantQRModal eventId={eventDetails.id} onClose={closeModal} />
       </Modal>
       {isManagerInProject && (
         <Modal

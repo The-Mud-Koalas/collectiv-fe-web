@@ -48,7 +48,7 @@ const EventCard: React.FC<Props> = ({ event }) => {
           )}
         </p>
         <div>
-          <StatusPill status={(eventStatus.split(" ").reduce((prev, curr) => `${prev}${curr}`, "")) as EventStatus} />
+          <StatusPill status={eventStatus as EventStatus} />
         </div>
       </div>
       <h2 className="font-semibold text-base bg-secondary-200 w-fit">{name}</h2>
@@ -100,7 +100,7 @@ const EventCard: React.FC<Props> = ({ event }) => {
             </div>
           </Button>
           <Link
-            href={`/event/${id}/forum`}
+            href={`/event/${id}`}
             className="bg-primary-800 py-2 px-4 rounded-full medium text-base text-primary-300"
           >
             Check Events

@@ -27,7 +27,7 @@ import {
 import { Arrow } from "@/components/shared/svg/icons";
 import { COLORS } from "@/utils/constants/colors";
 import useUpload from "@/hooks/utils/useUpload";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { auth } from "@/lib/firebase";
 import { BeatLoader, ClipLoader } from "react-spinners";
 import { capitalize } from "@/utils/helpers/formatting/capitalize";
@@ -67,9 +67,10 @@ const EventDetails: React.FC<Props> = ({
     isProject,
     tags
   } = useEventCreationContext();
+  const queryClient = useQueryClient();
 
   const { mutateAsync, isLoading: isLoadingSubmission } = useMutation({
-    mutationFn: createEvent,
+    mutationFn: createEvent(queryClient),
     onSuccess: () => {},
   });
 

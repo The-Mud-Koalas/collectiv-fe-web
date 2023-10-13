@@ -1,23 +1,30 @@
-import { useEffect, useState } from "react";
+import { useAppContext } from "@/context/AppContext";
+import { useCallback, useEffect, useState } from "react";
+import { toast } from "react-toastify";
 
 const useGPSLocation = () => {
   const [lat, setLat] = useState<number | null>(null);
   const [lng, setLng] = useState<number | null>(null);
+  const [isGettingGPS, setGettingGPS] = useState(false);
 
-  useEffect(() => {
+  const getCoords = useCallback(async () => {
+    setGettingGPS(true)
     const gpsPromise: Promise<GeolocationPosition> = new Promise(
       (resolve, reject) =>
         navigator.geolocation.getCurrentPosition(resolve, reject)
     );
-    const getCoords = async () => {
-      const coords = await gpsPromise;
-      setLat(coords.coords.latitude);
-      setLng(coords.coords.longitude);
-    };
-    getCoords();
+
+    const coords = await gpsPromise;
+    setLat(coords.coords.latitude);
+    setLng(coords.coords.longitude);
+    setGettingGPS(false)
   }, []);
 
-  return { lat, lng };
+  useEffect(() => {
+    getCoords();
+  }, [getCoords]);
+
+  return { lat, lng, getCoords, isGettingGPS };
 };
 
 export { useGPSLocation };

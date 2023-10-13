@@ -31,7 +31,7 @@ const PillSelector: React.FC<Props> = ({ choices, changeIdx, currentIdx }) => {
                 }
           }
           key={`${choice}-${idx}`}
-          className="bg-secondary-500 text-white w-full rounded-lg py-2"
+          className="bg-secondary-500 text-xs sm:text-sm lg:text-base text-white w-full rounded-lg py-2"
           onClick={changeIdx(idx)}
         >
           {choice}

@@ -1,26 +1,18 @@
-import { Button } from "@/components/shared/elements";
 import { Filter } from "@/components/shared/elements/Filter";
-import { TextInputField } from "@/components/shared/forms";
-import { inter } from "@/utils/constants/fonts";
-import { EMAIL_REGEX } from "@/utils/constants/regex";
-import { phoneOrEmailValidator } from "@/utils/helpers/validator/phoneOrEmailValidator";
+import { garamond, inter } from "@/utils/constants/fonts";
 import { useSearchParams } from "next/navigation";
-import { useRouter } from "next/router";
-import React, { useEffect, useState } from "react";
-import { SubmitHandler, useForm } from "react-hook-form";
+import React, { useState } from "react";
 import AssistedCheckinForm from "./AssistedCheckinForm";
 import { PillSelector } from "@/components/shared/elements/PillSelector";
 import { AnimatePresence, motion } from "framer-motion";
 import QRScanner from "./QRScanner";
+import { Button } from "@/components/shared/elements";
+import { RxCross2 } from "react-icons/rx";
 
 interface Props {
   eventId: string;
   onCheckInComplete: () => void;
   onClose: () => void;
-}
-
-interface ParticipationProps {
-  emailOrPhoneNumber: string;
 }
 
 type SelectParticipantOption = SelectOption<"Participant" | "Volunteer">;
@@ -44,11 +36,18 @@ const AttendanceModal: React.FC<Props> = ({
 
   return (
     <motion.div
-      className={`${inter.className} rounded-2xl bg-white w-full h-1/2 px-8 py-6`}
+      style={{ width: "min(90vw, 600px)" }}
+      className={`${inter.className} relative rounded-2xl bg-white px-8 py-6`}
     >
       {userIdfier == null ? (
         <div className="flex flex-col gap-3">
-          <div className="w-fit self-end">
+          <button
+            onClick={onClose}
+            className="absolute right-5 top-5 hover:bg-gray-200 p-1 rounded-md"
+          >
+            <RxCross2 />
+          </button>
+          <div className="w-fit">
             <Filter
               onChange={(value) => setType(value as SelectParticipantOption)}
               isClearable={false}
@@ -60,8 +59,8 @@ const AttendanceModal: React.FC<Props> = ({
               }))}
             />
           </div>
-          <h1 className="font-semibold text-4xl">Arrival Check-In</h1>
-          <p className="text-lg font-normal">
+          <h1 className="font-semibold text-3xl">Arrival Check-In</h1>
+          <p className="text-sm lg:text-base font-normal">
             Record check-in by inputting user information manually or scanning
             their QR code.
           </p>
@@ -91,14 +90,51 @@ const AttendanceModal: React.FC<Props> = ({
                 exit={{ opacity: 0 }}
                 key="qr"
               >
-                <QRScanner key="qr" />
+                <QRScanner
+                  key="qr"
+                  closeModal={onClose}
+                  eventId={eventId}
+                  type={type}
+                />
               </motion.div>
             )}
           </AnimatePresence>
         </div>
       ) : (
-        <div>
-          <h1>{userIdfier}</h1>
+        <div className="flex flex-col items-center gap-3">
+          <svg
+            width="56"
+            height="56"
+            viewBox="0 0 56 56"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <circle
+              cx="28"
+              cy="28"
+              r="26.5"
+              fill="#BAF67E"
+              stroke="#163300"
+              stroke-width="3"
+            />
+            <path
+              d="M37.9551 20.5332L24.2662 34.2221L18.0439 27.9999"
+              stroke="#163300"
+              stroke-width="3"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+          </svg>
+
+          <h1 className={`${garamond.className} font-normal text-4xl`}>
+            Check In Successful
+          </h1>
+          <Button
+            onClick={onClose}
+            className="self-center bg-primary-800 text-primary-300 font-medium items-center px-20 rounded-full gap-4 py-2 text-base w-fit justify-center flex"
+          >
+            Close
+          </Button>
         </div>
       )}
     </motion.div>

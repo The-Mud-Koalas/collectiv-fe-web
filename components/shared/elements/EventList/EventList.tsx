@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import EventCard from "./EventCard";
 import { useQuery } from "@tanstack/react-query";
 import { getListOfEvents } from "@/utils/fetchers/event/discovery";
-import { getLocations } from "@/utils/fetchers/event/creation";
 import { Loading } from "../../layouts";
 
 interface Props {
