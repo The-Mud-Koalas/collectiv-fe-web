@@ -247,6 +247,7 @@ const EventInfoAndActionsEditable = ({ eventDetails, isFetching }: Props) => {
     if (!user) return;
     if (!formPartiallyDirty) {
       setIsEditing(false);
+      toast.info('Nothing to save, cancelling edit.')
       return;
     }
     const { tags, ...rest } = data;
@@ -415,48 +416,6 @@ const EventInfoAndActionsEditable = ({ eventDetails, isFetching }: Props) => {
               )}
             </div>
             <div className="flex items-center gap-4 xl:justify-normal justify-center flex-wrap">
-              {eventDetails.status === "Scheduled" && (
-                <Link
-                  href={BASE_URL + "?confirmationStartEvent=true"}
-                  className={cn(
-                    "flex items-center gap-2 font-semibold rounded-md px-6 text-sm py-2 border-[2px]",
-                    isEditing &&
-                      "border-primary-700 bg-primary-200 text-primary-700",
-                    !isEditing &&
-                      "opacity-50 cursor-not-allowed border border-gray-400 text-gray-400 bg-gray-200"
-                  )}
-                >
-                  Start Event
-                </Link>
-              )}
-              {eventDetails.status === "Scheduled" && (
-                <Link
-                  href={BASE_URL + "?confirmationCancelEvent=true"}
-                  className={cn(
-                    "flex items-center gap-2 font-semibold rounded-md px-4 text-sm py-1",
-                    isEditing &&
-                      "border border-danger-300 text-danger-400 hover:bg-red-100",
-                    !isEditing &&
-                      "opacity-50 cursor-not-allowed border border-gray-400 text-gray-400"
-                  )}
-                >
-                  Cancel Event
-                </Link>
-              )}
-              {eventDetails.status === "On Going" && (
-                <Link
-                  href={BASE_URL + "?confirmationCompleteEvent=true"}
-                  className={cn(
-                    "flex items-center gap-2 font-semibold rounded-md px-6 text-sm py-2 border-[2px]",
-                    isEditing &&
-                      "border-secondary-400 bg-secondary-200 text-secondary-400",
-                    !isEditing &&
-                      "opacity-50 cursor-not-allowed border bg-gray-200 border-gray-400 text-gray-400"
-                  )}
-                >
-                  Complete Event
-                </Link>
-              )}
               {isEditing && (
                 <button
                   type={"button"}
@@ -504,6 +463,39 @@ const EventInfoAndActionsEditable = ({ eventDetails, isFetching }: Props) => {
                 >
                   <FiSave className="inline text-[10px] text-base" /> Save Edit
                 </button>
+              )}
+              {eventDetails.status === "Scheduled" && (
+                <Link
+                  href={BASE_URL + "?confirmationStartEvent=true"}
+                  className={cn(
+                    "flex items-center gap-2 font-semibold rounded-md px-6 text-sm py-2 border-[2px]",
+                    "border-primary-700 bg-primary-200 text-primary-700"
+                  )}
+                >
+                  Start Event
+                </Link>
+              )}
+              {eventDetails.status === "Scheduled" && (
+                <Link
+                  href={BASE_URL + "?confirmationCancelEvent=true"}
+                  className={cn(
+                    "flex items-center gap-2 font-semibold rounded-md px-4 text-sm py-1",
+                    "border border-danger-300 text-danger-400 hover:bg-red-100"
+                  )}
+                >
+                  Cancel Event
+                </Link>
+              )}
+              {eventDetails.status === "On Going" && (
+                <Link
+                  href={BASE_URL + "?confirmationCompleteEvent=true"}
+                  className={cn(
+                    "flex items-center gap-2 font-semibold rounded-md px-6 text-sm py-2 border-[2px]",
+                    "border-secondary-400 bg-secondary-200 text-secondary-400"
+                  )}
+                >
+                  Complete Event
+                </Link>
               )}
             </div>
           </div>
@@ -576,10 +568,7 @@ const EventInfoAndActionsEditable = ({ eventDetails, isFetching }: Props) => {
         open={router.query.checkOutParticipant === "true"}
         onOverlayTap={closeModal}
       >
-        <CheckoutModal
-          eventId={eventDetails.id}
-          onClose={closeModal}
-        />
+        <CheckoutModal eventId={eventDetails.id} onClose={closeModal} />
       </Modal>
       <Modal
         open={router.query.recordContribution === "true"}
