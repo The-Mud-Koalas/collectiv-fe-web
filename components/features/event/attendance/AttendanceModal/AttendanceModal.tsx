@@ -13,6 +13,7 @@ interface Props {
   eventId: string;
   onCheckInComplete: () => void;
   onClose: () => void;
+  eventType: "project" | "initiative";
 }
 
 type SelectParticipantOption = SelectOption<"Participant" | "Volunteer">;
@@ -24,12 +25,14 @@ const AttendanceModal: React.FC<Props> = ({
   eventId,
   onCheckInComplete,
   onClose,
+  eventType,
 }) => {
   const searchParams = useSearchParams();
   const [type, setType] = useState<SelectParticipantOption>({
-    label: "Participant",
-    value: "Participant",
+    label: "Volunteer",
+    value: "Volunteer",
   });
+
   const [checkInTypeIdx, setCheckInTypeIdx] = useState(0);
   const changeCheckInTypeIdx = (idx: number) => () => setCheckInTypeIdx(idx);
   const userIdfier = searchParams.get("userIdentifier");
@@ -47,18 +50,20 @@ const AttendanceModal: React.FC<Props> = ({
           >
             <RxCross2 />
           </button>
-          <div className="w-fit">
-            <Filter
-              onChange={(value) => setType(value as SelectParticipantOption)}
-              isClearable={false}
-              filterName=""
-              firstDefault
-              filterOptions={values.map((type) => ({
-                label: type,
-                value: type,
-              }))}
-            />
-          </div>
+          {eventType === "initiative" && (
+            <div className="w-fit">
+              <Filter
+                onChange={(value) => setType(value as SelectParticipantOption)}
+                isClearable={false}
+                filterName=""
+                firstDefault
+                filterOptions={values.map((type) => ({
+                  label: type,
+                  value: type,
+                }))}
+              />
+            </div>
+          )}
           <h1 className="font-semibold text-3xl">Arrival Check-In</h1>
           <p className="text-sm lg:text-base font-normal">
             Record check-in by inputting user information manually or scanning

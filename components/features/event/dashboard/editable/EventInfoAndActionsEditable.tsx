@@ -559,6 +559,7 @@ const EventInfoAndActionsEditable = ({ eventDetails, isFetching }: Props) => {
         onOverlayTap={closeModal}
       >
         <AttendanceModal
+        eventType={eventDetails.event_type}
           eventId={eventDetails.id}
           onCheckInComplete={() => {}}
           onClose={closeModal}

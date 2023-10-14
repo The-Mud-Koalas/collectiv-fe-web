@@ -5,6 +5,7 @@ import {
   getServiceCategories,
   getTags,
 } from "@/utils/fetchers/event/creation";
+import { capitalize } from "@/utils/helpers/formatting/capitalize";
 import { useQuery } from "@tanstack/react-query";
 import React, { useState } from "react";
 
@@ -62,7 +63,7 @@ const DiscoverPage = () => {
 
   const options: FilterOptions = {
     category:
-      categories?.map((cat) => ({ label: cat.name, value: cat.id })) ?? [],
+      categories?.map((cat) => ({ label: capitalize(cat.name, true), value: cat.id })) ?? [],
     location:
       locations?.map((loc) => ({ label: loc.name, value: loc.id })) ?? [],
     status: [
@@ -71,7 +72,7 @@ const DiscoverPage = () => {
       { label: "Ongoing", value: "On going" },
       { label: "Completed", value: "Completed" },
     ],
-    tag: tags?.map((tag) => ({ label: tag.name, value: tag.id })) ?? [],
+    tag: tags?.map((tag) => ({ label: tag.name, value: tag.name })) ?? [],
     type: [
       { label: "Project", value: "Project" },
       { label: "Initiative", value: "Initiative" },

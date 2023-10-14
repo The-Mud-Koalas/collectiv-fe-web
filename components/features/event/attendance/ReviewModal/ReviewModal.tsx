@@ -16,54 +16,20 @@ interface Props {
   isParticipant: boolean;
   eventId: string;
   onClose: () => void;
+  participation: EventParticipationData | null;
 }
 
-const ReviewModal: React.FC<Props> = ({ isParticipant, eventId, onClose }) => {
+const ReviewModal: React.FC<Props> = ({ isParticipant, eventId, onClose, participation }) => {
   const [selectedStar, setSelectedStar] = useState<number | null>(null);
-  const [shouldOpen, setShouldOpen] = useState(false);
 
-  const queryClient = useQueryClient();
   const searchParams = useSearchParams();
 
-  const { lat, lng, isGettingGPS } = useGPSLocation();
-
-  const participationType = isParticipant ? "Participant" : "Volunteer";
-  const router = useRouter();
-
-  const { mutateAsync } = useMutation({
-    mutationFn: checkOutSelf(participationType, queryClient),
-    onError: (error: Error) => {
-      onClose();
-      toast.error((error.cause as { message: string }).message as string);
-    },
-    onSuccess: () => {
-      if (participationType === "Volunteer") {
-        router.replace(
-          `/event/${eventId}?showCheckOut=true&reviewSubmitted=true`
-        );
-      }
-      setShouldOpen(true)
-    },
-  });
-
-  useEffect(() => {
-    if (isGettingGPS) return;
-    const checkOut = async () => {
-      const data = !isParticipant
-        ? { event_id: eventId }
-        : { event_id: eventId, latitude: lat, longitude: lng };
-      await mutateAsync(data);
-
-    };
-    checkOut();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isGettingGPS]);
+  const showThanksMessage = searchParams.get("reviewSubmitted") === "true" || participation?.submitted_review;
 
   const onStarSelect = (rating: number) => () => {
     setSelectedStar(rating);
   };
 
-  if (!shouldOpen) return <></>;
 
   return (
     <div
@@ -71,7 +37,7 @@ const ReviewModal: React.FC<Props> = ({ isParticipant, eventId, onClose }) => {
       className={`${inter.className} relative rounded-2xl bg-white px-8 py-6`}
     >
       <AnimatePresence mode="popLayout">
-        {searchParams.get("reviewSubmitted") !== "true" ? (
+        {!showThanksMessage ? (
           <motion.div
             className="flex flex-col gap-2"
             key="rating"
