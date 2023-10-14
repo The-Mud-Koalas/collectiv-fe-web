@@ -34,6 +34,7 @@ import { inter } from "@/utils/constants/fonts";
 import { COLORS } from "@/utils/constants/colors";
 import { postRequest } from "@/lib/fetch";
 import { toast } from "react-toastify";
+import CheckoutModal from "../../attendance/CheckoutModal";
 
 interface Props {
   eventDetails: EventDetail;
@@ -528,7 +529,7 @@ const EventInfoAndActionsEditable = ({ eventDetails, isFetching }: Props) => {
             </Link>
             {eventDetails.event_type === "initiative" && (
               <Link
-                href={"#"}
+                href={BASE_URL + "?checkOutParticipant=true"}
                 className="flex items-center gap-2 bg-secondary-500 text-secondary-100 text-sm border-[2px] border-secondary-500 px-5 py-2 rounded-md font-medium"
               >
                 Check-out Participant
@@ -568,6 +569,15 @@ const EventInfoAndActionsEditable = ({ eventDetails, isFetching }: Props) => {
         <AttendanceModal
           eventId={eventDetails.id}
           onCheckInComplete={() => {}}
+          onClose={closeModal}
+        />
+      </Modal>
+      <Modal
+        open={router.query.checkOutParticipant === "true"}
+        onOverlayTap={closeModal}
+      >
+        <CheckoutModal
+          eventId={eventDetails.id}
           onClose={closeModal}
         />
       </Modal>

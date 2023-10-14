@@ -11,7 +11,7 @@ interface Props {
   event: EventDetail;
 }
 
-type EventStatus = "scheduled" | "ongoing" | "completed" | "cancelled";
+type EventStatus = "scheduled" | "on going" | "completed" | "cancelled";
 
 const EventCard: React.FC<Props> = ({ event }) => {
   const {

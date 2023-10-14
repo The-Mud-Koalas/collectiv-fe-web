@@ -5,13 +5,10 @@ import { RxCross2 } from "react-icons/rx";
 import QRCode from "react-qr-code";
 
 interface Props {
-  eventId: string;
   onClose: () => void;
 }
 
-// queryKey: ["current-event"]
-
-const ParticipantQRModal: React.FC<Props> = ({ eventId, onClose }) => {
+const ParticipantQRModal: React.FC<Props> = ({ onClose }) => {
   const { user } = useAppContext();
 
   if (user == null) return <></>

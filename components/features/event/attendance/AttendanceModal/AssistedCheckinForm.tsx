@@ -3,6 +3,7 @@ import { TextInputField } from "@/components/shared/forms";
 import { Arrow } from "@/components/shared/svg/icons";
 import { useAppContext } from "@/context/AppContext";
 import { useGPSLocation } from "@/hooks/utils/useGPSLocation";
+import { showErrorToast } from "@/lib/toast";
 import { COLORS } from "@/utils/constants/colors";
 import { checkInAssisted } from "@/utils/fetchers/event/attendance";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
@@ -30,9 +31,9 @@ const AssistedCheckinForm: React.FC<Props> = ({ onClose, type, eventId }) => {
   } = useForm<ParticipationProps>();
   const queryClient = useQueryClient();
   const { lat, lng, isGettingGPS } = useGPSLocation();
-  const { isInRN, sendMessageToRN } = useAppContext();
   const { mutateAsync, isLoading } = useMutation({
     mutationFn: checkInAssisted(type.value, queryClient),
+    onError: (error: Error) => showErrorToast({ error })
   });
   const router = useRouter();
 
@@ -43,7 +44,7 @@ const AssistedCheckinForm: React.FC<Props> = ({ onClose, type, eventId }) => {
       event_id: eventId,
       latitude: lat!,
       longitude: lng!,
-      participant_email_phone: emailOrPhoneNumber,
+      [type.value === "Participant" ? "participant_email_phone" : "volunteer_email_phone"]: emailOrPhoneNumber,
     };
 
     try {
