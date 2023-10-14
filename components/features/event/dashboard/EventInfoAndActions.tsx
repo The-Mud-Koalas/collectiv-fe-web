@@ -23,7 +23,12 @@ import { getParticipation } from "@/utils/fetchers/event/participation";
 import RecordContributionModal from "../contribution";
 import ViewVolunteersModal from "./ViewVolunteersModal";
 import { AttendanceModal } from "../attendance/AttendanceModal";
+import ParticipantQRModal from "../attendance/ParticipantQRModal";
+import { ReviewModal } from "../attendance/ReviewModal";
+import { toast } from "react-toastify";
+import { showErrorToast } from "@/lib/toast";
 
+const REFETCH_INTERVAL_SECONDS = 30;
 interface Props {
   eventDetails: EventDetail;
 }
@@ -47,6 +52,7 @@ const EventInfoAndActions = ({ eventDetails }: Props) => {
       });
       return response;
     },
+    refetchInterval: REFETCH_INTERVAL_SECONDS * 1000
   });
 
   const participation = useQuery({
@@ -67,6 +73,8 @@ const EventInfoAndActions = ({ eventDetails }: Props) => {
         },
       });
     },
+    onSuccess: () => toast.success(`You have successfully registed to ${eventDetails.name}.`),
+    onError: (error: Error) => showErrorToast({error})
   });
   const registerVolunteer = useMutation({
     mutationFn: async () => {
@@ -118,9 +126,15 @@ const EventInfoAndActions = ({ eventDetails }: Props) => {
   const isManagerInInitiative =
     eventDetails.event_type === "initiative" && isManager;
   const isManagerInProject = eventDetails.event_type === "project" && isManager;
+  const isAttending = eventDetails.id === currentEvent.data?.data?.current_attended_event_id;
   const canCheckOut =
-    eventDetails.id === currentEvent.data?.id && (isParticipant || isVolunteer);
-  const canCheckIn = isParticipant && eventDetails.id === currentEvent.data?.id;
+    isAttending &&
+    (isParticipant || isVolunteer) &&
+    eventDetails.status === "On Going";
+  const canCheckIn =
+    (isParticipant || isVolunteer) &&
+    !currentEvent.data.is_currently_attending_event &&
+    eventDetails.status === "On Going";
 
   return (
     <>
@@ -177,7 +191,8 @@ const EventInfoAndActions = ({ eventDetails }: Props) => {
               </div>
             ))}
           </div>
-          <div className="flex items-center gap-4 mt-6 xl:justify-normal justify-center flex-wrap">
+          {isAttending && <p className="text-sm self-center xl:self-start text-gray-700">You are currently attending the event.</p>}
+          <div className="flex items-center gap-4 mt-2 xl:justify-normal justify-center flex-wrap">
             {/* CTA buttons */}
             {!participation.data?.is_registered ? (
               <>
@@ -258,7 +273,7 @@ const EventInfoAndActions = ({ eventDetails }: Props) => {
                 </Link>
                 {canCheckIn && (
                   <Link
-                    href={"#"}
+                    href={BASE_URL + "?showRegisterQR=true"}
                     className="flex items-center gap-2 text-primary-500 text-xs border-[2px] border-primary-300 px-4 py-2 rounded-3xl font-medium"
                   >
                     Check-in
@@ -267,8 +282,8 @@ const EventInfoAndActions = ({ eventDetails }: Props) => {
                 )}
                 {canCheckOut && (
                   <Link
-                    href={"#"}
-                    className="flex items-center gap-2 text-danger-300 text-xs border-[2px] border-danger-300 px-4 py-2 rounded-3xl font-medium"
+                    href={BASE_URL + "?showCheckOut=true"}
+                    className="flex items-center gap-2 text-danger-400 text-xs border-[2px] border-danger-400 px-4 py-2 rounded-3xl font-medium"
                   >
                     Check-out
                     <BiExit className="text-xl" />
@@ -289,6 +304,16 @@ const EventInfoAndActions = ({ eventDetails }: Props) => {
         </div>
       </section>
       <Modal
+        open={router.query.showCheckOut === "true"}
+        onOverlayTap={closeModal}
+      >
+        <ReviewModal
+          isParticipant={isParticipant!}
+          eventId={eventDetails?.id}
+          onClose={closeModal}
+        />
+      </Modal>
+      <Modal
         open={router.query.checkInParticipantOrVolunteer === "true"}
         onOverlayTap={closeModal}
       >
@@ -297,6 +322,12 @@ const EventInfoAndActions = ({ eventDetails }: Props) => {
           onCheckInComplete={() => {}}
           onClose={closeModal}
         />
+      </Modal>
+      <Modal
+        open={router.query.showRegisterQR === "true"}
+        onOverlayTap={closeModal}
+      >
+        <ParticipantQRModal onClose={closeModal} />
       </Modal>
       {isManagerInProject && (
         <Modal

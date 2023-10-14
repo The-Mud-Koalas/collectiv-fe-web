@@ -7,8 +7,7 @@ import {
 
 const getUserInfo = async () => {
   const idToken = await auth.currentUser?.getIdToken();
-  console.log({ idToken })
-
+  console.log(idToken)
   const user = await getRequest({ endpoint: "/user/data", token: idToken});
   return user;
 }

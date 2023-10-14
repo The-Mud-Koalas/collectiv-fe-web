@@ -1,6 +1,6 @@
 import { getRequest, postRequest } from "@/lib/fetch";
 import { auth } from "@/lib/firebase";
-import { QueryFunction } from "@tanstack/react-query";
+import { QueryClient, QueryFunction } from "@tanstack/react-query";
 
 const getServiceCategories = async () => {
   const categories: Category[] = await getRequest({
@@ -53,9 +53,9 @@ const getProjectUnitGoals: QueryFunction<
   return UNITS.map((unit) => ({ value: unit.id, label: unit.name }));
 };
 
-const createEvent = async (values: NewEventFields) => {
+const createEvent = (queryClient: QueryClient) => async (values: NewEventFields) => {
   const { eventValues, isProject } = values;
-
+  queryClient.invalidateQueries({queryKey: ["event"]});
   const idToken = await auth.currentUser?.getIdToken();
 
   const tagList: { id: string; name: string }[] = await postRequest({
