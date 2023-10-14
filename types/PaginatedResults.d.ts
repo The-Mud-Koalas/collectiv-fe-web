@@ -3,4 +3,5 @@ interface PaginatedResults<T> {
     next: number | null;
     previous: number | null;
     results: T;
+    total_pages: number;
 }

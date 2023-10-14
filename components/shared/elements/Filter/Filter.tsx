@@ -18,7 +18,7 @@ const getSVComponent = (fieldName: string) => {
   }: SingleValueProps<SelectOption<string>>) => {
     return (
       <components.SingleValue {...props} className="!max-w-[14ch] !overflow-hidden !text-ellipsis">
-        {fieldName === "" ? "" : `${capitalize(fieldName)}`} {children}
+        {fieldName === "" ? "" : `${capitalize(fieldName)}:`} {children}
       </components.SingleValue>
     );
   };

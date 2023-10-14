@@ -30,9 +30,6 @@ const EventCard: React.FC<Props> = ({ event }) => {
   const eventEndDate = new Date(event_end_date_time);
   const isInSameDate = occurInSameDate(eventStartDate, eventEndDate);
 
-  const handleForumReroute = () => {
-    router.push(`/router/${id}`);
-  };
 
   return (
     <article
@@ -90,15 +87,15 @@ const EventCard: React.FC<Props> = ({ event }) => {
           </p>
         </div>
         <div className="flex gap-2 items-center self-center">
-          <Button
-            onClick={handleForumReroute}
+          <Link
+            href={`/event/${id}/forum`}
             className="border-2 border-primary-800 flex gap-3 py-2 px-4 rounded-full"
           >
             <p className="medium text-base text-primary-800">View Forums</p>
             <div className="-rotate-45">
               <Arrow color={COLORS.primary[800]} dimensions={{ width: 25 }} />
             </div>
-          </Button>
+          </Link>
           <Link
             href={`/event/${id}`}
             className="bg-primary-800 py-2 px-4 rounded-full medium text-base text-primary-300"

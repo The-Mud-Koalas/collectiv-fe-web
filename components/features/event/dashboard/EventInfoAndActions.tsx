@@ -18,7 +18,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { capitalize } from "@/utils/helpers/formatting/capitalize";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { Modal } from "@/components/shared/elements";
+import { Button, Modal } from "@/components/shared/elements";
 import { getParticipation } from "@/utils/fetchers/event/participation";
 import RecordContributionModal from "../contribution";
 import ViewVolunteersModal from "./ViewVolunteersModal";
@@ -27,6 +27,8 @@ import ParticipantQRModal from "../attendance/ParticipantQRModal";
 import { ReviewModal } from "../attendance/ReviewModal";
 import { toast } from "react-toastify";
 import { showErrorToast } from "@/lib/toast";
+import { checkOutSelf } from "@/utils/fetchers/event/attendance";
+import { useGPSLocation } from "@/hooks/utils/useGPSLocation";
 
 const REFETCH_INTERVAL_SECONDS = 30;
 interface Props {
@@ -38,6 +40,8 @@ const EventInfoAndActions = ({ eventDetails }: Props) => {
 
   const { user } = useAppContext();
   const router = useRouter();
+
+  const { lat, lng } = useGPSLocation();
 
   const queryClient = useQueryClient();
 
@@ -52,7 +56,7 @@ const EventInfoAndActions = ({ eventDetails }: Props) => {
       });
       return response;
     },
-    refetchInterval: REFETCH_INTERVAL_SECONDS * 1000
+    refetchInterval: REFETCH_INTERVAL_SECONDS * 1000,
   });
 
   const participation = useQuery({
@@ -73,8 +77,9 @@ const EventInfoAndActions = ({ eventDetails }: Props) => {
         },
       });
     },
-    onSuccess: () => toast.success(`You have successfully registed to ${eventDetails.name}.`),
-    onError: (error: Error) => showErrorToast({error})
+    onSuccess: () =>
+      toast.success(`You have successfully registed to ${eventDetails.name}.`),
+    onError: (error: Error) => showErrorToast({ error }),
   });
   const registerVolunteer = useMutation({
     mutationFn: async () => {
@@ -126,7 +131,8 @@ const EventInfoAndActions = ({ eventDetails }: Props) => {
   const isManagerInInitiative =
     eventDetails.event_type === "initiative" && isManager;
   const isManagerInProject = eventDetails.event_type === "project" && isManager;
-  const isAttending = eventDetails.id === currentEvent.data?.data?.current_attended_event_id;
+  const isAttending =
+    eventDetails.id === currentEvent.data?.data?.current_attended_event_id;
   const canCheckOut =
     isAttending &&
     (isParticipant || isVolunteer) &&
@@ -135,6 +141,25 @@ const EventInfoAndActions = ({ eventDetails }: Props) => {
     (isParticipant || isVolunteer) &&
     !currentEvent.data?.is_currently_attending_event &&
     eventDetails.status === "On Going";
+
+  const checkOutMutation = useMutation({
+    mutationFn: checkOutSelf(
+      isParticipant ? "Participant" : "Volunteer",
+      queryClient
+    ),
+    onError: (error: Error) => {
+      toast.error((error.cause as { message: string }).message as string);
+    },
+  });
+
+  const handleCheckOut = async () => {
+    const data = !isParticipant
+        ? { event_id: eventDetails.id}
+        : { event_id: eventDetails.id, latitude: lat, longitude: lng };
+    await checkOutMutation.mutateAsync(data);
+
+    router.push(BASE_URL + "?showCheckOut=true");
+  };
 
   return (
     <>
@@ -191,7 +216,11 @@ const EventInfoAndActions = ({ eventDetails }: Props) => {
               </div>
             ))}
           </div>
-          {isAttending && <p className="text-sm self-center xl:self-start text-gray-700">You are currently attending the event.</p>}
+          {isAttending && (
+            <p className="text-sm self-center xl:self-start text-gray-700">
+              You are currently attending the event.
+            </p>
+          )}
           <div className="flex items-center gap-4 mt-2 xl:justify-normal justify-center flex-wrap">
             {/* CTA buttons */}
             {!participation.data?.is_registered ? (
@@ -281,13 +310,13 @@ const EventInfoAndActions = ({ eventDetails }: Props) => {
                   </Link>
                 )}
                 {canCheckOut && (
-                  <Link
-                    href={BASE_URL + "?showCheckOut=true"}
+                  <Button
+                    onClick={handleCheckOut}
                     className="flex items-center gap-2 text-danger-400 text-xs border-[2px] border-danger-400 px-4 py-2 rounded-3xl font-medium"
                   >
                     Check-out
                     <BiExit className="text-xl" />
-                  </Link>
+                  </Button>
                 )}
               </>
             )}
@@ -311,6 +340,14 @@ const EventInfoAndActions = ({ eventDetails }: Props) => {
           isParticipant={isParticipant!}
           eventId={eventDetails?.id}
           onClose={closeModal}
+          participation={
+            (
+              participation.data as {
+                is_registered: true;
+                data: EventParticipationData;
+              }
+            )?.data
+          }
         />
       </Modal>
       <Modal
@@ -321,6 +358,7 @@ const EventInfoAndActions = ({ eventDetails }: Props) => {
           eventId={eventDetails.id}
           onCheckInComplete={() => {}}
           onClose={closeModal}
+          eventType={eventDetails.event_type}
         />
       </Modal>
       <Modal
