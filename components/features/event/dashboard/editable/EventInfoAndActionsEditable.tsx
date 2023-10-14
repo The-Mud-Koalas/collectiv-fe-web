@@ -247,6 +247,7 @@ const EventInfoAndActionsEditable = ({ eventDetails, isFetching }: Props) => {
     if (!user) return;
     if (!formPartiallyDirty) {
       setIsEditing(false);
+      toast.info('Nothing to save, cancelling edit.')
       return;
     }
     const { tags, ...rest } = data;

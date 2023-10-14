@@ -133,7 +133,7 @@ const EventInfoAndActions = ({ eventDetails }: Props) => {
     eventDetails.status === "On Going";
   const canCheckIn =
     (isParticipant || isVolunteer) &&
-    !currentEvent.data.is_currently_attending_event &&
+    !currentEvent.data?.is_currently_attending_event &&
     eventDetails.status === "On Going";
 
   return (
