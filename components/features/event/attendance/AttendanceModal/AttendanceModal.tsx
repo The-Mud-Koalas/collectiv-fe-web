@@ -28,9 +28,10 @@ const AttendanceModal: React.FC<Props> = ({
   eventType,
 }) => {
   const searchParams = useSearchParams();
+  const initialParticipantOption = eventType === "initiative" ? "Participant" : "Volunteer"
   const [type, setType] = useState<SelectParticipantOption>({
-    label: "Volunteer",
-    value: "Volunteer",
+    label: initialParticipantOption,
+    value: initialParticipantOption,
   });
 
   const [checkInTypeIdx, setCheckInTypeIdx] = useState(0);
