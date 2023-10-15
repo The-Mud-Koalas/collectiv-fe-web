@@ -40,6 +40,10 @@ interface BaseEventDetail {
   volunteer_registration_enabled: boolean;
 }
 
+interface GoalKind {
+  kind: string;
+}
+
 interface ProjectDetail extends BaseEventDetail {
   event_type: "project";
   goal: number;

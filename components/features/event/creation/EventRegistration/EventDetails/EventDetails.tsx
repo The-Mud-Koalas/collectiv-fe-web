@@ -65,7 +65,8 @@ const EventDetails: React.FC<Props> = ({
     categories,
     locations,
     isProject,
-    tags
+    tags,
+    goalKind,
   } = useEventCreationContext();
   const queryClient = useQueryClient();
 
@@ -133,18 +134,17 @@ const EventDetails: React.FC<Props> = ({
     };
 
     try {
-
-      
       const event = await mutateAsync(newEvent);
-      
+
       const idToken = await auth.currentUser?.getIdToken();
-      
+
       const formData = new FormData();
       const image = data.image;
       formData.append("event_id", event.id);
       formData.append("event_image", image.file);
       await uploadFile(formData, idToken);
-      
+      window.scrollTo(0, 0);
+
       nextStage();
     } catch (error) {
       toast.error((error as Error).cause as string);
@@ -201,7 +201,7 @@ const EventDetails: React.FC<Props> = ({
           error={errors.tags as FieldError}
           setValue={setValue}
           getValue={getValues}
-          options={tags.map(tag => ({value: tag.id, label: tag.name}))}
+          options={tags.map((tag) => ({ value: tag.id, label: tag.name }))}
         />
         <SelectField
           placeholder="e.g. Great Court"
@@ -273,12 +273,15 @@ const EventDetails: React.FC<Props> = ({
                   error={errors.project_goal}
                 />
               </div>
-              <AsyncSelectField
-                fetcher={getProjectUnitGoals}
+              <SelectField
                 field="goal_kind"
                 label=""
                 placeholder="e.g. food packs"
                 control={control}
+                options={goalKind.map((gk) => ({
+                  label: gk.kind,
+                  value: gk.kind,
+                }))}
               />
             </div>
           </div>
