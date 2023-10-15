@@ -23,7 +23,7 @@ const EventList: React.FC<Props> = ({ filters, fetchType }) => {
   });
 
   useEffect(() => {
-    if (noOfPages == null && data != null) {
+    if (data != null) {
       setNoOfPages(data.total_pages);
     }
   }, [data, noOfPages]);
