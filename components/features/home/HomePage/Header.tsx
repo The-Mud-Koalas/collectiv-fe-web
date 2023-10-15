@@ -1,14 +1,14 @@
 import { FC } from "react";
 import { inter, garamond } from "@/utils/constants/fonts";
-import { Button } from "@/components/shared/elements";
+import Link from "next/link";
 interface HeaderProps {}
 
 const Header: FC<HeaderProps> = ({}) => {
     return (
         <div
-            className={`${inter.className} text-center p-10 max-w-4xl mx-auto`}
+            className={`${inter.className} text-center p-10 max-w-4xl mx-auto mb-40 mt-10`}
         >
-            <h1 className="text-primary-900 py-5 font-semibold md:leading-snug text-4xl md:text-7xl">
+            <h1 className="text-primary-900 py-5 font-semibold md:leading-snug text-4xl md:text-6xl lg:text-7xl">
                 Your sanctuary for{" "}
                 <span className={`${garamond.className} italic font-light`}>
                     Community
@@ -22,16 +22,20 @@ const Header: FC<HeaderProps> = ({}) => {
                 </span>
             </p>
             <div className="flex flex-wrap justify-center gap-3">
-                <Button className="border border-primary-800 rounded-full text-primary-800 py-2 min-w-[167px]">
+                <Link
+                    className="border border-primary-800 rounded-full text-primary-800 py-2 min-w-[167px]"
+                    href={"/event/discover"}
+                >
                     View Events
-                </Button>
-                <Button
+                </Link>
+                <Link
                     // disabled={isLoading}
                     type="submit"
                     className="border border-primary-800 bg-primary-800 flex justify-center items-center py-2 min-w-[167px] rounded-full"
+                    href={"/accounts/signup"}
                 >
                     <p className="text-primary-200">Register Now</p>
-                </Button>
+                </Link>
             </div>
         </div>
     );

@@ -1,6 +1,6 @@
 import EventParticipationPopup from "@/components/features/event/participation/EventParticipationPopup";
 import { Home } from "@/components/features/home/HomePage";
-import LocationSubscription from "@/components/features/home/LocationSubscription/LocationSubscription";
+import LocationSubscription from "@/pages/event/locations";
 import { Template } from "@/components/shared/layouts";
 import { Inter } from "next/font/google";
 

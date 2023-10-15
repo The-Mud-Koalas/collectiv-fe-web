@@ -59,7 +59,7 @@ const LocationList: FC<LocationListProps> = ({}) => {
     if (isLoading) return <Loading />;
 
     return (
-        <div className="text-center">
+        <div className="text-center my-40">
             <span className="w-10 h-10 bg-secondary-200 rounded-full p-4 flex items-center justify-center mx-auto mb-5">
                 ❇️
             </span>

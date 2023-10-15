@@ -8,6 +8,9 @@ const config: Config = {
     ],
     theme: {
         extend: {
+          grayscale: {
+            50: '50%',
+          },
             flex: {
                 "2": "2 2 0%",
             },
