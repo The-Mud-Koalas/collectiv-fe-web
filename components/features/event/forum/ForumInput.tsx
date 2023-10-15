@@ -11,7 +11,7 @@ interface Props {
 }
 
 const ForumInput = forwardRef<HTMLDivElement, Props>(
-  ({ eventDetails }: Props, ref) => {
+  function ForumInput({ eventDetails }: Props, ref) {
     const id = useId();
     const { user } = useAppContext();
     const [isAnonymous, setIsAnonymous] = useState(false);

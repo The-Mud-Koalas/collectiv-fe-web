@@ -56,7 +56,7 @@ const Forum = ({ eventDetails }: { eventDetails: EventDetail }) => {
     if (!noMorePosts && !isFetchingOldPosts && lastPost?.isIntersecting) {
       getMorePosts();
     }
-  }, [noMorePosts, isFetchingOldPosts, lastPost?.isIntersecting]);
+  }, [noMorePosts, getMorePosts, isFetchingOldPosts, lastPost?.isIntersecting]);
 
   let formatter = Intl.NumberFormat("en", { notation: "compact" });
   const allPosts = oldPosts.concat(newPosts);
@@ -141,7 +141,7 @@ const Forum = ({ eventDetails }: { eventDetails: EventDetail }) => {
       {isFetchingMorePosts && <BeatLoader color={COLORS.primary[500]} />}
       {noMorePosts && (
         <p className="lg:text-2xl text-lg font-semibold italic text-primary-600">
-          You're all caught up!
+          You&apos;re all caught up!
         </p>
       )}
     </div>

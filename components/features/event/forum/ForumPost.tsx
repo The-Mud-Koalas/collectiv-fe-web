@@ -18,7 +18,7 @@ interface Props {
 }
 
 const ForumPost = forwardRef<HTMLDivElement, Props>(
-  ({ user, post, eventId, onVote }: Props, ref) => {
+  function ForumPost({ user, post, eventId, onVote }: Props, ref) {
     const tickInterval = useRef(1000 * 60);
     const now = useTime(tickInterval.current);
     const contentRef = useRef<HTMLParagraphElement>(null);
