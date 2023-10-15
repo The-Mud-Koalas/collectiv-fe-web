@@ -65,7 +65,7 @@ const Forum = ({ eventDetails }: { eventDetails: EventDetail }) => {
 
   return (
     <div className="flex flex-col items-center gap-4 lg:p-16 p-10">
-      <div className="flex items-center gap-40 w-full my-4 px-32">
+      <div className="flex flex-wrap items-center justify-center xl:gap-24 gap-12 w-full my-4 px-32">
         <StatisticCard
           icon={<MdOutlineForum />}
           value={formatter.format(numPosts)}
