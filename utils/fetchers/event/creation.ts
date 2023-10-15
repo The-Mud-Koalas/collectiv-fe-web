@@ -24,33 +24,14 @@ const getLocations: QueryFunction<
 };
 
 const getProjectUnitGoals: QueryFunction<
-  SelectOption<string>[],
+  GoalKind[],
   string[],
   any
 > = async ({ queryKey }) => {
   const [_, __, searchParam] = queryKey;
 
-  const UNITS = [
-    {
-      id: "1",
-      name: "bags",
-    },
-    {
-      id: "2",
-      name: "donated",
-    },
-    {
-      id: "3",
-      name: "planted",
-    },
-    {
-      id: "4",
-      name: "executed",
-    },
-  ];
-
-  await new Promise((res: any) => setTimeout(res, 1000));
-  return UNITS.map((unit) => ({ value: unit.id, label: unit.name }));
+  const goalKinds = await getRequest({ endpoint: "/event/project/goal-kinds/all" })
+  return goalKinds;
 };
 
 const createEvent = (queryClient: QueryClient) => async (values: NewEventFields) => {

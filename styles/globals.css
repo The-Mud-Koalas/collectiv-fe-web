@@ -9,26 +9,10 @@
   --background-end-rgb: 255, 255, 255;
 }
 
-/* @media (prefers-color-scheme: dark) {
-  :root {
-    --foreground-rgb: 255, 255, 255;
-    --background-start-rgb: 0, 0, 0;
-    --background-end-rgb: 0, 0, 0;
-  }
-} */
-
 body {
   background: #FFFCEF;
 }
 
-/* style : {
-  --react-international-phone-border-radius : 0
-  --react-international-phone-border-color : "gray"
-  --react-international-phone-background-color : "#282c34"
-  --react-international-phone-text-color : "white"
-  --react-international-phone-selected-dropdown-item-background-color : "black"
-  --react-international-phone-country-selector-background-color-hover : "black"
-  } */
-.hello:focus {
-  border-color: green;
+html {
+  scroll-behavior: smooth;
 }
