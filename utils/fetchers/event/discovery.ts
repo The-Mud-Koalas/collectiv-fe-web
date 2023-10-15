@@ -1,6 +1,6 @@
 import { getRequest } from "@/lib/fetch";
 
-const PAGE_LIMIT = 10;
+const PAGE_LIMIT = 6;
 
 const EVENT_MAP: Record<keyof EventFilters, string> = {
   type: "type",

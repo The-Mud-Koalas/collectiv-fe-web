@@ -1,5 +1,5 @@
 import { Loading } from "@/components/shared/layouts";
-import { getLocations, getServiceCategories, getTags } from "@/utils/fetchers/event/creation";
+import { getLocations, getProjectUnitGoals, getServiceCategories, getTags } from "@/utils/fetchers/event/creation";
 import { useQuery } from "@tanstack/react-query";
 import React, { createContext, useContext, useState } from "react";
 import { UseFormReturn, useForm } from "react-hook-form";
@@ -14,6 +14,7 @@ interface EventContextProps {
   categories: Category[];
   locations: EventLocation[];
   tags: Tag[];
+  goalKind: GoalKind[];
 }
 
 const EventCreationContext = createContext<EventContextProps>(
@@ -55,6 +56,15 @@ const EventCreationProvider: React.FC<React.PropsWithChildren> = ({
     queryFn: getTags
   });
 
+  const {
+    data: goalKind,
+    isLoading: isGoalKindLoading,
+    isError: isGoalKindError
+  } = useQuery({
+    queryKey: ["goal-kind"],
+    queryFn: getProjectUnitGoals
+  })
+
   const isLoading = isCategoriesLoading || isLocationLoading || isTagsLoading;
   const isError = isCategoriesError || isLocationError || isTagsError
 
@@ -85,8 +95,8 @@ const EventCreationProvider: React.FC<React.PropsWithChildren> = ({
     setIsProject(isProject);
   }
 
-  if (isCategoriesLoading || isLocationLoading || isTagsLoading) return <Loading />;
-  if (isCategoriesError || isLocationError || isTagsError) return <></>;
+  if (isCategoriesLoading || isLocationLoading || isTagsLoading || isGoalKindLoading) return <Loading />;
+  if (isCategoriesError || isLocationError || isTagsError || isGoalKindError) return <></>;
 
   return (
     <EventCreationContext.Provider
@@ -100,7 +110,8 @@ const EventCreationProvider: React.FC<React.PropsWithChildren> = ({
         categories,
         locations,
         populateFormValues,
-        tags
+        tags,
+        goalKind
       }}
     >
       {children}

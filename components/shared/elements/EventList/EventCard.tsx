@@ -6,6 +6,8 @@ import { COLORS } from "@/utils/constants/colors";
 import { occurInSameDate } from "@/utils/helpers/others/dates";
 import Link from "next/link";
 import { useRouter } from "next/router";
+import { useWindowSize } from "@/hooks/display";
+import { BREAKPOINTS } from "@/utils/constants/breakpoints";
 
 interface Props {
   event: EventDetail;
@@ -29,11 +31,11 @@ const EventCard: React.FC<Props> = ({ event }) => {
   const eventStartDate = new Date(event_start_date_time);
   const eventEndDate = new Date(event_end_date_time);
   const isInSameDate = occurInSameDate(eventStartDate, eventEndDate);
-
+  const { windowWidth } = useWindowSize();
 
   return (
     <article
-      className={`${inter.className} flex flex-col gap-2 w-96 border-2 border-primary-900 rounded-md p-4`}
+      className={`${inter.className} flex flex-col gap-2 w-full md:w-96 border-2 border-primary-900 rounded-md p-4`}
     >
       <div className="flex justify-between">
         <p className="font-bold text-lg">
@@ -89,11 +91,11 @@ const EventCard: React.FC<Props> = ({ event }) => {
         <div className="flex gap-2 items-center self-center">
           <Link
             href={`/event/${id}/forum`}
-            className="border-2 border-primary-800 flex gap-3 py-2 px-4 rounded-full"
+            className="border-2 border-primary-800 flex gap-3 py-2 px-2 sm:px-4 rounded-full"
           >
-            <p className="medium text-base text-primary-800">View Forums</p>
+            <p className="medium text-sm sm:text-base text-primary-800">View Forums</p>
             <div className="-rotate-45">
-              <Arrow color={COLORS.primary[800]} dimensions={{ width: 25 }} />
+              <Arrow color={COLORS.primary[800]} dimensions={{ width: windowWidth >= BREAKPOINTS.sm ? 25 : 20 }} />
             </div>
           </Link>
           <Link

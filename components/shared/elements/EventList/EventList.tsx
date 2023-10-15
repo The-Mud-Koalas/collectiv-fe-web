@@ -4,6 +4,7 @@ import { useQuery } from "@tanstack/react-query";
 import { getListOfEvents } from "@/utils/fetchers/event/discovery";
 import { Loading } from "../../layouts";
 import PageToggler from "./PageToggler";
+import { AnimatePresence, motion } from "framer-motion";
 
 interface Props {
   filters: EventFilters;
@@ -22,7 +23,7 @@ const EventList: React.FC<Props> = ({ filters, fetchType }) => {
   });
 
   useEffect(() => {
-    if (noOfPages == null && data != null) {
+    if (data != null) {
       setNoOfPages(data.total_pages);
     }
   }, [data, noOfPages]);
@@ -37,13 +38,29 @@ const EventList: React.FC<Props> = ({ filters, fetchType }) => {
       {isLoading ? (
         <Loading />
       ) : (
-        <div className="flex gap-6 flex-wrap w-full px-10 my-2 self-center">
-          {data.results.map((event) => (
-            <EventCard key={event.id} event={event} />
-          ))}
+        <div className="flex justify-center sm:justify-normal gap-6 flex-wrap w-full px-4 md:px-6 my-2 self-center">
+          <AnimatePresence mode="popLayout">
+            {data.results.map((event) => (
+              <motion.div
+                layout
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                key={event.id}
+              >
+                <EventCard event={event} />
+              </motion.div>
+            ))}
+          </AnimatePresence>
         </div>
       )}
-      <PageToggler changePage={handlePageChange}  noOfPages={noOfPages} currentPage={page} prev={data?.previous} next={data?.next}/>
+      <PageToggler
+        changePage={handlePageChange}
+        noOfPages={noOfPages}
+        currentPage={page}
+        prev={data?.previous}
+        next={data?.next}
+      />
     </section>
   );
 };
