@@ -5,9 +5,8 @@ import { Arrow } from "@/components/shared/svg/icons";
 import CollectivLogo from "@/components/shared/svg/logo/CollectivLogo";
 import { COLORS } from "@/utils/constants/colors";
 import { garamond, inter, interItalics } from "@/utils/constants/fonts";
-import { getListOfEvents } from "@/utils/fetchers/event/discovery";
 import Link from "next/link";
-import React, { useEffect } from "react";
+import React from "react";
 
 type FilterOptions = {
   [Property in keyof EventFilters]: SelectOption<string>[];

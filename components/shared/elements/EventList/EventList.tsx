@@ -7,26 +7,32 @@ import PageToggler from "./PageToggler";
 import { AnimatePresence, motion } from "framer-motion";
 
 interface Props {
-  filters: EventFilters;
+  filters: EventFilters | Omit<EventFilters, "location">;
   fetchType: "event" | "location";
+  location?: EventLocation;
 }
 
-const EventList: React.FC<Props> = ({ filters, fetchType }) => {
+const EventList: React.FC<Props> = ({ filters, fetchType, location }) => {
   const [page, setPage] = useState(1);
   const [noOfPages, setNoOfPages] = useState<number | null>(null);
   const { data, isLoading, isError, error, isPreviousData } = useQuery<
     PaginatedResults<EventDetail[]>
   >({
-    queryFn: () => getListOfEvents(filters)(page),
+    queryFn: fetchType === "event" ? () => getListOfEvents(filters)(page) : () => getListOfEvents(filters as LocationFilters, location)(page),
     queryKey: ["event", page, filters],
     keepPreviousData: true,
   });
 
   useEffect(() => {
+    console.log(data)
     if (data != null) {
       setNoOfPages(data.total_pages);
     }
   }, [data, noOfPages]);
+
+  useEffect(() => {
+    setPage(1);
+  }, [filters])
 
   const handlePageChange = (page: number) => () => setPage(page);
 
@@ -38,7 +44,7 @@ const EventList: React.FC<Props> = ({ filters, fetchType }) => {
       {isLoading ? (
         <Loading />
       ) : (
-        <div className="flex justify-center sm:justify-normal gap-6 flex-wrap w-full px-4 md:px-6 my-2 self-center">
+        <div className="flex justify-center gap-6 flex-wrap w-full px-4 md:px-6 my-2 self-center">
           <AnimatePresence mode="popLayout">
             {data.results.map((event) => (
               <motion.div
