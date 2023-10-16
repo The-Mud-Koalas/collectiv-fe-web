@@ -1,6 +1,7 @@
 import React from "react";
 import Navbar from "./Navbar";
 import Footer from "./Footer";
+import { ToastContainer } from "react-toastify";
 
 const Template: React.FC<React.PropsWithChildren> = ({ children }) => {
   return (
@@ -10,6 +11,7 @@ const Template: React.FC<React.PropsWithChildren> = ({ children }) => {
         {children}
       </main>
       <Footer />
+      <ToastContainer />
     </>
   );
 };

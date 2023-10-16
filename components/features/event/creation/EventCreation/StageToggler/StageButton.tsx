@@ -18,9 +18,14 @@ const StageButton: React.FC<Props> = ({ idx, name }) => {
   const textColor = idx === stage ? COLORS.primary[300] : COLORS.primary[800];
   const bgColor = idx === stage ? COLORS.primary[800] : COLORS.primary[300];
   const svgSize = windowWidth >= BREAKPOINTS.sm ? 17 : 12;
+  const lastVisitedStage = Math.max(...visitedStage);
+
+  const isEnabled = lastVisitedStage >= 2 ? false : visitedStage.includes(idx);
+
   return (
     <motion.button
       onClick={changeStage(idx)}
+      disabled={!isEnabled}
       initial={{ backgroundColor: COLORS.primary[300] }}
       animate={{ backgroundColor: bgColor }}
       transition={{ type: "tween", duration: 0.2 }}

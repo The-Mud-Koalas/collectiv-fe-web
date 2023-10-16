@@ -1,22 +1,20 @@
 import { Loading } from "@/components/shared/layouts";
-import { getServiceCategories } from "@/utils/fetchers/event/creation";
+import { getLocations, getProjectUnitGoals, getServiceCategories, getTags } from "@/utils/fetchers/event/creation";
 import { useQuery } from "@tanstack/react-query";
 import React, { createContext, useContext, useState } from "react";
 import { UseFormReturn, useForm } from "react-hook-form";
-
-interface Image {
-  file: File;
-  url: string;
-}
-
 interface EventContextProps {
-  form: UseFormReturn<EventCreationFields>;
+  eventDetailsForm: UseFormReturn<EventCreationFields>;
   stage: number;
-  isProject: boolean;
+  isProject: boolean | null;
   changeStage: (newStage: number) => () => void;
   changeIsProject: (newIsProject: boolean) => () => void;
+  populateFormValues: (event: NewEventFields) => void;
   visitedStage: number[];
-  categories: CategoryOptions[];
+  categories: Category[];
+  locations: EventLocation[];
+  tags: Tag[];
+  goalKind: GoalKind[];
 }
 
 const EventCreationContext = createContext<EventContextProps>(
@@ -28,13 +26,49 @@ const useEventCreationContext = () => useContext(EventCreationContext);
 const EventCreationProvider: React.FC<React.PropsWithChildren> = ({
   children,
 }) => {
-  const form = useForm<EventCreationFields>();
-  const { data: categories, isLoading, isError } = useQuery({
+  const eventDetailsForm = useForm<EventCreationFields>();
+
+  const {
+    data: categories,
+    isLoading: isCategoriesLoading,
+    isError: isCategoriesError,
+  } = useQuery({
     queryKey: ["categories"],
     queryFn: getServiceCategories,
-    staleTime: Infinity
+    staleTime: Infinity,
+  });
+
+  const {
+    data: locations,
+    isLoading: isLocationLoading,
+    isError: isLocationError
+  } = useQuery({
+    queryKey: ["locations"],
+    queryFn: getLocations
+  });
+
+  const {
+    data: tags,
+    isLoading: isTagsLoading,
+    isError: isTagsError
+  } = useQuery({
+    queryKey: ["tags"],
+    queryFn: getTags
+  });
+
+  const {
+    data: goalKind,
+    isLoading: isGoalKindLoading,
+    isError: isGoalKindError
+  } = useQuery({
+    queryKey: ["goal-kind"],
+    queryFn: getProjectUnitGoals
   })
-  const [isProject, setIsProject] = useState(false);
+
+  const isLoading = isCategoriesLoading || isLocationLoading || isTagsLoading;
+  const isError = isCategoriesError || isLocationError || isTagsError
+
+  const [isProject, setIsProject] = useState<boolean | null>(null);
   const [stage, setStage] = useState(0);
   const [visitedStage, setVisitedStage] = useState<number[]>([0]);
 
@@ -45,13 +79,41 @@ const EventCreationProvider: React.FC<React.PropsWithChildren> = ({
     setVisitedStage([...visitedSet]);
   };
 
-  const changeIsProject = (newIsProject: boolean) => () => setIsProject(newIsProject);
+  const changeIsProject = (newIsProject: boolean) => () =>
+    setIsProject(newIsProject);
 
-  if (isLoading) return <Loading/>;
-  if (isError) return <></>;
+  const populateFormValues = (event: NewEventFields) => {
+    const {eventValues, isProject} = event;
+    
+    const eventKeys = Object.keys(eventValues);
+
+    eventKeys.forEach((key) => {
+      const eventKey = key as keyof EventCreationFields;
+      eventDetailsForm.setValue(eventKey, eventValues[eventKey]);
+    });
+
+    setIsProject(isProject);
+  }
+
+  if (isCategoriesLoading || isLocationLoading || isTagsLoading || isGoalKindLoading) return <Loading />;
+  if (isCategoriesError || isLocationError || isTagsError || isGoalKindError) return <></>;
 
   return (
-    <EventCreationContext.Provider value={{ isProject, changeIsProject, form, stage, changeStage, visitedStage, categories }}>
+    <EventCreationContext.Provider
+      value={{
+        isProject,
+        changeIsProject,
+        eventDetailsForm,
+        stage,
+        changeStage,
+        visitedStage,
+        categories,
+        locations,
+        populateFormValues,
+        tags,
+        goalKind
+      }}
+    >
       {children}
     </EventCreationContext.Provider>
   );

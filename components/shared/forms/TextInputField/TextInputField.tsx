@@ -44,13 +44,13 @@ const TextInputField = <T extends unknown>({
     <div className="flex flex-col gap-1 w-full">
       <label
         htmlFor={inputId}
-        className={`${inter.className} text-sm sm:text-base font-medium`}
+        className={`${inter.className} text-sm sm:text-base font-small`}
       >
         {label} { registerOptions?.required && <span className="text-red-600">*</span>}
       </label>
       <motion.input
         whileFocus={{ boxShadow: `0 0 0 2px ${error == null ? COLORS.secondary[400] : COLORS.danger[400]}` }}
-        className={`${inter.className} outline-none bg-gray-50 text-sm sm:text-base px-3 py-3 rounded-lg border-gray-300 border-[1.5px]`}
+        className={`${inter.className} outline-none bg-gray-50 text-sm sm:text-base px-3 py-3 rounded-lg border-gray-300 border-[1.5px] disabled:text-gray-400`}
         type="text"
         id={inputId}
         placeholder={placeholder}

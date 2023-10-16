@@ -1,9 +1,16 @@
-import { postRequest } from "@/lib/fetch";
+import { getRequest, postRequest } from "@/lib/fetch";
 import { auth } from "@/lib/firebase";
 import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
 } from "firebase/auth";
+
+const getUserInfo = async () => {
+  const idToken = await auth.currentUser?.getIdToken();
+  console.log(idToken)
+  const user = await getRequest({ endpoint: "/user/data", token: idToken});
+  return user;
+}
 
 const loginWithEmail = async (data: LoginFormFields) => {
   const { email, password } = data;
@@ -38,4 +45,4 @@ const signUpWithEmail = async (data: SignupFormFields) => {
   }
 };
 
-export { loginWithEmail, signUpWithEmail };
+export { loginWithEmail, signUpWithEmail, getUserInfo };

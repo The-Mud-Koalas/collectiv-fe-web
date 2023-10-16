@@ -54,10 +54,10 @@ const EventRadioButton: React.FC<Props> = ({ isSelected }) => {
       <motion.circle
         cx="10.5221"
         cy="10.5222"
-        r="6"
-        fill={COLORS.primary[700]}
+        r="9"
+        fill={COLORS.primary[300]}
         initial={{ r: 0 }}
-        animate={{ r: isSelected ? 6 : 0 }}
+        animate={{ r: isSelected ? 9 : 0 }}
       />
     </motion.svg>
   );
