@@ -7,8 +7,6 @@ import {
 
 const getUserInfo = async () => {
   const idToken = await auth.currentUser?.getIdToken();
-  console.log({ idToken })
-
   const user = await getRequest({ endpoint: "/user/data", token: idToken});
   return user;
 }
@@ -34,9 +32,9 @@ const signUpWithEmail = async (data: SignupFormFields) => {
       endpoint: "/user/update",
       token: idToken,
       body: {
-        "full-name": name,
-        "location-track": false, // Disallow location tracking, only when user says yes
-        "preferred-radius": 10, // When first created, discovery radius set to 10 km
+        full_name: name,
+        location_track: false, // Disallow location tracking, only when user says yes
+        preferred_radius: 10, // When first created, discovery radius set to 10 km
       },
     });
     return populatedUser;

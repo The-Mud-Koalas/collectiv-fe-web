@@ -1,4 +1,5 @@
 import { Button } from "@/components/shared/elements";
+import { EventList } from "@/components/shared/elements/EventList";
 import { Filter } from "@/components/shared/elements/Filter";
 import { Arrow } from "@/components/shared/svg/icons";
 import CollectivLogo from "@/components/shared/svg/logo/CollectivLogo";
@@ -16,26 +17,30 @@ interface Props {
     key: keyof EventFilters
   ) => (value: SelectOption<string> | null) => void;
   filters: EventFilters;
-  options: FilterOptions
+  options: FilterOptions;
 }
 
-const DiscoverEvents: React.FC<Props> = ({ filters, changeFilterParam, options }) => {
+const DiscoverEvents: React.FC<Props> = ({
+  filters,
+  changeFilterParam,
+  options,
+}) => {
   return (
     <div className="flex flex-col items-center">
       <section
         id="join-circle"
         className="py-10 w-1/2 flex flex-col items-center justify-center gap-4"
       >
-        <h4 className={`${garamond.className} font-bold italic text-xl`}>
+        <h4 className={`${garamond.className} text-center font-bold italic text-xl`}>
           Events
         </h4>
         <h1
-          className={`${inter.className} text-primary-800 text-6xl font-bold`}
+          className={`${inter.className}  text-center text-primary-800 text-4xl sm:text-6xl font-bold`}
         >
           Join the Circle
         </h1>
         <p
-          className={`${inter.className} text-lg font-medium text-center text-primary-800`}
+          className={`${inter.className} text-base sm:text-lg font-medium text-center text-primary-800`}
         >
           Don&apos;t just watch from the sidelines – dive in! Register and
           immerse yourself in a community that&apos;s brimming with
@@ -58,23 +63,31 @@ const DiscoverEvents: React.FC<Props> = ({ filters, changeFilterParam, options }
           </Button>
         </Link>
       </section>
-      <section id="health">
-        {/* Rashad's Health Part */}
-      </section>
-      <section id="events-in" className="w-full px-10">
+      <section id="health">{/* Rashad's Health Part */}</section>
+      <section id="events-in" className="w-full px-10 flex flex-col gap-3 mb-8">
         <div className="flex items-center gap-2">
           <h2 className={`${garamond.className} text-3xl italic`}>
             Events in <span className="font-bold">Collectiv</span>
           </h2>
-          <CollectivLogo color="black" dimensions={{ width: 27 }}/>
+          <CollectivLogo color="black" dimensions={{ width: 27 }} />
         </div>
-        <div className="flex gap-3 items-center">
-            <p className={`${interItalics.className} font-medium text-base`}>Filter by</p>
-            {
-                Object.keys(filters).map(filter => <Filter key={filter} filterOptions={options[filter as keyof FilterOptions]} filterName={filter} onChange={changeFilterParam(filter as keyof EventFilters)}/>)
-            }
+        <div className=" sm:flex gap-3 items-center">
+          <p className={`${interItalics.className} mb-2 sm:mb-0 font-medium text-base`}>
+            Filter by
+          </p>
+          <div className="flex gap-2 sm:gap-3 max-w-sreen flex-wrap">
+            {Object.keys(filters).map((filter) => (
+              <Filter
+                key={filter}
+                filterOptions={options[filter as keyof FilterOptions]}
+                filterName={filter}
+                onChange={changeFilterParam(filter as keyof EventFilters)}
+              />
+            ))}
+          </div>
         </div>
       </section>
+      <EventList fetchType="event" filters={filters} />
     </div>
   );
 };

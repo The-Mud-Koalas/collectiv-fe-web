@@ -2,14 +2,15 @@ interface FetchProps {
   endpoint?: string;
   url?: string;
   token?: string;
+  searchParams?: URLSearchParams;
 }
 
 interface MutateProps<T> extends FetchProps {
   body: T;
 }
 
-const getRequest = async ({ url, endpoint, token }: FetchProps) => {
-  url ??= `${process.env.NEXT_PUBLIC_BACKEND_URL}${endpoint}/`;
+const getRequest = async ({ url, endpoint, token, searchParams }: FetchProps) => {
+  url ??= `${process.env.NEXT_PUBLIC_BACKEND_URL}${endpoint}/${searchParams != null ? `?${searchParams.toString()}` : ""}`;
 
   const response = await fetch(url, {
     headers: {
@@ -19,8 +20,9 @@ const getRequest = async ({ url, endpoint, token }: FetchProps) => {
   });
 
   if (!response.ok) {
+    const error = await response.json();
     throw new Error(`Response failed with status ${response.status}`, {
-      cause: response,
+      cause: error,
     });
   }
 
@@ -38,14 +40,16 @@ const postRequest = async <T>({
   const response = await fetch(url, {
     headers: {
       Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
     },
     body: JSON.stringify(body),
     method: "POST",
   });
 
   if (!response.ok) {
+    const error = await response.json();
     throw new Error(`Response failed with status ${response.status}`, {
-      cause: response,
+      cause: error,
     });
   }
 

@@ -13,6 +13,10 @@ const ELEMENTS: NavLinksType = [
     url: "/forum"
   },
   {
+    name: "Location",
+    url: "/location"
+  },
+  {
     name: "Events",
     url: "/event/discover"
   },

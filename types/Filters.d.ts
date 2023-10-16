@@ -5,3 +5,5 @@ interface EventFilters {
     tag: SelectOption<string> | null;
     location: SelectOption<string> | null;
 }
+
+type LocationFilters = Omit<EventFilters, "location">;

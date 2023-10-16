@@ -4,5 +4,7 @@ import Loader from "./Loader";
 import RoundedCircle from "./RoundedCircle";
 import StatusPill from "./StatusPill";
 import Modal from "./Modal";
+import { Switch, UncontrolledSwitch } from "./Switch";
+import LabelledToggler from "./LabelledToggler";
 
-export { Button, Loader, Card, RoundedCircle, StatusPill, Modal };
+export { Button, Loader, Card, RoundedCircle, LabelledToggler, StatusPill, Modal, Switch, UncontrolledSwitch };
