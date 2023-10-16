@@ -1,7 +1,7 @@
 interface UserPreferenceFields {
-    "full-name"?: string;
-    "preferred-radius"?: number | null;
-    "location-track"?: boolean | null;
+    full_name?: string;
+    preferred_radius?: number | null;
+    location_track?: boolean | null;
 }
 
 interface UserData {
