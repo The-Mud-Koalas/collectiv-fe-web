@@ -20,6 +20,7 @@ import React, {
   createContext,
   useContext,
   useEffect,
+  useRef,
   useState,
 } from "react";
 
@@ -36,13 +37,17 @@ interface AuthContextProps {
   logout: () => void;
   sendMessageToRN: (msg: Record<string, any>) => void;
   isInRN: () => boolean;
+  userData?: UserData | null;
+  refetch?: () => void;
 }
 
 const AppContext = createContext<AuthContextProps>({
   user: null,
   logout: () => {},
   sendMessageToRN: () => {},
-  isInRN: () => false
+  isInRN: () => false,
+  userData: null,
+  refetch: () => false,
 });
 const useAppContext = () => useContext(AppContext);
 
@@ -52,7 +57,7 @@ const AppProvider: React.FC<PropsWithChildren> = ({ children }) => {
   const router = useRouter();
   const logout = async () => {
     await signOut(auth);
-    sendMessageToRN({ type: "auth-token", token: null })
+    sendMessageToRN({ type: "auth-token", token: null });
     router.push("/accounts/login");
   };
   const queryClient = useQueryClient();
@@ -64,7 +69,7 @@ const AppProvider: React.FC<PropsWithChildren> = ({ children }) => {
     fetchStatus,
     status,
     refetch,
-  } = useQuery({
+  } = useQuery<UserData>({
     queryFn: getUserInfo,
     queryKey: ["user-info"],
     enabled: user != null,
@@ -76,10 +81,12 @@ const AppProvider: React.FC<PropsWithChildren> = ({ children }) => {
     window.ReactNativeWebView.postMessage(JSON.stringify(msg));
   };
 
+  const hasUserDataLoaded = useRef(false);
+
   const onAccept = () => {
     sendMessageToRN({ type: "location-sharing", agree: true });
-    setShowModal(false)
-  }
+    setShowModal(false);
+  };
 
   useEffect(() => {
     if (userData == null) return;
@@ -98,6 +105,8 @@ const AppProvider: React.FC<PropsWithChildren> = ({ children }) => {
       setUser(user);
       queryClient.invalidateQueries({ queryKey: ["user-info"] });
 
+      await refetch();
+
       if (user == null) {
         setAuthLoading(false);
         return;
@@ -109,14 +118,20 @@ const AppProvider: React.FC<PropsWithChildren> = ({ children }) => {
       // setShowModal(true);
     });
     return () => unsubscribe();
-  }, [queryClient]);
+  }, [queryClient, refetch]);
 
   if (!isMapsScriptLoaded || isAuthLoading) return <Loading />;
 
   return (
-    <AppContext.Provider value={{ user, logout, sendMessageToRN, isInRN }}>
+    <AppContext.Provider
+      value={{ user, logout, sendMessageToRN, isInRN, userData, refetch }}
+    >
       {children}
-      <LocationModal onAccept={onAccept} setShowModal={setShowModal} showModal={showModal} />
+      <LocationModal
+        onAccept={onAccept}
+        setShowModal={setShowModal}
+        showModal={showModal}
+      />
     </AppContext.Provider>
   );
 };

@@ -31,10 +31,10 @@ const NavbarAccount = () => {
           >
             <ul className="flex flex-col gap-5 mt-6 bg-primary-300 px-4 pt-2 pb-4  w-44">
               <li>
-                <NavbarLink name="My Rewards" url="/rewards"/>
+                <NavbarLink name="Your Activities" url="/wrapped"/>
               </li>
               <li>
-                <NavbarLink name="Applied Events" url="/event/registered"/>
+                <NavbarLink name="Participated Events" url="/event/registered"/>
               </li>
               <div className="bg-primary-800 w-full h-[1px]"></div>
               <li>

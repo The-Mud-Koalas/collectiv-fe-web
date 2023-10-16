@@ -10,17 +10,19 @@ const EVENT_MAP: Record<keyof EventFilters, string> = {
   location: "location_id"
 }
 
-const getListOfEvents = (filters: EventFilters, location?: EventLocation) => {
+const getListOfEvents = (filters: EventFilters | LocationFilters, location?: EventLocation) => {
+  
+  const searchFilters: EventFilters = "location" in filters ? filters as EventFilters : { ...filters, location: { value: location?.id, label: location?.name}} as EventFilters;
   return async (page: number = 1) => {
     const searchParamValues: Record<string, string> = Object.keys(
-      filters
+      searchFilters
     ).reduce(
       (prev, key) =>
-        filters[key as keyof EventFilters] == null
+        searchFilters[key as keyof EventFilters] == null
           ? prev
           : {
               ...prev,
-              [EVENT_MAP[key as keyof EventFilters]]: filters[key as keyof EventFilters]?.value.toLowerCase(),
+              [EVENT_MAP[key as keyof EventFilters]]: searchFilters[key as keyof EventFilters]?.value.toLowerCase(),
             },
       {
         limit: `${PAGE_LIMIT}`,
