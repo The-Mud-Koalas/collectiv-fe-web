@@ -77,6 +77,7 @@ interface BaseEventParticipation {
   submitted_review: boolean;
   total_contribution: number;
   activities: { timestamp: string; contribution: number }[];
+  event?: EventDetail;
 }
 
 interface ContributorEventParticipation extends BaseEventParticipation {

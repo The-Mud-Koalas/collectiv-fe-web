@@ -3,6 +3,7 @@
 @tailwind utilities;
 @import url("./overrides/datepicker.css");
 @import url("./overrides/mapfilter.css");
+@import url("./overrides/scrollbar.css");
 
 :root {
   --foreground-rgb: 0, 0, 0;
