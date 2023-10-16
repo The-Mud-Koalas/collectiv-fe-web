@@ -11,3 +11,27 @@ interface ForumPost {
     upvoters: string[];
     downvoters: string[];
 }
+
+type NamedEntity = { word: string, count: number }
+
+interface ForumTopWords {
+    PER?: NamedEntity[];
+    ORG?: NamedEntity[];
+    LOC?: NamedEntity[];
+    MISC?: NamedEntity[];
+}
+
+interface ForumAnalytics {
+    sentiment_score: number | null;
+    top_words: ForumTopWords;
+}
+
+interface TrendingForums {
+    'event_id': string,
+    'event_name': string,
+    'event_location_name': string,
+    'forum_top_words': ForumTopWords,
+    'forum_trending_posts': ForumPost[],
+}
+
+type GlobalForum = TrendingForums[]

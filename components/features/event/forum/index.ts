@@ -1,3 +1,4 @@
 import Forum from "./Forum";
+import GlobalForum from "./GlobalForum";
 
-export default Forum;
+export { Forum, GlobalForum }

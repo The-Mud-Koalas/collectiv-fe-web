@@ -9,11 +9,17 @@ import { COLORS } from "@/utils/constants/colors";
 import { garamond } from "@/utils/constants/fonts";
 import { StatisticCard } from "../dashboard/dataviz";
 import { MdOutlineForum } from "react-icons/md";
-import { AiOutlineFire } from "react-icons/ai"
+import { AiOutlineFire } from "react-icons/ai";
+import { FaFaceFrown, FaFaceMeh, FaFaceGrin } from "react-icons/fa6";
+import { useAnalytics } from "@/hooks/forum/useAnalytics";
+import cn from "clsx";
+import WordCloud from "./WordCloud";
 
 const Forum = ({ eventDetails }: { eventDetails: EventDetail }) => {
   const { user } = useAppContext();
   const pageAccessDate = useRef(new Date());
+
+  const analytics = useAnalytics({ eventDetails });
 
   const {
     posts: oldPosts,
@@ -61,10 +67,31 @@ const Forum = ({ eventDetails }: { eventDetails: EventDetail }) => {
   let formatter = Intl.NumberFormat("en", { notation: "compact" });
   const allPosts = oldPosts.concat(newPosts);
   const numPosts = allPosts.length;
-  const numTrendingPosts = allPosts.filter(post => post.vote_count >= 30).length;
+  const numTrendingPosts = allPosts.filter(
+    (post) => post.vote_count >= 20
+  ).length;
+
+  const sentimentScore =
+    analytics.data && analytics.data.sentiment_score
+      ? analytics.data.sentiment_score * 100
+      : 0;
+
+  let sentimentIcon = <FaFaceFrown className="text-danger-300" />;
+
+  if (sentimentScore < 80 && sentimentScore >= 50) {
+    sentimentIcon = <FaFaceMeh className="text-yellow-600" />;
+  } else if (sentimentScore > 80) {
+    sentimentIcon = <FaFaceGrin className="text-primary-400" />;
+  }
+
+  const noMorePostsToFetch = noMorePosts && oldPosts.length;
+  const beTheFirstToPost = noMorePosts && !oldPosts.length;
 
   return (
-    <div className="flex flex-col items-center gap-4 lg:p-16 p-10">
+    <div className="flex flex-col items-center gap-4 lg:p-16 p-6">
+      <h1 className={cn(garamond.className, "lg:text-7xl text-5xl")}>
+        {eventDetails.name} Event Forum
+      </h1>
       <div className="flex flex-wrap items-center justify-center xl:gap-24 gap-12 w-full my-4 px-32">
         <StatisticCard
           icon={<MdOutlineForum />}
@@ -86,17 +113,20 @@ const Forum = ({ eventDetails }: { eventDetails: EventDetail }) => {
             Trending Posts
           </p>
           <p className="lg:text-sm text-xs text-secondary-400 italic">
-            *posts with 30+ upvotes from this event
+            *posts with 20+ upvotes from this event
           </p>
         </StatisticCard>
         <StatisticCard
-          icon={<MdOutlineForum />}
-          value={"'Hello'"}
+          icon={sentimentIcon}
+          value={`${sentimentScore.toFixed(1)}%`}
         >
           <p
             className={`mt-2 lg:text-3xl text-xl font-medium ${garamond.className}`}
           >
-            Trending words
+            User sentiment score
+          </p>
+          <p className="lg:text-sm text-xs text-secondary-400 italic">
+            *determines how positive the overall forum is
           </p>
         </StatisticCard>
       </div>
@@ -106,6 +136,8 @@ const Forum = ({ eventDetails }: { eventDetails: EventDetail }) => {
         Write a post
       </p>
       <ForumInput ref={inputRef} eventDetails={eventDetails} />
+      {analytics.data && <WordCloud topWords={analytics.data.top_words} />}
+
       {newPosts.map((post) => (
         <ForumPost
           key={post.id}
@@ -139,9 +171,14 @@ const Forum = ({ eventDetails }: { eventDetails: EventDetail }) => {
         );
       })}
       {isFetchingMorePosts && <BeatLoader color={COLORS.primary[500]} />}
-      {noMorePosts && (
+      {noMorePostsToFetch && (
         <p className="lg:text-2xl text-lg font-semibold italic text-primary-600">
           You&apos;re all caught up!
+        </p>
+      )}
+      {beTheFirstToPost && (
+        <p className="lg:text-2xl text-lg font-semibold italic text-primary-600">
+          Be the first to say something!
         </p>
       )}
     </div>
