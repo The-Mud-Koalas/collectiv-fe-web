@@ -1,6 +1,6 @@
 import React from "react";
 import { Template } from "@/components/shared/layouts";
-import Forum from "@/components/features/event/forum";
+import { Forum } from "@/components/features/event/forum";
 import { getRequest } from "@/lib/fetch";
 import { GetServerSideProps, InferGetServerSidePropsType } from "next";
 import { useAppContext } from "@/context/AppContext";
@@ -44,8 +44,8 @@ const EventForumsPage = ({
 
     if (!participationData.is_registered) {
       toast.error(
-        "In order to access this forum, you have to register to event with id " +
-          event.id
+        "In order to access this forum, you have to register to this event",
+        { toastId: "error-forum-" + event.id }
       );
       router.replace(`/event/${event.id}`);
       return null;
@@ -56,7 +56,8 @@ const EventForumsPage = ({
       participationData.data.has_left_forum
     ) {
       toast.error(
-        "You do not have access to this page since you have left the event/forum."
+        "You do not have access to this page since you have left the event/forum.",
+        { toastId: "error-forum-" + event.id }
       );
       router.replace(`/event/${event.id}`);
       return null;
