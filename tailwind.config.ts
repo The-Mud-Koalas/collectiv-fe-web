@@ -8,9 +8,12 @@ const config: Config = {
     ],
     theme: {
         extend: {
-          grayscale: {
-            50: '50%',
-          },
+            inset: {
+                "-16": "-4rem",
+            },
+            grayscale: {
+                50: "50%",
+            },
             flex: {
                 "2": "2 2 0%",
             },
@@ -50,6 +53,9 @@ const config: Config = {
                     300: "#E3E5E5",
                     400: "#CDCFD0",
                     500: "#979C9E",
+                },
+                eggshell: {
+                    100: "#F7F9FA",
                 },
             },
         },
