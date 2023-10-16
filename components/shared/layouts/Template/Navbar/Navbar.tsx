@@ -50,7 +50,7 @@ const Navbar = () => {
       <Link href="/">
         <CollectivLogoHorizontal size="md" colorCode="primary-800" />
       </Link>
-      {windowWidth >= BREAKPOINTS.sm ? (<>
+      {windowWidth >= BREAKPOINTS.md ? (<>
         <NavbarLinks elements={ELEMENTS} />
         <NavbarAccount/>
       </>

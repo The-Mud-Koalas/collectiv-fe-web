@@ -35,7 +35,7 @@ const EventCard: React.FC<Props> = ({ event }) => {
 
   return (
     <article
-      className={`${inter.className} flex flex-col gap-2 w-full md:w-96 border-2 border-primary-900 rounded-md p-4`}
+      className={`${inter.className} flex flex-col gap-2 min-w-[320px] w-full max-w-sm border-2 border-primary-900 rounded-md p-4`}
     >
       <div className="flex justify-between">
         <p className="font-bold text-lg">

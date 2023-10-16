@@ -9,12 +9,16 @@ interface Props {
 
 const authUrls: NavLinkType[] = [
   {
-    name: "Applied Events",
+    name: "Your Activities",
+    url: "/wrapped",
+  },
+  {
+    name: "Registered Events",
     url: "/event/registered",
   },
   {
-    name: "My Rewards",
-    url: "/rewards",
+    name: "Hosted Events",
+    url: "/event/hosted",
   },
   {
     name: "Profile",

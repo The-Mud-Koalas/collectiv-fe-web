@@ -34,7 +34,10 @@ const NavbarAccount = () => {
                 <NavbarLink name="Your Activities" url="/wrapped"/>
               </li>
               <li>
-                <NavbarLink name="Participated Events" url="/event/registered"/>
+                <NavbarLink name="Registered Events" url="/event/registered"/>
+              </li>
+              <li>
+                <NavbarLink name="Hosted Events" url="/event/hosted"/>
               </li>
               <div className="bg-primary-800 w-full h-[1px]"></div>
               <li>
