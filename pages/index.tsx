@@ -1,4 +1,3 @@
-import EventParticipationPopup from "@/components/features/event/participation/EventParticipationPopup";
 import { Home } from "@/components/features/home/HomePage";
 import { Template } from "@/components/shared/layouts";
 import { Inter } from "next/font/google";

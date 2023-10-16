@@ -1,3 +1,4 @@
 import useWindowSize from "./useWindowSize";
+import { useIntersectionObserver } from "./useIntersectionObserver";
 
-export { useWindowSize }
+export { useWindowSize, useIntersectionObserver }

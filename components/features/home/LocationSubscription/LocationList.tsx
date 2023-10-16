@@ -8,6 +8,8 @@ import {
 } from "@/utils/fetchers/event/creation";
 import LocationEntry from "./LocationEntry";
 import { Loading } from "@/components/shared/layouts";
+import cn from "clsx";
+import { inter } from "@/utils/constants/fonts";
 
 interface LocationListProps {}
 
@@ -19,9 +21,6 @@ type LocationType = {
 };
 
 const LocationList: FC<LocationListProps> = ({}) => {
-    const [subscribedLocation, setSubScribedLocation] = useState<
-        LocationType[]
-    >([]);
 
     const {
         data: locations,
@@ -39,7 +38,7 @@ const LocationList: FC<LocationListProps> = ({}) => {
         isError: isSubscribedLocationsError,
         error: subscribedlocationsError,
     } = useQuery({
-        queryKey: ["locations"],
+        queryKey: ["locations-subscribed"],
         queryFn: getSubscribedLocations,
     });
 
@@ -63,13 +62,13 @@ const LocationList: FC<LocationListProps> = ({}) => {
             <span className="w-10 h-10 bg-secondary-200 rounded-full p-4 flex items-center justify-center mx-auto mb-5">
                 ❇️
             </span>
-            <h1 className="text-5xl font-bold">Check our Locations</h1>
+            <h1 className={cn("text-5xl font-bold", inter.className)}>Check our Locations</h1>
             <div className="flex flex-col max-w-[921px] mx-auto my-10">
                 {locations ? (
                     locations.map((location: EventLocation) => (
                         <LocationEntry
                             key={location.id}
-                            name={location.name}
+                            {...location}
                             isSubscribed={isSubscribed(location)}
                         />
                     ))
