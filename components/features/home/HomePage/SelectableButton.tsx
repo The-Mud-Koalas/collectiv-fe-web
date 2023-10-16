@@ -22,7 +22,8 @@ const SelectableButton: FC<SelectableButtonProps> = ({
                     selected
                         ? "bg-secondary-200 text-secondary-500 font-semibold"
                         : "text-sky-500"
-                }`}
+                }  hover:text-secondary-500 hover:font-semibold
+                transition duration-300 ease-in-out`}
                 onClick={onClick}
             >
                 <p className={`${inter.className}`}>{label}</p>

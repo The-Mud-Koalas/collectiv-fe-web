@@ -2,6 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 @import url("./overrides/datepicker.css");
+@import url("./overrides/mapfilter.css");
 
 :root {
   --foreground-rgb: 0, 0, 0;
@@ -28,9 +29,7 @@ html {
   border-color: green;
 }
 
-.colorme {
-  filter: sepia(100%) hue-rotate(255deg); 
-}
+
 /*
 :root {
   --purple-shade: 180; /* Adjust this value for your desired shade 

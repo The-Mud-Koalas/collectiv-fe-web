@@ -23,7 +23,7 @@ const Header: FC<HeaderProps> = ({}) => {
             </p>
             <div className="flex flex-wrap justify-center gap-3">
                 <Link
-                    className="border border-primary-800 rounded-full text-primary-800 py-2 min-w-[167px]"
+                    className="border border-primary-800 rounded-full text-primary-800 py-2 min-w-[167px] transition duration-300 hover:text-primary-200 hover:bg-primary-800 hover:shadow-lg"
                     href={"/event/discover"}
                 >
                     View Events
@@ -31,10 +31,10 @@ const Header: FC<HeaderProps> = ({}) => {
                 <Link
                     // disabled={isLoading}
                     type="submit"
-                    className="border border-primary-800 bg-primary-800 flex justify-center items-center py-2 min-w-[167px] rounded-full"
+                    className="border border-primary-800 bg-primary-800 flex justify-center items-center py-2 min-w-[167px] rounded-full transition duration-300 text-primary-200 hover:bg-tertiary-100 hover:text-primary-800 hover:shadow-lg"
                     href={"/accounts/signup"}
                 >
-                    <p className="text-primary-200">Register Now</p>
+                    <p>Register Now</p>
                 </Link>
             </div>
         </div>

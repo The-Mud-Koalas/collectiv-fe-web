@@ -11,9 +11,9 @@ interface LocationInfographicProps {}
 const LocationInfographic: FC<LocationInfographicProps> = ({}) => {
     return (
         <div
-            className={`${inter.className} rounded-2xl bg-secondary-200 px-5 py-10 my-40`}
+            className={`${inter.className}  rounded-2xl background-div bg-secondary-200 px-5 py-20 my-40`}
         >
-            <div className="flex flex-wrap-reverse justify-evenly items-center">
+            <div className="flex flex-wrap-reverse justify-evenly items-center inside-div">
                 <div className="flex flex-col gap-3 w-[500px] ">
                     <StatisticBox value="124" label="Events Present" />
                     <StatisticBox
@@ -32,7 +32,7 @@ const LocationInfographic: FC<LocationInfographicProps> = ({}) => {
                     </p>
                     <Link
                         className="bg-primary-800 flex justify-between gap-2 items-center px-6 py-3 text-primary-200 font-light rounded-3xl mb-5 max-w-[240px]"
-                        href={"/event/locations"}
+                        href={"/location"}
                     >
                         <p>Check out location</p>
                         <Arrow
@@ -41,13 +41,6 @@ const LocationInfographic: FC<LocationInfographicProps> = ({}) => {
                         />
                     </Link>
                 </div>
-
-                <Image
-                    src={MapImage}
-                    width={738}
-                    alt="map of uq"
-                    className="colorme"
-                />
             </div>
         </div>
     );
