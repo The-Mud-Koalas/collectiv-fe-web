@@ -1,99 +1,84 @@
-import { Button } from "@/components/shared/elements";
-import { NumberInputField, TextInputField } from "@/components/shared/forms";
+import { NumberInputField } from "@/components/shared/forms";
 import { useAppContext } from "@/context/AppContext";
-import { postRequest } from "@/lib/fetch";
-import { inter } from "@/utils/constants/fonts";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import cn from "clsx";
 import React from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { RxCross2 } from "react-icons/rx";
+import cn from "clsx";
+import { inter } from "@/utils/constants/fonts";
+import { Button } from "@/components/shared/elements";
 import { toast } from "react-toastify";
+import { GoalMeter } from "./dataviz";
+import { postRequest } from "@/lib/fetch";
 
 interface Props {
-  eventDetails: EventDetail;
+  eventDetails: ProjectAnalytics;
   onClose: () => void;
 }
 
-const RecordContributionModal = ({ eventDetails, onClose }: Props) => {
+const UpdateProgressModal = ({ eventDetails, onClose }: Props) => {
   const { user } = useAppContext();
   const queryClient = useQueryClient();
   const {
     register,
     handleSubmit,
     formState: { errors },
-    reset
+    reset,
   } = useForm<{
     emailOrPhoneNumber: string;
     contributionAmount: number;
   }>();
-
-  const recordContribution = useMutation({
-    mutationFn: async (data: {
-      emailOrPhoneNumber: string;
-      contributionAmount: number;
-    }) => {
+  const updateProgress = useMutation({
+    mutationFn: async (data: { contributionAmount: number }) => {
       if (!user) return;
       const token = await user.getIdToken();
       await postRequest({
-        endpoint: "/participation/project/contribution/register",
+        endpoint: "/event/project/progress/update",
         body: {
           event_id: eventDetails.id,
-          contributor_email_phone: data.emailOrPhoneNumber,
-          amount_contributed: data.contributionAmount,
+          amount_to_update: data.contributionAmount,
+          type: "increase",
         },
         token
       });
     },
     onSuccess: async () => {
-      toast.success('Contribution successfully recorded!')
-      queryClient.invalidateQueries(['event-analytics', eventDetails.id])
+      toast.success("Progress successfully updated!");
+      queryClient.invalidateQueries(["event-analytics", eventDetails.id]);
       reset();
     },
     onError: (e: any) => {
-      toast.error(e.cause.message)
-    }
+      toast.error(e.cause.message);
+    },
   });
 
   const onSubmit: SubmitHandler<{
-    emailOrPhoneNumber: string;
     contributionAmount: number;
   }> = async (data) => {
-    recordContribution.mutate(data);
+    updateProgress.mutate(data);
   };
-
   const onError = async () => {};
 
   return (
     <div
       style={{ width: "min(95vw, 600px)" }}
-      className="rounded-md bg-white p-8 flex flex-col items-center gap-2 relative"
+      className="rounded-md bg-white p-8 flex flex-col items-center gap-4 relative"
     >
       <p className={cn(inter.className, "text-3xl font-bold self-start")}>
-        Record Contribution
+        Update Progress
       </p>
+      <GoalMeter
+        currVal={eventDetails.progress}
+        target={eventDetails.goal}
+        unit={eventDetails.measurement_unit}
+      />
       <form
         onSubmit={handleSubmit(onSubmit, onError)}
         className="w-full flex flex-col gap-3"
       >
-        <TextInputField
-          field="emailOrPhoneNumber"
-          label="Email/Phone Number"
-          register={register}
-          registerOptions={{
-            required: "This field is required",
-            pattern: {
-              value:
-                /^(\+[0-9]{9})|([A-Za-z0-9._%\+\-]+@[a-z0-9.\-]+\.[a-z]{2,3})$/g,
-              message:
-                "The value supplied is not a valid email or phone number.",
-            },
-          }}
-          error={errors.emailOrPhoneNumber}
-        />
         <NumberInputField
           field="contributionAmount"
-          label={`Contribution Amount (${
+          label={`Update Amount (${
             (eventDetails as ProjectDetail).measurement_unit
           })`}
           register={register}
@@ -112,10 +97,10 @@ const RecordContributionModal = ({ eventDetails, onClose }: Props) => {
             Cancel
           </Button>
           <Button
-            disabled={recordContribution.isLoading}
+            disabled={updateProgress.isLoading}
             className="text-sm lg:text-lg px-8 py-2 rounded-3xl font-medium bg-primary-800 text-primary-300 disabled:bg-gray-300 disabled:text-gray-100 disabled:cursor-not-allowed"
           >
-            Record Contribution
+            Update Progress
           </Button>
         </div>
       </form>
@@ -129,4 +114,4 @@ const RecordContributionModal = ({ eventDetails, onClose }: Props) => {
   );
 };
 
-export default RecordContributionModal;
+export default UpdateProgressModal;

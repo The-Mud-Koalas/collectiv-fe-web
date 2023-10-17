@@ -32,6 +32,16 @@ const EventDashboard = (props: EventDashboardProps) => {
     }
   );
 
+  const analytics = useQuery({
+    queryKey: ["event-analytics", eventDetails.id],
+    queryFn: async () => {
+      const data = await getRequest({
+        endpoint: `/analytics/event/${eventDetails.id}`,
+      });
+      return data as EventAnalytics;
+    },
+  });
+
   const router = useRouter();
   const isCreator = user?.uid === eventDetails.event_creator_id;
 
@@ -52,11 +62,14 @@ const EventDashboard = (props: EventDashboardProps) => {
         />
       </section>
       {isCreator ? (
-        <EventInfoAndActionsEditable eventDetails={eventDetails} isFetching={isFetching} />
+        <EventInfoAndActionsEditable
+          eventDetails={eventDetails}
+          isFetching={isFetching}
+        />
       ) : (
         <EventInfoAndActions eventDetails={eventDetails} />
       )}
-      <EventAnalytics eventDetails={eventDetails} />
+      <EventAnalytics analytics={analytics} eventId={eventDetails.id} />
     </div>
   );
 };

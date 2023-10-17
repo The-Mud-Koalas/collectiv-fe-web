@@ -1,4 +1,4 @@
-import React, { useRef, useEffect } from "react";
+import React, { useRef, useEffect, useMemo } from "react";
 import cn from "clsx";
 import { inter } from "@/utils/constants/fonts";
 import { motion, animate } from "framer-motion";
@@ -11,7 +11,10 @@ interface Props {
 
 const GoalMeter = ({ currVal, target, unit }: Props) => {
   const counterRef = useRef<HTMLDivElement>(null);
-  const percentage = ((currVal / target) * 100).toFixed(1);
+  const percentage = useMemo(
+    () => ((currVal / target) * 100).toFixed(1),
+    [currVal, target]
+  );
 
   useEffect(() => {
     if (!counterRef.current) return;
@@ -26,6 +29,7 @@ const GoalMeter = ({ currVal, target, unit }: Props) => {
     });
 
     return () => controls.stop();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currVal, target]);
 
   return (
