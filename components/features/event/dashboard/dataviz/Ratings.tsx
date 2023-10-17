@@ -20,7 +20,7 @@ const Ratings: React.FC<Props> = ({ rating }) => {
         {
             FIVE.map(num => <FillableStar key={num} color='#ffe234' dimensions={{ width: 25}} fillPercentage={getFillPercentage(rating, num)} id={num}/>)
         }
-        <p className='text-xl font-medium'>{ rating }</p>
+        <p className='text-xl font-medium'>{ rating.toFixed(1) }</p>
     </div>
   )
 }
