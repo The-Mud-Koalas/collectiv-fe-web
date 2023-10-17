@@ -84,6 +84,12 @@ const Forum = ({ eventDetails }: { eventDetails: EventDetail }) => {
     sentimentIcon = <FaFaceGrin className="text-primary-400" />;
   }
 
+  const noSentimentYet = analytics.data && analytics.data.sentiment_score == null
+
+  if (analytics.data && analytics.data.sentiment_score == null) {
+    sentimentIcon = <FaFaceMeh className="text-yellow-600" />;
+  }
+
   const noMorePostsToFetch = noMorePosts && oldPosts.length;
   const beTheFirstToPost = noMorePosts && !oldPosts.length;
 
@@ -118,7 +124,7 @@ const Forum = ({ eventDetails }: { eventDetails: EventDetail }) => {
         </StatisticCard>
         <StatisticCard
           icon={sentimentIcon}
-          value={`${sentimentScore.toFixed(1)}%`}
+          value={noSentimentYet ? 'n/a' : `${sentimentScore.toFixed(1)}%`}
         >
           <p
             className={`mt-2 lg:text-3xl text-xl font-medium ${garamond.className}`}
