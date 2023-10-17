@@ -13,6 +13,7 @@ const BarChart = ({
   return (
     <ResponsiveBar
       data={data}
+      enableGridY={false}
       theme={{
         fontFamily: inter.style.fontFamily,
         labels: { text: { fontSize: "100%", fontWeight: "bold" } },
