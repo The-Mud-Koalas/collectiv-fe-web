@@ -9,6 +9,7 @@ import EventInfoAndActionsEditable from "./editable";
 import { useAppContext } from "@/context/AppContext";
 import { useQuery } from "@tanstack/react-query";
 import { getRequest } from "@/lib/fetch";
+import { Loading } from "@/components/shared/layouts";
 
 interface EventDashboardProps extends React.PropsWithChildren {
   eventDetails: EventDetail;
@@ -16,7 +17,7 @@ interface EventDashboardProps extends React.PropsWithChildren {
 
 const EventDashboard = (props: EventDashboardProps) => {
   const { user } = useAppContext();
-  const { data: eventDetails, isFetching } = useQuery(
+  const { data: eventDetails, isFetching, isLoading, isError } = useQuery(
     ["event-details", props.eventDetails.id],
     {
       queryFn: async () => {
@@ -42,8 +43,12 @@ const EventDashboard = (props: EventDashboardProps) => {
     },
   });
 
+
   const router = useRouter();
   const isCreator = user?.uid === eventDetails.event_creator_id;
+
+  if (isLoading || analytics.isLoading) return <Loading/>;
+  if (isError || analytics.isError) return <></>
 
   return (
     <div className={`lg:pt-24 lg:p-10 p-6 ${inter.className}`}>
@@ -65,9 +70,10 @@ const EventDashboard = (props: EventDashboardProps) => {
         <EventInfoAndActionsEditable
           eventDetails={eventDetails}
           isFetching={isFetching}
+          analytics={analytics}
         />
       ) : (
-        <EventInfoAndActions eventDetails={eventDetails} />
+        <EventInfoAndActions eventDetails={eventDetails} analytics={analytics}/>
       )}
       <EventAnalytics analytics={analytics} eventId={eventDetails.id} />
     </div>

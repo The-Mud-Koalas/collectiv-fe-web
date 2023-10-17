@@ -6,7 +6,7 @@ import { FiSave } from "react-icons/fi";
 import Image from "next/image";
 import { Modal, Switch } from "@/components/shared/elements";
 import cn from "clsx";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { UseQueryResult, useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import CreatableSelect from "react-select/creatable";
 import { getTags } from "@/utils/fetchers/event/creation";
 import { capitalize } from "@/utils/helpers/formatting/capitalize";
@@ -35,10 +35,12 @@ import { COLORS } from "@/utils/constants/colors";
 import { postRequest } from "@/lib/fetch";
 import { toast } from "react-toastify";
 import CheckoutModal from "../../attendance/CheckoutModal";
+import { Ratings } from "../dataviz";
 
 interface Props {
   eventDetails: EventDetail;
   isFetching: boolean;
+  analytics: UseQueryResult<EventAnalytics, unknown>;
 }
 
 const EditableTagsField = ({
@@ -117,7 +119,7 @@ const EditableDateField = ({
   );
 };
 
-const EventInfoAndActionsEditable = ({ eventDetails, isFetching }: Props) => {
+const EventInfoAndActionsEditable = ({ eventDetails, isFetching, analytics }: Props) => {
   const BASE_URL = `/event/${eventDetails.id}`;
   const { user } = useAppContext();
   const queryClient = useQueryClient();
@@ -544,14 +546,19 @@ const EventInfoAndActionsEditable = ({ eventDetails, isFetching }: Props) => {
             </Link>
           </div>
         </form>
-        <div className="xl:w-2/5 w-full h-fit rounded-md aspect-video relative max-w-2xl xl:mx-0 mx-auto">
-          <Image
-            src={`${process.env.NEXT_PUBLIC_BACKEND_URL}/event/image/${eventDetails.id}`}
-            fill
-            objectFit="cover"
-            alt="picture"
-            className="rounded-lg shadow-md border border-gray-500"
-          />
+        <div className="flex flex-col gap-4 xl:w-2/5 w-full h-fit  max-w-2xl xl:mx-0 mx-auto">
+          <div className="w-full h-fit rounded-md aspect-video relative">
+            <Image
+              src={`${process.env.NEXT_PUBLIC_BACKEND_URL}/event/image/${eventDetails.id}`}
+              fill
+              objectFit="cover"
+              alt="picture"
+              className="rounded-lg shadow-md border border-gray-500"
+            />
+          </div>
+          <div className="flex w-full justify-end">
+            <Ratings rating={analytics.data?.average_event_rating ?? 0}/>
+          </div>
         </div>
       </section>
       <Modal

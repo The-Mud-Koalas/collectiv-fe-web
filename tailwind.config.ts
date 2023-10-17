@@ -41,11 +41,13 @@ const config: Config = {
                     100: "#FFFCEF",
                 },
                 danger: {
+                    50: "#FEE1D3",
                     100: "#641252",
                     200: "#FF8F7D",
                     300: "#FB282F",
                     400: "#FB282F",
                     500: "#780733",
+                    600: "#B51435"
                 },
                 sky: {
                     100: "#F7F9FA",
@@ -53,6 +55,9 @@ const config: Config = {
                     300: "#E3E5E5",
                     400: "#CDCFD0",
                     500: "#979C9E",
+                },
+                alert: {
+                    100: "#FEE1D3",
                 },
                 eggshell: {
                     100: "#F7F9FA",

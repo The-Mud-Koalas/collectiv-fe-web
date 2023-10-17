@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import Image from "next/image";
 import cn from "clsx";
 import { AiOutlineCalendar } from "react-icons/ai";
@@ -14,7 +14,7 @@ import {
 } from "react-icons/bs";
 import { useAppContext } from "@/context/AppContext";
 import { getRequest, postRequest } from "@/lib/fetch";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { UseQueryResult, useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { capitalize } from "@/utils/helpers/formatting/capitalize";
 import Link from "next/link";
 import { useRouter } from "next/router";
@@ -29,13 +29,18 @@ import { toast } from "react-toastify";
 import { showErrorToast } from "@/lib/toast";
 import { checkOutSelf } from "@/utils/fetchers/event/attendance";
 import { useGPSLocation } from "@/hooks/utils/useGPSLocation";
+import ReportModal from "../reportEvent/ReportModal";
+import { FaFlag } from "react-icons/fa6";
+import { Ratings } from "./dataviz";
 
 const REFETCH_INTERVAL_SECONDS = 30;
 interface Props {
   eventDetails: EventDetail;
+  analytics: UseQueryResult<EventAnalytics, unknown>;
 }
 
-const EventInfoAndActions = ({ eventDetails }: Props) => {
+const EventInfoAndActions = ({ eventDetails, analytics }: Props) => {
+  const [showModal, setShowModal] = useState<boolean>(false);
   const BASE_URL = `/event/${eventDetails.id}`;
 
   const { user } = useAppContext();
@@ -93,6 +98,9 @@ const EventInfoAndActions = ({ eventDetails }: Props) => {
         },
       });
     },
+    onSuccess: () =>
+      toast.success(`You have successfully registed to ${eventDetails.name}.`),
+    onError: (error: Error) => showErrorToast({ error }),
   });
 
   const handleRegisterAsParticipant = async () => {
@@ -154,8 +162,8 @@ const EventInfoAndActions = ({ eventDetails }: Props) => {
 
   const handleCheckOut = async () => {
     const data = !isParticipant
-        ? { event_id: eventDetails.id}
-        : { event_id: eventDetails.id, latitude: lat, longitude: lng };
+      ? { event_id: eventDetails.id }
+      : { event_id: eventDetails.id, latitude: lat, longitude: lng };
     await checkOutMutation.mutateAsync(data);
 
     router.push(BASE_URL + "?showCheckOut=true");
@@ -322,16 +330,30 @@ const EventInfoAndActions = ({ eventDetails }: Props) => {
             )}
           </div>
         </div>
-        <div className="xl:w-2/5 w-full h-fit rounded-md aspect-video relative max-w-2xl xl:mx-0 mx-auto">
-          <Image
-            src={`${process.env.NEXT_PUBLIC_BACKEND_URL}/event/image/${eventDetails.id}`}
-            fill
-            objectFit="cover"
-            alt="picture"
-            className="rounded-lg shadow-md border border-gray-500"
-          />
+        <div className="flex flex-col gap-4 xl:w-2/5 w-full h-fit  max-w-2xl xl:mx-0 mx-auto">
+          <div className="w-full h-fit rounded-md aspect-video relative">
+            <Image
+              src={`${process.env.NEXT_PUBLIC_BACKEND_URL}/event/image/${eventDetails.id}`}
+              fill
+              objectFit="cover"
+              alt="picture"
+              className="rounded-lg shadow-md border border-gray-500"
+            />
+          </div>
+          <div className="flex w-full justify-between">
+            <Button onClick={() => setShowModal(true)} className="bg-danger-50 px-4 py-1 rounded-full flex gap-2 items-center text-danger-600">
+              <FaFlag/>
+              <p className="font-medium text-base">Report</p>
+            </Button>
+            <Ratings rating={analytics.data?.average_event_rating ?? 0}/>
+          </div>
         </div>
       </section>
+      <ReportModal
+        eventId={eventDetails?.id}
+        showModal={showModal}
+        setShowModal={setShowModal}
+      />
       <Modal
         open={router.query.showCheckOut === "true"}
         onOverlayTap={closeModal}

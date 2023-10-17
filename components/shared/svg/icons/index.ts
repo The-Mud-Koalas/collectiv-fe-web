@@ -11,5 +11,6 @@ import Upload from "./Upload";
 import People from "./People";
 import Clock from "./Clock";
 import Star from "./Star";
+import FillableStar from "./FillableStar";
 
-export { Back, Star, Clock, Upload, Eye, EyeClosed, Arrow, Chevron, Unlocked, Locked, LocationSVG, Calendar, People }
+export { Back, Star, Clock, Upload, Eye, EyeClosed, Arrow, Chevron, Unlocked, Locked, LocationSVG, Calendar, People, FillableStar }
