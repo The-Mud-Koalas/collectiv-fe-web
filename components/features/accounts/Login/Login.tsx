@@ -24,7 +24,7 @@ interface Props {
 }
 
 const Login: React.FC<Props> = ({ form, onSubmit, onError, isLoading }) => {
-  const { register, handleSubmit } = form;
+  const { register, handleSubmit, formState: { errors } } = form;
   const { windowWidth } = useWindowSize();
 
   return (
@@ -55,6 +55,7 @@ const Login: React.FC<Props> = ({ form, onSubmit, onError, isLoading }) => {
                 },
                 required: "This field should not be left empty.",
               }}
+              error={errors.email}
             />
             <PasswordField
               label="Password"
@@ -67,12 +68,13 @@ const Login: React.FC<Props> = ({ form, onSubmit, onError, isLoading }) => {
                 },
                 required: "This field should not be left empty.",
               }}
+              error={errors.password}
             />
             <Link
-              href="/accounts/forget"
+              href="/accounts/phoneLogin"
               className="text-xs sm:text-sm sm:font-semibold underline"
             >
-              Forgot password?
+              Phone Number Login
             </Link>
             <Button
               disabled={isLoading}

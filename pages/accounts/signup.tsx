@@ -22,6 +22,7 @@ const SignupPage: NextPage = () => {
     mutationFn: signUpWithEmail,
     onSuccess: (data) => {
       form.reset();
+      router.push("/accounts/login")
     },
     onError: (error) => {
       if (error instanceof FirebaseError) {
