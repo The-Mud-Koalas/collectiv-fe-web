@@ -54,6 +54,9 @@ const config: Config = {
                     400: "#CDCFD0",
                     500: "#979C9E",
                 },
+                alert: {
+                    100: "#FEE1D3",
+                },
                 eggshell: {
                     100: "#F7F9FA",
                 },
