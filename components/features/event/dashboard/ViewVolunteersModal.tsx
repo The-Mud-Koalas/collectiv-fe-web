@@ -129,7 +129,7 @@ const VolunteersTable = ({
   const endIndex = startIndex + volunteersPerPage;
 
   return (
-    <div className="w-full">
+    <div className={cn("w-full", inter.className)}>
       <div className="flex items-center gap-3">
         <motion.input
           whileFocus={{ boxShadow: `0 0 0 2px ${COLORS.secondary[400]}` }}
@@ -240,7 +240,12 @@ const ViewVolunteersModal = ({ eventDetails, onClose }: Props) => {
       </p>
       <div className="bg-primary-100 w-full rounded-md p-4 flex items-center gap-4">
         <AiOutlineInfoCircle className="lg:text-3xl text-xl text-primary-500" />
-        <p className="lg:text-sm text-xs text-primary-600 font-semibold">
+        <p
+          className={cn(
+            inter.className,
+            "lg:text-sm text-xs text-primary-600 font-semibold"
+          )}
+        >
           Before granting managerial access to a volunteer, please ensure they
           have access to a location-enabled device.
         </p>

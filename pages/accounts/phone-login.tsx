@@ -15,6 +15,8 @@ import {
 } from "react-hook-form";
 import { toast } from "react-toastify";
 import { PhoneNumberUtil } from "google-libphonenumber";
+import { useRouter } from "next/router";
+import { showErrorToast } from "@/lib/toast";
 
 const phoneUtil = PhoneNumberUtil.getInstance();
 declare global {
@@ -108,6 +110,8 @@ const PhoneLoginPage: NextPage = () => {
         toast.error(errors?.[0]);
     };
 
+    const router = useRouter();
+
     const handleOTPChange = (newOTP: string[]) => {
         const otp = newOTP.join("");
 
@@ -121,14 +125,14 @@ const PhoneLoginPage: NextPage = () => {
                     // User signed in successfully.
                     setIsOTPLoading(false);
                     let user = result.user;
-                    console.log(user);
-                    alert("User signed in successfully");
                     setShowOTPModal(false);
+                    toast.success("User signed in successfully.");
+                    router.push("/");
                 })
                 .catch((error: any) => {
                     // User couldn't sign in (bad verification code?)
                     // ...
-                    console.error("Error verifying code:", error);
+                    showErrorToast({ error })
                 });
         }
     };

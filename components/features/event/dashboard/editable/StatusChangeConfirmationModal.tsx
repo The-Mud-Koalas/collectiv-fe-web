@@ -109,7 +109,7 @@ const StatusChangeConfirmationModal = ({
       >
         <RxCross2 />
       </button>
-      <div className="self-end flex items-center gap-2">
+      <div className={cn("self-end flex items-center gap-2", inter.className)}>
         <Button
           onClick={onClose}
           type="button"

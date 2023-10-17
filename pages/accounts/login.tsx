@@ -17,6 +17,7 @@ import {
 } from "react-hook-form";
 import { toast } from "react-toastify";
 import { useAppContext } from "@/context/AppContext";
+import { showErrorToast } from "@/lib/toast";
 
 const LoginPage: NextPage = () => {
   const { sendMessageToRN } = useAppContext();
@@ -35,7 +36,6 @@ const LoginPage: NextPage = () => {
     onError: (error) => {
       if (error instanceof FirebaseError) {
         const errorMessage = formatFirebaseAuthErrorMessage(error);
-        console.log(errorMessage);
         return;
       }
 
@@ -47,6 +47,11 @@ const LoginPage: NextPage = () => {
     try {
       mutateAsync(data);
     } catch (error) {
+      if (error instanceof FirebaseError) {
+        const errorMessage = formatFirebaseAuthErrorMessage(error);
+        toast.error(errorMessage)
+        return;
+      }
       const err = error as Error;
       toast.error(err.cause as string);
     }
