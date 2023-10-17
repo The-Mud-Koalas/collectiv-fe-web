@@ -13,7 +13,7 @@ interface CheckInAssistedProps {
 export const checkInAssisted =
   (type: "Participant" | "Volunteer", queryClient: QueryClient) =>
   async (data: CheckInAssistedProps) => {
-    queryClient.invalidateQueries({ queryKey: ["current-event"] });
+    queryClient.invalidateQueries({ queryKey: ["current-event", "participation"] });
     const idToken = await auth.currentUser?.getIdToken();
     const endpoint = `/participation/${type.toLowerCase()}/check-in/assisted`;
 
@@ -34,7 +34,7 @@ interface CheckOutProps {
 export const checkOutSelf =
   (type: "Participant" | "Volunteer", queryClient: QueryClient) =>
   async (data: CheckOutProps) => {
-    queryClient.invalidateQueries({ queryKey: ["current-event"] });
+    queryClient.invalidateQueries({ queryKey: ["current-event", "participation"] });
     const idToken = await auth.currentUser?.getIdToken();
     const endpoint = `/participation/${type.toLowerCase()}/check-out/self`;
 

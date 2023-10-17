@@ -8,7 +8,8 @@
   }
 
   .scroll-styled::-webkit-scrollbar-thumb {
-    background-color: #DC93CB; /* color of the scroll thumb */
+    /* background-color: #DC93CB; color of the scroll thumb */
+    background-color: none;
     border-radius: 20px; /* roundness of the scroll thumb */
     width: 4px;
     /* border: 3px solid orange; creates padding around scroll thumb */

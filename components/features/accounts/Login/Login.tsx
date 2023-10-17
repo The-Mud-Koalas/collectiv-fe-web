@@ -71,7 +71,7 @@ const Login: React.FC<Props> = ({ form, onSubmit, onError, isLoading }) => {
               error={errors.password}
             />
             <Link
-              href="/accounts/phoneLogin"
+              href="/accounts/phone-login"
               className="text-xs sm:text-sm sm:font-semibold underline"
             >
               Phone Number Login
