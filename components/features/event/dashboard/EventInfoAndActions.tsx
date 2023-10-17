@@ -14,7 +14,12 @@ import {
 } from "react-icons/bs";
 import { useAppContext } from "@/context/AppContext";
 import { getRequest, postRequest } from "@/lib/fetch";
-import { UseQueryResult, useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import {
+  UseQueryResult,
+  useMutation,
+  useQuery,
+  useQueryClient,
+} from "@tanstack/react-query";
 import { capitalize } from "@/utils/helpers/formatting/capitalize";
 import Link from "next/link";
 import { useRouter } from "next/router";
@@ -32,6 +37,7 @@ import { useGPSLocation } from "@/hooks/utils/useGPSLocation";
 import ReportModal from "../reportEvent/ReportModal";
 import { FaFlag } from "react-icons/fa6";
 import { Ratings } from "./dataviz";
+import EventParticipationModal from "../attendance/EventParticipationModal";
 
 const REFETCH_INTERVAL_SECONDS = 30;
 interface Props {
@@ -160,6 +166,8 @@ const EventInfoAndActions = ({ eventDetails, analytics }: Props) => {
     },
   });
 
+  const isPastEvent = ["Completed", "Cancelled"].includes(eventDetails.status);
+
   const handleCheckOut = async () => {
     const data = !isParticipant
       ? { event_id: eventDetails.id }
@@ -233,32 +241,39 @@ const EventInfoAndActions = ({ eventDetails, analytics }: Props) => {
             {/* CTA buttons */}
             {!participation.data?.is_registered ? (
               <>
-                {eventDetails.event_type !== "project" && (
-                  <button
+                {eventDetails.event_type !== "project" && !isPastEvent && (
+                  <Button
                     disabled={
                       registerParticipant.isLoading || participation.isLoading
                     }
-                    onClick={handleRegisterAsParticipant}
+                    onClick={() =>
+                      router.push(BASE_URL + "?participantRegister=true")
+                    }
                     className={cn(
                       "bg-primary-900 text-primary-400 text-sm px-6 py-2 rounded-3xl font-medium",
                       "disabled:bg-gray-300 disabled:text-gray-200"
                     )}
                   >
                     Register as Participant
-                  </button>
+                  </Button>
                 )}
-                <button
-                  disabled={
-                    registerVolunteer.isLoading || participation.isLoading
-                  }
-                  onClick={handleRegisterAsVolunteer}
-                  className={cn(
-                    "text-primary-700 text-sm border border-primary-600 px-6 py-2 rounded-3xl font-medium",
-                    "disabled:text-gray-300 disabled:border-gray-300"
-                  )}
-                >
-                  Register as Volunteer
-                </button>
+
+                {!isPastEvent && (
+                  <Button
+                    disabled={
+                      registerParticipant.isLoading || participation.isLoading
+                    }
+                    onClick={() =>
+                      router.push(BASE_URL + "?volunteerRegister=true")
+                    }
+                    className={cn(
+                      "text-primary-700 text-sm border border-primary-600 px-6 py-2 rounded-3xl font-medium",
+                      "disabled:text-gray-300 disabled:border-gray-300"
+                    )}
+                  >
+                    Register as Volunteer
+                  </Button>
+                )}
               </>
             ) : (
               <>
@@ -341,11 +356,14 @@ const EventInfoAndActions = ({ eventDetails, analytics }: Props) => {
             />
           </div>
           <div className="flex w-full justify-between">
-            <Button onClick={() => setShowModal(true)} className="bg-danger-50 px-4 py-1 rounded-full flex gap-2 items-center text-danger-600">
-              <FaFlag/>
+            <Button
+              onClick={() => setShowModal(true)}
+              className="bg-danger-50 px-4 py-1 rounded-full flex gap-2 items-center text-danger-600"
+            >
+              <FaFlag />
               <p className="font-medium text-base">Report</p>
             </Button>
-            <Ratings rating={analytics.data?.average_event_rating ?? 0}/>
+            <Ratings rating={analytics.data?.average_event_rating ?? 0} />
           </div>
         </div>
       </section>
@@ -353,6 +371,18 @@ const EventInfoAndActions = ({ eventDetails, analytics }: Props) => {
         eventId={eventDetails?.id}
         showModal={showModal}
         setShowModal={setShowModal}
+      />
+      <EventParticipationModal
+        closeModal={closeModal}
+        showModal={router.query.participantRegister === "true"}
+        type="participant"
+        onConfirm={handleRegisterAsParticipant}
+      />
+      <EventParticipationModal
+        closeModal={closeModal}
+        showModal={router.query.volunteerRegister === "true"}
+        type="volunteer"
+        onConfirm={handleRegisterAsVolunteer}
       />
       <Modal
         open={router.query.showCheckOut === "true"}

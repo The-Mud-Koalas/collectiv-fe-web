@@ -6,8 +6,6 @@ import { FC, useState } from "react";
 interface aboutProps {}
 
 const AboutPage: FC<aboutProps> = ({}) => {
-  const [showModal, setShowModal] = useState<boolean>(false);
-
   return (
     <Template>
       <div className="mt-20"></div>
