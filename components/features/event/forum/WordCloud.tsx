@@ -29,7 +29,7 @@ const FlyingWord = ({
 }) => {
   const ratio = entity.count / maxWordCount;
   const invRatio = 1 / ratio;
-  const fontSize = (32 + maxWordCount * 2) * ratio;
+  const fontSize = Math.max((32 + maxWordCount * 2) * ratio, 12);
   const [isSpawned, setIsSpawned] = useState(false);
   const wordRef = useRef<HTMLDivElement>(null);
   const velocity = useRef({
@@ -62,6 +62,14 @@ const FlyingWord = ({
         velocity.current.y = -vy * randomAccelerationY;
       } else if (position.y + box.height >= parentBounds.height && vy > 0) {
         velocity.current.y = -vy * randomAccelerationY;
+      }
+
+      if (Math.abs(velocity.current.x) > 120) {
+        velocity.current.x = velocity.current.x * 0.8;
+      }
+
+      if (Math.abs(velocity.current.y) > 120) {
+        velocity.current.y = velocity.current.y * 0.8;
       }
 
       const dx = velocity.current.x * deltaInSeconds;
