@@ -73,8 +73,7 @@ const AppProvider: React.FC<PropsWithChildren> = ({ children }) => {
   } = useQuery<UserData>({
     queryFn: getUserInfo,
     queryKey: ["user-info"],
-    // enabled: user != null,
-    enabled: false
+    enabled: user != null
   });
 
   const sendMessageToRN = (msg: Record<string, any>) => {
@@ -82,8 +81,6 @@ const AppProvider: React.FC<PropsWithChildren> = ({ children }) => {
 
     window.ReactNativeWebView.postMessage(JSON.stringify(msg));
   };
-
-  const hasUserDataLoaded = useRef(false);
 
   const onAccept = () => {
     sendMessageToRN({ type: "location-sharing", agree: true });
@@ -114,11 +111,12 @@ const AppProvider: React.FC<PropsWithChildren> = ({ children }) => {
 
       setAuthLoading(false);
 
-      // if (window.ReactNativeWebView == null) return;
-      // setShowModal(true);
+      if (window.ReactNativeWebView == null) return;
+      if (userData == null) return;
+      setShowModal(userData.has_been_prompted_for_location_tracking);
     });
     return () => unsubscribe();
-  }, [queryClient]);
+  }, [queryClient, userData]);
 
   if (!isMapsScriptLoaded || isAuthLoading) return <Loading />;
 
