@@ -34,7 +34,7 @@ const GlobalForum = () => {
   const trendingPosts = useQuery({
     queryKey: ["trending-posts"],
     queryFn: async () => {
-      const params = new URLSearchParams({ threshold: "1" });
+      const params = new URLSearchParams({ threshold: "20" });
       const posts = await getRequest({
         endpoint: "/forums/global",
         searchParams: params,
