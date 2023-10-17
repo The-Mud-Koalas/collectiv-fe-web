@@ -12,6 +12,7 @@ import Link from "next/link";
 interface Props {
   post: ForumPost & {
     event_name: string;
+    event_location_id: string;
     event_location_name: string;
     event_id: string;
   };
@@ -100,7 +101,7 @@ const GlobalForumPost = forwardRef<HTMLDivElement, Props>(function ForumPost(
           {post.event_name}
         </Link>
         <Link
-          href={"/event/discover"}
+          href={`/location/${post.event_location_id}`}
           className={cn(
             "flex items-center gap-1 border px-3 rounded-xl text-xs py-[3px] font-medium bg-tertiary-100 border-primary-700 text-primary-700",
             inter.className

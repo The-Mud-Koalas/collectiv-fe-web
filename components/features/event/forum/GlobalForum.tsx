@@ -34,7 +34,7 @@ const GlobalForum = () => {
   const trendingPosts = useQuery({
     queryKey: ["trending-posts"],
     queryFn: async () => {
-      const params = new URLSearchParams({ threshold: "20" });
+      const params = new URLSearchParams({ threshold: "1" });
       const posts = await getRequest({
         endpoint: "/forums/global",
         searchParams: params,
@@ -51,6 +51,7 @@ const GlobalForum = () => {
         ?.map((forum) =>
           forum.forum_trending_posts.map((post) => ({
             event_id: forum.event_id,
+            event_location_id: forum.event_location_id,
             event_location_name: forum.event_location_name,
             event_name: forum.event_name,
             ...post,
@@ -74,11 +75,16 @@ const GlobalForum = () => {
       ?.map((forum) => forum.forum_top_words.ORG ?? [])
       .flat();
 
+    const top3LOC = removeAndMergeDuplicates(topWordsLOC ?? []).sort((a, b) => b.count - a.count).slice(0, 3);
+    const top3MISC = removeAndMergeDuplicates(topWordsMISC ?? []).sort((a, b) => b.count - a.count).slice(0, 3);
+    const top3PER= removeAndMergeDuplicates(topWordsPER ?? []).sort((a, b) => b.count - a.count).slice(0, 3);
+    const top3ORG = removeAndMergeDuplicates(topWordsORG ?? []).sort((a, b) => b.count - a.count).slice(0, 3);
+
     return {
-      LOC: removeAndMergeDuplicates(topWordsLOC ?? []),
-      MISC: removeAndMergeDuplicates(topWordsMISC ?? []),
-      PER: removeAndMergeDuplicates(topWordsPER ?? []),
-      ORG: removeAndMergeDuplicates(topWordsORG ?? []),
+      LOC: top3LOC,
+      MISC: top3MISC,
+      PER: top3PER,
+      ORG: top3ORG,
     } as ForumTopWords;
   }, [trendingPosts.data]);
 

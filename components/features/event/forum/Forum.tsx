@@ -65,11 +65,6 @@ const Forum = ({ eventDetails }: { eventDetails: EventDetail }) => {
   }, [noMorePosts, getMorePosts, isFetchingOldPosts, lastPost?.isIntersecting]);
 
   let formatter = Intl.NumberFormat("en", { notation: "compact" });
-  const allPosts = oldPosts.concat(newPosts);
-  const numPosts = allPosts.length;
-  const numTrendingPosts = allPosts.filter(
-    (post) => post.vote_count >= 20
-  ).length;
 
   const sentimentScore =
     analytics.data && analytics.data.sentiment_score
@@ -90,7 +85,7 @@ const Forum = ({ eventDetails }: { eventDetails: EventDetail }) => {
     sentimentIcon = <FaFaceMeh className="text-yellow-600" />;
   }
 
-  const noMorePostsToFetch = noMorePosts && oldPosts.length;
+  const noMorePostsToFetch = noMorePosts && oldPosts.length > 0;
   const beTheFirstToPost = noMorePosts && !oldPosts.length;
 
   return (
@@ -101,7 +96,7 @@ const Forum = ({ eventDetails }: { eventDetails: EventDetail }) => {
       <div className="flex flex-wrap items-center justify-center xl:gap-24 gap-12 w-full my-4 px-32">
         <StatisticCard
           icon={<MdOutlineForum />}
-          value={formatter.format(numPosts)}
+          value={formatter.format(analytics.data?.num_posts ?? 0)}
         >
           <p
             className={`mt-2 lg:text-3xl text-xl font-medium ${garamond.className}`}
@@ -111,7 +106,7 @@ const Forum = ({ eventDetails }: { eventDetails: EventDetail }) => {
         </StatisticCard>
         <StatisticCard
           icon={<AiOutlineFire />}
-          value={formatter.format(numTrendingPosts)}
+          value={formatter.format(analytics.data?.num_trending_posts ?? 0)}
         >
           <p
             className={`mt-2 lg:text-3xl text-xl font-medium ${garamond.className}`}
