@@ -24,7 +24,7 @@ const EventCreated = () => {
           convenience.
         </p>
 
-        <Link href="/event/discover">
+        <Link href="/event/hosted">
           <Button
             className="flex items-center gap-2 font-medium px-3 py-1 text-sm sm:text-base rounded-full border-[1px] bg-primary-800 text-primary-300"
             tabIndex={-1}

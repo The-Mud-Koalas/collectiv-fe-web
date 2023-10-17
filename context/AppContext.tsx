@@ -63,6 +63,7 @@ const AppProvider: React.FC<PropsWithChildren> = ({ children }) => {
   const queryClient = useQueryClient();
 
   const isInRN = () => window.ReactNativeWebView != null;
+  console.log({ test: user != null})
 
   const {
     data: userData,
@@ -72,7 +73,8 @@ const AppProvider: React.FC<PropsWithChildren> = ({ children }) => {
   } = useQuery<UserData>({
     queryFn: getUserInfo,
     queryKey: ["user-info"],
-    enabled: user != null,
+    // enabled: user != null,
+    enabled: false
   });
 
   const sendMessageToRN = (msg: Record<string, any>) => {
@@ -105,8 +107,6 @@ const AppProvider: React.FC<PropsWithChildren> = ({ children }) => {
       setUser(user);
       queryClient.invalidateQueries({ queryKey: ["user-info"] });
 
-      await refetch();
-
       if (user == null) {
         setAuthLoading(false);
         return;
@@ -118,7 +118,7 @@ const AppProvider: React.FC<PropsWithChildren> = ({ children }) => {
       // setShowModal(true);
     });
     return () => unsubscribe();
-  }, [queryClient, refetch]);
+  }, [queryClient]);
 
   if (!isMapsScriptLoaded || isAuthLoading) return <Loading />;
 

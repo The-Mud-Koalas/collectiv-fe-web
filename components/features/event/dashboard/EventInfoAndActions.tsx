@@ -173,6 +173,7 @@ const EventInfoAndActions = ({ eventDetails, analytics }: Props) => {
       ? { event_id: eventDetails.id }
       : { event_id: eventDetails.id, latitude: lat, longitude: lng };
     await checkOutMutation.mutateAsync(data);
+    queryClient.invalidateQueries({ queryKey: ["participation", user?.uid, eventDetails.id] });
 
     router.push(BASE_URL + "?showCheckOut=true");
   };
