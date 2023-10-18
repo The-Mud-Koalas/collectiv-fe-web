@@ -53,14 +53,6 @@ const EventDashboard = (props: EventDashboardProps) => {
   return (
     <div className={`lg:pt-24 lg:p-10 p-6 ${inter.className}`}>
       <section className="flex justify-between items-center">
-        <RoundedCircle>
-          <button
-            onClick={() => router.push("/event/discover")}
-            className="lg:text-base md:text-base text-xs"
-          >
-            <FaArrowLeft />
-          </button>
-        </RoundedCircle>
         <StatusPill
           // @ts-expect-error
           status={eventDetails.status.toLowerCase()}

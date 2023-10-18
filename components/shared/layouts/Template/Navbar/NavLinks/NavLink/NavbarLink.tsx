@@ -3,6 +3,7 @@ import { COLORS } from "@/utils/constants/colors";
 import { inter } from "@/utils/constants/fonts";
 import { AnimatePresence, motion } from "framer-motion";
 import Link from "next/link";
+import { useRouter } from "next/router";
 import React, { useState } from "react";
 
 interface Props extends NavLinkType {
@@ -11,6 +12,7 @@ interface Props extends NavLinkType {
 
 const NavbarLink: React.FC<Props> = ({ name, url, showArrow }) => {
   const [isHover, setIsHover] = useState(false);
+  const router = useRouter();
   return (
     <Link
       className={`${inter.className} text-base text-primary-800 font-medium`}
@@ -36,8 +38,8 @@ const NavbarLink: React.FC<Props> = ({ name, url, showArrow }) => {
         )}{" "}
       </p>
       <motion.div
-        initial={{ width: 0 }}
-        animate={{ width: isHover ? "100%" : 0 }}
+        initial={{ width: (router.asPath === url) ? "100%" : 0 }}
+        animate={{ width: (isHover || router.asPath === url) ? "100%" : 0 }}
         className="bg-primary-800 h-[2px]"
       ></motion.div>
     </Link>
