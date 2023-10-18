@@ -11,7 +11,7 @@ interface LocationInfographicProps {}
 const LocationInfographic: FC<LocationInfographicProps> = ({}) => {
     return (
         <div
-            className={`${inter.className}  rounded-2xl background-div bg-secondary-200 px-5 py-20 my-40`}
+            className={`${inter.className}  rounded-2xl background-div bg-secondary-200 px-5 py-20 my-20 md:my-40`}
         >
             <div className="flex flex-wrap-reverse justify-evenly items-center inside-div">
                 <div className="flex flex-col gap-3 w-[500px] ">

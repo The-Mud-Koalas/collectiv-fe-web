@@ -1,7 +1,5 @@
-import EventParticipationPopup from "@/components/features/event/participation/EventParticipationPopup";
-import { Button } from "@/components/shared/elements";
 import { Template } from "@/components/shared/layouts";
-import { FC, useState } from "react";
+import { FC } from "react";
 
 interface aboutProps {}
 
