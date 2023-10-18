@@ -5,22 +5,28 @@ import { garamond, inter } from "@/utils/constants/fonts";
 import CollectivLogoHorizontal from "../../../shared/svg/logo/CollectivLogoHorizontal";
 import { Arrow } from "@/components/shared/svg/icons";
 import { COLORS } from "@/utils/constants/colors";
-
+import Link from "next/link";
 
 interface HostingProps {}
 
 const Hosting: FC<HostingProps> = ({}) => {
     return (
-        <div className="rounded-3xl bg-secondary-200 p-10 mb-20 md:mb-40">
+        <div
+            id="hosting-info"
+            className="rounded-3xl bg-secondary-200 p-10 mb-20"
+        >
             <div className="flex flex-col-reverse md:flex-col">
                 <div className="flex flex-row justify-start md:justify-end">
-                    <Button className="flex flex-row justify-center items-center gap-2 bg-primary-900 rounded-full px-3 py-2 text-primary-200">
+                    <Link
+                        href="/event/create"
+                        className="flex flex-row justify-center items-center gap-2 bg-primary-900 rounded-full px-3 py-2 text-primary-200"
+                    >
                         <p>Get Started</p>
                         <Arrow
                             color={COLORS.primary[200]}
                             dimensions={{ width: 15, height: 15 }}
                         />
-                    </Button>
+                    </Link>
                 </div>
                 <div className="flex flex-col gap-2 w-30">
                     <div className="flex flex-row flex-wrap items-start gap-2">
