@@ -64,9 +64,6 @@ const LocationDetails: React.FC<Props> = ({
         id="detail"
         className="flex flex-col-reverse lg:flex-row py-10 w-full relative rounded-lg bg-primary-200 lg:gap-0 gap-6"
       >
-        <Button onClick={() => router.back()} className="absolute left-4 top-2">
-          <Back color={COLORS.primary[800]} dimensions={{ width: 30 }} />
-        </Button>
         <LocationMap {...locationDetails} />
         <div className="w-full flex flex-col gap-4 px-10 lg:gap-10">
           <h1 className="font-semibold text-4xl sm:text-7xl">
