@@ -12,7 +12,6 @@ import { TextInputField } from "@/components/shared/forms";
 import { EMAIL_REGEX } from "@/utils/constants/regex";
 import { Button } from "@/components/shared/elements";
 import { inter } from "@/utils/constants/fonts";
-import { Back } from "@/components/shared/svg/icons";
 import { FC } from "react";
 import { ClipLoader } from "react-spinners";
 
@@ -39,12 +38,6 @@ const ForgetPassword: FC<Props> = ({ onSubmit, onError, isLoading }) => {
                         className={`flex flex-col px-5 py-8 gap-6 ${inter.className} md:py-[5%] max-w-xl w-full`}
                     >
                         <div className="flex flex-col gap-2">
-                            <Link href="/accounts/login" className="mb-5">
-                                <Back
-                                    dimensions={{ width: 32 }}
-                                    color={COLORS.primary[700]}
-                                />
-                            </Link>
                             <h1 className="text-3xl md:text-4xl font-semibold">
                                 Forgot Password
                             </h1>
