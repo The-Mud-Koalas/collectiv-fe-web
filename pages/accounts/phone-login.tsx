@@ -14,6 +14,11 @@ import {
     useForm,
 } from "react-hook-form";
 import { toast } from "react-toastify";
+import { PhoneNumberUtil } from "google-libphonenumber";
+import { useRouter } from "next/router";
+import { showErrorToast } from "@/lib/toast";
+
+const phoneUtil = PhoneNumberUtil.getInstance();
 declare global {
     interface Window {
         recaptchaVerifier: any;
@@ -50,11 +55,26 @@ const PhoneLoginPage: NextPage = () => {
         ); // Add a <div> with id 'recaptcha-container' in your HTML
     }, []);
 
+    const isPhoneValid = (phone: string) => {
+        try {
+            return phoneUtil.isValidNumber(
+                phoneUtil.parseAndKeepRawInput(phone)
+            );
+        } catch (error) {
+            return false;
+        }
+    };
+
     const onSubmit: SubmitHandler<PhoneLoginFormFields> = async (data) => {
         setIsLoading(true);
         const { phoneNumber } = data;
-        setPhoneNumber(phoneNumber);
-        signIn(phoneNumber);
+        if (isPhoneValid(phoneNumber)) {
+            setPhoneNumber(phoneNumber);
+            signIn(phoneNumber);
+        } else {
+            console.log("invalid number");
+            setIsLoading(false)
+        }
     };
 
     const signIn = async (phoneNumber: string) => {
@@ -90,6 +110,8 @@ const PhoneLoginPage: NextPage = () => {
         toast.error(errors?.[0]);
     };
 
+    const router = useRouter();
+
     const handleOTPChange = (newOTP: string[]) => {
         const otp = newOTP.join("");
 
@@ -103,14 +125,14 @@ const PhoneLoginPage: NextPage = () => {
                     // User signed in successfully.
                     setIsOTPLoading(false);
                     let user = result.user;
-                    console.log(user);
-                    alert("User signed in successfully");
                     setShowOTPModal(false);
+                    toast.success("User signed in successfully.");
+                    router.push("/");
                 })
                 .catch((error: any) => {
                     // User couldn't sign in (bad verification code?)
                     // ...
-                    console.error("Error verifying code:", error);
+                    showErrorToast({ error })
                 });
         }
     };

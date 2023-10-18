@@ -16,23 +16,26 @@ import {
   useForm,
 } from "react-hook-form";
 import { toast } from "react-toastify";
+import { useAppContext } from "@/context/AppContext";
+import { showErrorToast } from "@/lib/toast";
 
 const LoginPage: NextPage = () => {
+  const { sendMessageToRN } = useAppContext();
   const form = useForm<LoginFormFields>();
   const router = useRouter();
   const searchParams = useSearchParams();
 
   const { mutateAsync, isLoading } = useMutation({
     mutationFn: loginWithEmail,
-    onSuccess: () => {
+    onSuccess: (user) => {
       form.reset();
+      sendMessageToRN({ type: "auth-token", token: user.user.refreshToken });
       const next = searchParams.get("next");
       router.push(next ?? "/");
     },
     onError: (error) => {
       if (error instanceof FirebaseError) {
         const errorMessage = formatFirebaseAuthErrorMessage(error);
-        console.log(errorMessage);
         return;
       }
 
@@ -41,7 +44,17 @@ const LoginPage: NextPage = () => {
   });
 
   const onSubmit: SubmitHandler<LoginFormFields> = async (data) => {
-    mutateAsync(data);
+    try {
+      mutateAsync(data);
+    } catch (error) {
+      if (error instanceof FirebaseError) {
+        const errorMessage = formatFirebaseAuthErrorMessage(error);
+        toast.error(errorMessage)
+        return;
+      }
+      const err = error as Error;
+      toast.error(err.cause as string);
+    }
   };
 
   const onError: SubmitErrorHandler<FieldError> = (error) => {

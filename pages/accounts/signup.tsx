@@ -22,6 +22,7 @@ const SignupPage: NextPage = () => {
     mutationFn: signUpWithEmail,
     onSuccess: (data) => {
       form.reset();
+      router.push("/accounts/login")
     },
     onError: (error) => {
       if (error instanceof FirebaseError) {
@@ -36,7 +37,12 @@ const SignupPage: NextPage = () => {
   const form = useForm<SignupFormFields>();
 
   const onSubmit: SubmitHandler<SignupFormFields> = async (data) => {
-    mutateAsync(data);
+    try {
+      mutateAsync(data);
+    } catch (error) {
+      const err = error as Error;
+      toast.error(err.cause as string);
+    }
   };
 
   const onError: SubmitErrorHandler<FieldError> = (error) => {

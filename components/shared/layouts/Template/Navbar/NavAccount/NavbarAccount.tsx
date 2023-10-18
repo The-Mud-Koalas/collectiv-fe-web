@@ -26,15 +26,18 @@ const NavbarAccount = () => {
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -10 }}
-            className="absolute"
+            className="absolute z-30"
             key="nav-acc"
           >
             <ul className="flex flex-col gap-5 mt-6 bg-primary-300 px-4 pt-2 pb-4  w-44">
               <li>
-                <NavbarLink name="My Rewards" url="/rewards"/>
+                <NavbarLink name="Your Activities" url="/wrapped"/>
               </li>
               <li>
-                <NavbarLink name="Applied Events" url="/event/registered"/>
+                <NavbarLink name="Registered Events" url="/event/registered"/>
+              </li>
+              <li>
+                <NavbarLink name="Hosted Events" url="/event/hosted"/>
               </li>
               <div className="bg-primary-800 w-full h-[1px]"></div>
               <li>

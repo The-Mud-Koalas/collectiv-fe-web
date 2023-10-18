@@ -11,7 +11,7 @@ const USER_GUIDELINES = [
     description: [
       "Clearly define the purpose and goals of the event, ensure they don’t ",
       "disrupt other’s beliefs and outlook",
-      " on life."
+      " on life.",
     ],
   },
   {
@@ -19,7 +19,7 @@ const USER_GUIDELINES = [
     description: [
       "Respect the community space's ",
       "resources, other members, and property",
-      " throughout the event planning and execution."
+      " throughout the event planning and execution.",
     ],
   },
   {
@@ -63,6 +63,15 @@ const USER_GUIDELINES = [
       " that may arise during the event.",
     ],
   },
+  {
+    title: "Minimize Foulplay",
+    description: [
+      "Have your ",
+      "device location enabled when checking in or checking out",
+      " participants or volunteers to ensure that it is done ",
+      "on the event site.",
+    ],
+  },
 ];
 
 const Guidelines = () => {
@@ -98,22 +107,34 @@ const Guidelines = () => {
           We encourage a{" "}
           <span className="bg-secondary-200">
             respectful and inclusive community
-          </span>
-          {" "}and expect all events to:
+          </span>{" "}
+          and expect all events to:
         </p>
         <div className="grid items-center grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-8  w-full">
-          {
-            USER_GUIDELINES.map((guideline, idx) => <GuidelineItem {...guideline} idx={idx + 1} key={`gl-${idx}`}/>)
-          }
+          {USER_GUIDELINES.map((guideline, idx) => (
+            <GuidelineItem {...guideline} idx={idx + 1} key={`gl-${idx}`} />
+          ))}
         </div>
       </section>
       <section id="gl-agree" className={inter.className}>
-        <h3 className="font-semibold text-primary-800 text-base sm:text-2xl">Do you agree to comply with the guidelines above?</h3>
+        <h3 className="font-semibold text-primary-800 text-base sm:text-2xl">
+          Do you agree to comply with the guidelines above?
+        </h3>
         <div className="flex w-fit gap-4 my-4">
           <Link href="/">
-            <Button className="font-medium px-2 py-1 text-sm sm:text-base rounded-full border-[1px] border-primary-800" tabIndex={-1}>I Disagree</Button>
+            <Button
+              className="font-medium px-2 py-1 text-sm sm:text-base rounded-full border-[1px] border-primary-800"
+              tabIndex={-1}
+            >
+              I Disagree
+            </Button>
           </Link>
-          <Button className="font-medium px-3 py-1 text-sm sm:text-base rounded-full bg-primary-800 text-primary-300" onClick={changeStage(1)}>I Agree</Button>
+          <Button
+            className="font-medium px-3 py-1 text-sm sm:text-base rounded-full bg-primary-800 text-primary-300"
+            onClick={changeStage(1)}
+          >
+            I Agree
+          </Button>
         </div>
       </section>
     </div>

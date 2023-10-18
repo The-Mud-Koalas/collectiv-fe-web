@@ -1,13 +1,16 @@
-import Image from "next/image";
-import { Inter } from "next/font/google";
+import ReportModal from "@/components/features/event/reportEvent/ReportModal";
+import { Home } from "@/components/features/home/HomePage";
 import { Template } from "@/components/shared/layouts";
+import { SetStateAction, useState } from "react";
 
-const inter = Inter({ subsets: ["latin"] });
 
 function HomePage() {
+    
+    const [showModal, setShowModal] = useState<boolean>(true);
+    // return <Home />;
     return (
         <Template>
-            <p>home</p>
+            <Home />
         </Template>
     );
 }

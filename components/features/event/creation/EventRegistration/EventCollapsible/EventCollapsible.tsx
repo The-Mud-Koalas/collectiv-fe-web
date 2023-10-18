@@ -1,5 +1,7 @@
 import { Button } from "@/components/shared/elements";
 import { Chevron } from "@/components/shared/svg/icons";
+import { useWindowSize } from "@/hooks/display";
+import { BREAKPOINTS } from "@/utils/constants/breakpoints";
 import { garamond, inter } from "@/utils/constants/fonts";
 import { AnimatePresence, motion } from "framer-motion";
 import React, { useState } from "react";
@@ -26,10 +28,13 @@ const EventCollapsible: React.FC<Props> = ({
   description,
   isCollapsibleEnabled,
 }) => {
+
+  const { windowWidth } = useWindowSize();
+
   return (
     <motion.section
       id={sectionId}
-      className="flex flex-col gap-4 w-full relative py-4 px-16"
+      className="flex flex-col gap-4 w-full relative py-4 px-0 sm:px-16"
     >
       <Button
         disabled={!isCollapsibleEnabled}
@@ -41,12 +46,12 @@ const EventCollapsible: React.FC<Props> = ({
           initial={{ rotate: 0 }}
           animate={{ rotate: isOpened ? "180deg" : 0 }}
         >
-          <Chevron dimensions={{ width: 48 }} color="black" />
+          <Chevron dimensions={{ width: windowWidth >= BREAKPOINTS.sm ? 48 : 32 }} color="black" />
         </motion.div>
       </Button>
-      <h2 className={`${garamond.className} text-5xl`}>{sectionTitle}</h2>
-      <div className="flex flex-col md:flex-row gap-[15%] w-full">
-        <p className={`${inter.className} text-lg font-medium w-full`}>
+      <h2 className={`${garamond.className} text-3xl sm:text-5xl`}>{sectionTitle}</h2>
+      <div className="flex flex-col gap-6 md:flex-row md:gap-[15%] w-full">
+        <p className={`${inter.className} text-base sm:text-lg font-medium w-full`}>
           {description.map((desc, idx) =>
             idx % 2 === 0 ? (
               desc
