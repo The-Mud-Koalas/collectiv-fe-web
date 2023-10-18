@@ -9,7 +9,9 @@ interface HostingCardProps {
 
 const HostingCard: FC<HostingCardProps> = ({ title, content, emoji }) => {
     return (
-        <div className={`${inter.className} rounded-2xl bg-white p-5 w-[405px] h-[216px]`}>
+        <div
+            className={`${inter.className} rounded-2xl bg-white p-5 max-w-[405px] min-h-[216px]`}
+        >
             <div className="flex flex-row justify-end items-center">
                 <span>{emoji}</span>
             </div>

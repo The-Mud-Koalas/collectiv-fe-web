@@ -9,7 +9,7 @@ interface HeaderProps {}
 
 const Header: FC<HeaderProps> = ({}) => {
     return (
-        <div className="text-center mx-auto max-w-3xl my-40">
+        <div className="text-center mx-auto max-w-3xl mt-20 md:mt-40 mb-40">
             <p className={`${garamond.className} italic text-2xl`}>Hosting</p>
             <h1
                 className={`${inter.className} font-bold text-4xl xl:text-7xl md:text-5xl lg:text-7xl text-primary-800 p-10 leading-10`}

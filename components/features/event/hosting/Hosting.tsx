@@ -6,11 +6,12 @@ import CollectivLogoHorizontal from "../../../shared/svg/logo/CollectivLogoHoriz
 import { Arrow } from "@/components/shared/svg/icons";
 import { COLORS } from "@/utils/constants/colors";
 
+
 interface HostingProps {}
 
 const Hosting: FC<HostingProps> = ({}) => {
     return (
-        <div className="rounded-3xl bg-secondary-200 p-10">
+        <div className="rounded-3xl bg-secondary-200 p-10 mb-20 md:mb-40">
             <div className="flex flex-col-reverse md:flex-col">
                 <div className="flex flex-row justify-start md:justify-end">
                     <Button className="flex flex-row justify-center items-center gap-2 bg-primary-900 rounded-full px-3 py-2 text-primary-200">
