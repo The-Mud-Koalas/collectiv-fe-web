@@ -12,7 +12,7 @@ interface RewardInfographicProps {}
 const RewardInfographic: FC<RewardInfographicProps> = ({}) => {
     return (
         <div
-            className={`${inter.className} bg-primary-200 rounded-2xl px-5 py-10 my-40`}
+            className={`${inter.className} bg-primary-200 rounded-2xl px-5 py-10`}
         >
             <div className="flex flex-wrap gap-2 justify-center mx-5">
                 <div className="w-[677px]">
