@@ -275,7 +275,7 @@ const LocationAnalytics = ({ locationId }: Props) => {
       <div className="flex items-center justify-center w-full 2xl:gap-24 gap-12 flex-wrap">
         <div
           className={cn(
-            "2xl:w-[600px] w-[min(100%,_500px)] text-primary-700 font-semibold h-fit flex flex-col items-center aspect-video py-2 text-6xl lg:text-7xl xl:text-8xl",
+            "2xl:w-[600px] w-[min(100%,_500px)] text-primary-700 font-semibold h-fit flex flex-col items-center aspect-video py-2 text-6xl lg:text-7xl",
             garamond.className
           )}
         >
@@ -290,13 +290,31 @@ const LocationAnalytics = ({ locationId }: Props) => {
               garamond.className
             )}
           >
-            Projects in location achievement showcase
+            Projects in location contribution showcase
           </p>
           <p className="lg:text-sm text-xs text-secondary-400 italic text-left w-full pl-5">
             *Top 10 past/current project goals by their contribution amount
           </p>
           <PieChart
             data={showcasedGoals}
+            hideLegends
+            margin={{ top: 15, bottom: 15 }}
+            // @ts-expect-error
+            val={(val) => {
+              // @ts-expect-error
+              if (!val.value) return "";
+              return (
+                <>
+                  <tspan dx={0} dy={0}>
+                    {/** @ts-expect-error */}
+                    {val.value}
+                  </tspan>
+                  <tspan dx={-40} dy={18}>
+                    {val.label}
+                  </tspan>
+                </>
+              );
+            }}
           />
         </ChartContainer>
       </div>

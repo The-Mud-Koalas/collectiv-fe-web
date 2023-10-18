@@ -63,7 +63,6 @@ const AppProvider: React.FC<PropsWithChildren> = ({ children }) => {
   const queryClient = useQueryClient();
 
   const isInRN = () => window.ReactNativeWebView != null;
-  console.log({ test: user != null})
 
   const {
     data: userData,
