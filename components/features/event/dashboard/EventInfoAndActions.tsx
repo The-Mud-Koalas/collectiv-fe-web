@@ -38,6 +38,7 @@ import ReportModal from "../reportEvent/ReportModal";
 import { FaFlag } from "react-icons/fa6";
 import { Ratings } from "./dataviz";
 import EventParticipationModal from "../attendance/EventParticipationModal";
+import CheckoutModal from "../attendance/CheckoutModal";
 
 const REFETCH_INTERVAL_SECONDS = 30;
 interface Props {
@@ -128,7 +129,7 @@ const EventInfoAndActions = ({ eventDetails, analytics }: Props) => {
   };
 
   const closeModal = () => {
-    router.push(BASE_URL, undefined, { shallow: true });
+    router.replace(BASE_URL, undefined, { shallow: true });
   };
 
   const isParticipant =
@@ -173,7 +174,9 @@ const EventInfoAndActions = ({ eventDetails, analytics }: Props) => {
       ? { event_id: eventDetails.id }
       : { event_id: eventDetails.id, latitude: lat, longitude: lng };
     await checkOutMutation.mutateAsync(data);
-    queryClient.invalidateQueries({ queryKey: ["participation", user?.uid, eventDetails.id] });
+    queryClient.invalidateQueries({
+      queryKey: ["participation", user?.uid, eventDetails.id],
+    });
 
     router.push(BASE_URL + "?showCheckOut=true");
   };
@@ -265,7 +268,7 @@ const EventInfoAndActions = ({ eventDetails, analytics }: Props) => {
                       registerParticipant.isLoading || participation.isLoading
                     }
                     onClick={() =>
-                      router.push(BASE_URL + "?volunteerRegister=true")
+                      router.replace(BASE_URL + "?volunteerRegister=true")
                     }
                     className={cn(
                       "text-primary-700 text-sm border border-primary-600 px-6 py-2 rounded-3xl font-medium",
@@ -279,17 +282,22 @@ const EventInfoAndActions = ({ eventDetails, analytics }: Props) => {
             ) : (
               <>
                 {isManagerInProject && (
-                  <Link
-                    href={BASE_URL + "?recordContribution=true"}
+                  <Button
+                    onClick={() =>
+                      router.replace(BASE_URL + "?recordContribution=true")
+                    }
                     className="flex items-center gap-2 bg-secondary-400 text-secondary-100 text-sm border-[2px] border-secondary-400 px-5 py-2 rounded-md font-medium"
                   >
                     Record Participant Contribution <SlNote />
-                  </Link>
+                  </Button>
                 )}
                 {isManager && (
-                  <Link
-                    href={BASE_URL + "?checkInParticipantOrVolunteer=true"}
-                    shallow
+                  <Button
+                    onClick={() =>
+                      router.replace(
+                        BASE_URL + "?checkInParticipantOrVolunteer=true"
+                      )
+                    }
                     className="flex items-center gap-2 bg-secondary-500 text-secondary-100 text-sm border-[2px] border-secondary-500 px-5 py-2 rounded-md font-medium"
                   >
                     Check In{" "}
@@ -297,25 +305,29 @@ const EventInfoAndActions = ({ eventDetails, analytics }: Props) => {
                       ? "Participant/Volunteer"
                       : "Volunteer"}
                     <BsPersonCheckFill className="text-lg" />
-                  </Link>
+                  </Button>
                 )}
                 {isManagerInInitiative && (
-                  <Link
-                    href={"#"}
+                  <Button
+                    onClick={() =>
+                      router.replace(BASE_URL + "?checkOutParticipant=true")
+                    }
                     className="flex items-center gap-2 bg-secondary-500 text-secondary-100 text-sm border-[2px] border-secondary-500 px-5 py-2 rounded-md font-medium"
                   >
                     Check-out Participant
                     <BsPersonFillSlash className="text-lg" />
-                  </Link>
+                  </Button>
                 )}
                 {isManager && (
-                  <Link
-                    href={BASE_URL + "?viewVolunteers=true"}
+                  <Button
+                    onClick={() =>
+                      router.replace(BASE_URL + "?viewVolunteers=true")
+                    }
                     className="flex items-center gap-2 text-secondary-400 text-sm border-[2px] border-secondary-400 px-5 py-2 rounded-3xl font-medium"
                   >
                     View Volunteers
                     <GrUserManager className="[&>path]:!stroke-secondary-400" />
-                  </Link>
+                  </Button>
                 )}
                 <Link
                   className="flex items-center gap-2 text-primary-700 text-sm border-[2px] border-primary-600 px-5 py-2 rounded-3xl font-medium"
@@ -325,13 +337,15 @@ const EventInfoAndActions = ({ eventDetails, analytics }: Props) => {
                   <FiArrowUpRight className="font-extrabold text-xl text-primary-700" />
                 </Link>
                 {canCheckIn && (
-                  <Link
-                    href={BASE_URL + "?showRegisterQR=true"}
+                  <Button
+                    onClick={() =>
+                      router.replace(BASE_URL + "?showRegisterQR=true")
+                    }
                     className="flex items-center gap-2 text-primary-500 text-xs border-[2px] border-primary-300 px-4 py-2 rounded-3xl font-medium"
                   >
                     Check-in
                     <BsQrCodeScan className="text-xl" />
-                  </Link>
+                  </Button>
                 )}
                 {canCheckOut && (
                   <Button
@@ -385,6 +399,12 @@ const EventInfoAndActions = ({ eventDetails, analytics }: Props) => {
         type="volunteer"
         onConfirm={handleRegisterAsVolunteer}
       />
+      <Modal
+        open={router.query.checkOutParticipant === "true"}
+        onOverlayTap={closeModal}
+      >
+        <CheckoutModal eventId={eventDetails.id} onClose={closeModal} />
+      </Modal>
       <Modal
         open={router.query.showCheckOut === "true"}
         onOverlayTap={closeModal}

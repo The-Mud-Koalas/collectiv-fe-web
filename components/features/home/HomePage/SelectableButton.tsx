@@ -26,7 +26,7 @@ const SelectableButton: FC<SelectableButtonProps> = ({
                 transition duration-300 ease-in-out`}
                 onClick={onClick}
             >
-                <p className={`${inter.className}`}>{label}</p>
+                <p className={`${inter.className} text-left`}>{label}</p>
 
                 {selected ? (
                     <Arrow

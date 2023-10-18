@@ -6,7 +6,7 @@ interface HeaderProps {}
 const Header: FC<HeaderProps> = ({}) => {
     return (
         <div
-            className={`${inter.className} text-center p-10 max-w-4xl mx-auto mb-40 mt-10`}
+            className={`${inter.className} text-center p-10 max-w-4xl mx-auto mb-20 md:mb-40 mt-10 md:mt-20`}
         >
             <h1 className="text-primary-900 py-5 font-semibold md:leading-snug text-4xl md:text-6xl lg:text-7xl">
                 Your sanctuary for{" "}

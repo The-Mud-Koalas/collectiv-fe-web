@@ -4,9 +4,14 @@ import { CiLocationOn } from "react-icons/ci";
 import { BiSolidPencil } from "react-icons/bi";
 import { FiSave } from "react-icons/fi";
 import Image from "next/image";
-import { Modal, Switch } from "@/components/shared/elements";
+import { Button, Modal, Switch } from "@/components/shared/elements";
 import cn from "clsx";
-import { UseQueryResult, useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import {
+  UseQueryResult,
+  useMutation,
+  useQuery,
+  useQueryClient,
+} from "@tanstack/react-query";
 import CreatableSelect from "react-select/creatable";
 import { getTags } from "@/utils/fetchers/event/creation";
 import { capitalize } from "@/utils/helpers/formatting/capitalize";
@@ -119,7 +124,11 @@ const EditableDateField = ({
   );
 };
 
-const EventInfoAndActionsEditable = ({ eventDetails, isFetching, analytics }: Props) => {
+const EventInfoAndActionsEditable = ({
+  eventDetails,
+  isFetching,
+  analytics,
+}: Props) => {
   const BASE_URL = `/event/${eventDetails.id}`;
   const { user } = useAppContext();
   const queryClient = useQueryClient();
@@ -240,7 +249,7 @@ const EventInfoAndActionsEditable = ({ eventDetails, isFetching, analytics }: Pr
   const router = useRouter();
 
   const closeModal = () => {
-    router.push(BASE_URL, undefined, { shallow: true });
+    router.replace(BASE_URL, undefined, { shallow: true });
   };
 
   const onSubmit: SubmitHandler<UpdateInitiativeEventDetail> = async (data) => {
@@ -249,7 +258,7 @@ const EventInfoAndActionsEditable = ({ eventDetails, isFetching, analytics }: Pr
     if (!user) return;
     if (!formPartiallyDirty) {
       setIsEditing(false);
-      toast.info('Nothing to save, cancelling edit.')
+      toast.info("Nothing to save, cancelling edit.");
       return;
     }
     const { tags, ...rest } = data;
@@ -467,52 +476,66 @@ const EventInfoAndActionsEditable = ({ eventDetails, isFetching, analytics }: Pr
                 </button>
               )}
               {eventDetails.status === "Scheduled" && (
-                <Link
-                  href={BASE_URL + "?confirmationStartEvent=true"}
+                <Button
+                  type="button"
+                  onClick={() =>
+                    router.replace(BASE_URL + "?confirmationStartEvent=true")
+                  }
                   className={cn(
                     "flex items-center gap-2 font-semibold rounded-md px-6 text-sm py-2 border-[2px]",
                     "border-primary-700 bg-primary-200 text-primary-700"
                   )}
                 >
                   Start Event
-                </Link>
+                </Button>
               )}
               {eventDetails.status === "Scheduled" && (
-                <Link
-                  href={BASE_URL + "?confirmationCancelEvent=true"}
+                <Button
+                  type="button"
+                  onClick={() =>
+                    router.replace(BASE_URL + "?confirmationCancelEvent=true")
+                  }
                   className={cn(
                     "flex items-center gap-2 font-semibold rounded-md px-4 text-sm py-1",
                     "border border-danger-300 text-danger-400 hover:bg-red-100"
                   )}
                 >
                   Cancel Event
-                </Link>
+                </Button>
               )}
               {eventDetails.status === "On Going" && (
-                <Link
-                  href={BASE_URL + "?confirmationCompleteEvent=true"}
+                <Button
+                  type="button"
+                  onClick={() =>
+                    router.replace(BASE_URL + "?confirmationCompleteEvent=true")
+                  }
                   className={cn(
                     "flex items-center gap-2 font-semibold rounded-md px-6 text-sm py-2 border-[2px]",
                     "border-secondary-400 bg-secondary-200 text-secondary-400"
                   )}
                 >
                   Complete Event
-                </Link>
+                </Button>
               )}
             </div>
           </div>
           <div className="flex items-center gap-4 flex-wrap justify-center xl:justify-normal mt-4">
             {eventDetails.event_type === "project" && (
-              <Link
-                href={BASE_URL + "?recordContribution=true"}
+              <Button
+                type="button"
+                onClick={() =>
+                  router.replace(BASE_URL + "?recordContribution=true")
+                }
                 className="flex items-center gap-2 bg-secondary-400 text-secondary-100 text-sm border-[2px] border-secondary-400 px-5 py-2 rounded-md font-medium"
               >
                 Record Participant Contribution <SlNote />
-              </Link>
+              </Button>
             )}
-            <Link
-              href={BASE_URL + "?checkInParticipantOrVolunteer=true"}
-              shallow
+            <Button
+              type="button"
+              onClick={() =>
+                router.replace(BASE_URL + "?checkInParticipantOrVolunteer=true")
+              }
               className="flex items-center gap-2 bg-secondary-500 text-secondary-100 text-sm border-[2px] border-secondary-500 px-5 py-2 rounded-md font-medium"
             >
               Check In{" "}
@@ -520,23 +543,27 @@ const EventInfoAndActionsEditable = ({ eventDetails, isFetching, analytics }: Pr
                 ? "Participant/Volunteer"
                 : "Volunteer"}
               <BsPersonCheckFill className="text-lg" />
-            </Link>
+            </Button>
             {eventDetails.event_type === "initiative" && (
-              <Link
-                href={BASE_URL + "?checkOutParticipant=true"}
+              <Button
+                type="button"
+                onClick={() =>
+                  router.replace(BASE_URL + "?checkOutParticipant=true")
+                }
                 className="flex items-center gap-2 bg-secondary-500 text-secondary-100 text-sm border-[2px] border-secondary-500 px-5 py-2 rounded-md font-medium"
               >
                 Check-out Participant
                 <BsPersonFillSlash className="text-lg" />
-              </Link>
+              </Button>
             )}
-            <Link
-              href={BASE_URL + "?viewVolunteers=true"}
+            <Button
+              type="button"
+              onClick={() => router.replace(BASE_URL + "?viewVolunteers=true")}
               className="flex items-center gap-2 text-secondary-400 text-sm border-[2px] border-secondary-400 px-5 py-2 rounded-3xl font-medium"
             >
               View Volunteers
               <GrUserManager className="[&>path]:!stroke-secondary-400" />
-            </Link>
+            </Button>
             <Link
               className="flex items-center gap-2 text-primary-700 text-sm border-[2px] border-primary-600 px-5 py-2 rounded-3xl font-medium"
               href={`/event/${eventDetails.id}/forum`}
@@ -557,7 +584,7 @@ const EventInfoAndActionsEditable = ({ eventDetails, isFetching, analytics }: Pr
             />
           </div>
           <div className="flex w-full justify-end">
-            <Ratings rating={analytics.data?.average_event_rating ?? 0}/>
+            <Ratings rating={analytics.data?.average_event_rating ?? 0} />
           </div>
         </div>
       </section>
@@ -566,7 +593,7 @@ const EventInfoAndActionsEditable = ({ eventDetails, isFetching, analytics }: Pr
         onOverlayTap={closeModal}
       >
         <AttendanceModal
-        eventType={eventDetails.event_type}
+          eventType={eventDetails.event_type}
           eventId={eventDetails.id}
           onCheckInComplete={() => {}}
           onClose={closeModal}

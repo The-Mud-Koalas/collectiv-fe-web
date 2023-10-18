@@ -13,15 +13,7 @@ import { inter } from "@/utils/constants/fonts";
 
 interface LocationListProps {}
 
-type LocationType = {
-    id: string;
-    name: string;
-    latitude: number;
-    longitude: number;
-};
-
 const LocationList: FC<LocationListProps> = ({}) => {
-
     const {
         data: locations,
         isLoading: isLocationsLoading,
@@ -58,11 +50,18 @@ const LocationList: FC<LocationListProps> = ({}) => {
     if (isLoading) return <Loading />;
 
     return (
-        <div className="text-center my-40">
+        <div className="text-center my-20 md:my-40">
             <span className="w-10 h-10 bg-secondary-200 rounded-full p-4 flex items-center justify-center mx-auto mb-5">
                 ❇️
             </span>
-            <h1 className={cn("text-5xl font-bold", inter.className)}>Check our Locations</h1>
+            <h1
+                className={cn(
+                    " text-3xl md:text-5xl font-bold",
+                    inter.className
+                )}
+            >
+                Check our Locations
+            </h1>
             <div className="flex flex-col max-w-[921px] mx-auto my-10">
                 {locations ? (
                     locations.map((location: EventLocation) => (

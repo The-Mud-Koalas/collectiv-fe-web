@@ -17,7 +17,7 @@ const Template: React.FC<React.PropsWithChildren> = ({ children }) => {
       <Navbar />
       <main className="bg-tertiary-100 min-h-screen pt-[60px] sm:pt-0">
         {!hideBackButtons.includes(router.asPath) && (
-          <Button className="p-5">
+          <Button className="p-5" onClick={() => router.back()}>
             <Back color={COLORS.primary[800]} dimensions={{ width: 40 }} />
           </Button>
         )}
