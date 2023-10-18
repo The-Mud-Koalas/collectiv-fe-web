@@ -1,9 +1,17 @@
 import React from "react";
+import cn from "clsx";
 
-const ChartContainer = ({ children }: React.PropsWithChildren) => {
+const ChartContainer = ({
+  children,
+  className,
+}: React.PropsWithChildren & { className?: string }) => {
   return (
-    <div className="border-[2px] 2xl:w-[600px] w-[min(100%,_500px)] rounded-lg border-primary-700 h-fit flex flex-col items-center aspect-video py-2">
-      <p></p>
+    <div
+      className={cn(
+        "border-[2px] grow 2xl:w-[600px] w-[min(100%,_500px)] min-h-[400px] rounded-lg border-primary-700 lg:h-fit flex flex-col items-center py-2",
+        className
+      )}
+    >
       {children}
     </div>
   );

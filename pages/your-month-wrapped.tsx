@@ -5,12 +5,19 @@ import { useEffect, useRef, useState } from "react";
 import cn from "clsx";
 import { garamond, inter, interItalics } from "@/utils/constants/fonts";
 import { BsArrowDown } from "react-icons/bs";
-import PieChart from "@/components/features/event/dashboard/dataviz/PieChart";
 import { useQuery } from "@tanstack/react-query";
 import { useAppContext } from "@/context/AppContext";
 import { getRequest } from "@/lib/fetch";
 import { useWindowSize } from "@/hooks/display";
 import { Loading } from "@/components/shared/layouts";
+import {
+  Bar,
+  BarChart,
+  LabelList,
+  ResponsiveContainer,
+  XAxis,
+  YAxis,
+} from "recharts";
 
 interface WrappedData {
   last_month_created_events_count: number;
@@ -344,12 +351,45 @@ const WrappedComponent = ({ wrappedData }: { wrappedData: WrappedData }) => {
   const rankInView = useInView(rankRef, { amount: 1, once: true });
   const { windowWidth } = useWindowSize();
 
+  const colors = [
+    COLORS.primary[300],
+    COLORS.primary[400],
+    COLORS.primary[500],
+    COLORS.primary[600],
+    COLORS.primary[700],
+    COLORS.secondary[300],
+    COLORS.secondary[400],
+    COLORS.secondary[500],
+    COLORS.gray["400"],
+    COLORS.gray["600"],
+  ];
+
+  // const dummy: WrappedData["last_month_contributions"] = [
+  //   { goal_kind: "rice", measurement_unit: "kg", total_contribution: 100 },
+  //   { goal_kind: "rice", measurement_unit: "kg", total_contribution: 400 },
+  //   { goal_kind: "rice", measurement_unit: "kg", total_contribution: 400 },
+  //   { goal_kind: "rice", measurement_unit: "kg", total_contribution: 200 },
+  //   { goal_kind: "rice", measurement_unit: "kg", total_contribution: 300 },
+  //   { goal_kind: "rice", measurement_unit: "kg", total_contribution: 400 },
+  //   { goal_kind: "rice", measurement_unit: "kg", total_contribution: 600 },
+  //   { goal_kind: "rice", measurement_unit: "kg", total_contribution: 890 },
+  //   { goal_kind: "rice", measurement_unit: "kg", total_contribution: 700 },
+  //   { goal_kind: "rice", measurement_unit: "kg", total_contribution: 900 },
+  // ];
+
   const contributions = wrappedData.last_month_contributions
     .sort((a, b) => b.total_contribution - a.total_contribution)
-    .map((contribution) => ({
-      id: `${contribution.measurement_unit} (${contribution.goal_kind})`,
-      label: `${contribution.measurement_unit} (${contribution.goal_kind})`,
-      value: contribution.total_contribution,
+    .map((goal, i) => ({
+      name:
+        goal.total_contribution > 0
+          ? `${goal.goal_kind} (${goal.measurement_unit})`
+          : undefined,
+      value: goal.total_contribution,
+      caption:
+        goal.total_contribution > 0
+          ? `${goal.total_contribution} ${goal.measurement_unit} ${goal.goal_kind}`
+          : undefined,
+      fill: colors[i],
     }))
     .slice(0, 10);
 
@@ -479,31 +519,41 @@ const WrappedComponent = ({ wrappedData }: { wrappedData: WrappedData }) => {
         </div>
       </motion.div>
       <motion.div className="bg-tertiary-100 min-h-screen">
-        <div className="flex flex-col-reverse min-h-screen">
+        <div className="flex lg:flex-row flex-col-reverse min-h-screen">
           <motion.div
             initial={{ scale: 0 }}
             whileInView={{ scale: 1 }}
-            className="lg:h-screen lg:mt-0 mt-14 xl:p-20 h-[50vh] w-full flex justify-center items-center px-8"
+            className="lg:h-screen lg:mt-0 mt-14 xl:p-20 h-[50vh] lg:w-1/2 w-full flex justify-center items-center px-8"
           >
             {contributions.length > 0 && (
-              <PieChart
-                margin={{ top: 14 }}
-                hideLegends // @ts-expect-error
-                val={(val) => {
-                  return (
-                    <>
-                      <tspan dx={0} dy={0}>
-                        {/** @ts-expect-error */}
-                        {val.value}
-                      </tspan>
-                      <tspan dx={-40} dy={18}>
-                        {val.label}
-                      </tspan>
-                    </>
-                  );
-                }}
-                data={contributions}
-              />
+              <ResponsiveContainer
+                className={"grow"}
+                width="100%"
+                height="100%"
+              >
+                <BarChart
+                  margin={{ left: 20, top: 20, right: 80 }}
+                  layout="vertical"
+                  data={contributions}
+                  barCategoryGap={10}
+                >
+                  <YAxis dataKey="name" type="category" hide />
+                  <XAxis type="number" dataKey={"value"} hide />
+                  <Bar maxBarSize={200} dataKey={"value"} fill="fill">
+                    <LabelList
+                      position={"right"}
+                      dataKey={"caption"}
+                      fill="black"
+                      width={200}
+                      style={{
+                        fontWeight: "bold",
+                        fontFamily: inter.style.fontFamily,
+                        fontSize: "clamp(14px, 1.5vw, 20px)",
+                      }}
+                    />
+                  </Bar>
+                </BarChart>
+              </ResponsiveContainer>
             )}
             {!contributions.length && (
               <p className={cn(garamond.className, "text-2xl")}>
@@ -513,10 +563,10 @@ const WrappedComponent = ({ wrappedData }: { wrappedData: WrappedData }) => {
               </p>
             )}
           </motion.div>
-          <div className="lg:min-h-screen min-h-[50vh] w-full flex justify-center items-center px-8">
+          <div className="lg:min-h-screen min-h-[50vh] lg:w-1/2 w-full flex justify-center items-center px-8">
             <p
               className={cn(
-                "text-5xl sm:text-6xl md:text-7xl xl:text-8xl text-primary-700 text-center",
+                "text-7xl lg:text-6xl text-primary-700 text-center",
                 garamond.className
               )}
             >
@@ -619,7 +669,7 @@ const WrappedComponent = ({ wrappedData }: { wrappedData: WrappedData }) => {
             <div className="flex flex-col md:flex-row lg:flex-col h-1/2 items-center md:justify-center justify-center lg:gap-0 md:gap-8 md:p-4 px-2">
               <div>
                 <RankMeter
-                  className="lg:w-[260px] lg:h-[260px] md:w-[200px] md:h-[200px] w-[150px] h-[150px]"
+                  className="lg:!w-[260px] lg:!h-[260px] md:!w-[200px] md:!h-[200px] !w-[150px] !h-[150px]"
                   classNameText="!text-2xl md:!text-3xl lg:!text-4xl"
                   isStatic
                   rank={wrappedData.last_month_overall_rank}
@@ -660,34 +710,42 @@ const WrappedComponent = ({ wrappedData }: { wrappedData: WrappedData }) => {
                   "text-2xl md:text-3xl lg:text-4xl text-center w-full md:w-1/2 lg:w-full mb-2"
                 )}
               >
-                Your Contributions
+                Your top ten contributions
               </p>
               <div
                 className={cn(
-                  "h-full lg:w-full md:w-1/2 w-full md:pb-0 pb-4 px-6",
+                  "h-full lg:w-full md:w-1/2 w-full md:pb-0 pb-4",
                   !contributions.length && "flex items-center"
                 )}
               >
                 {contributions.length > 0 && (
-                  <PieChart
-                    // @ts-expect-error
-                    val={(val) => {
-                      return (
-                        <>
-                          <tspan dx={0} dy={0}>
-                            {/** @ts-expect-error */}
-                            {val.value}
-                          </tspan>
-                          <tspan dx={-40} dy={18}>
-                            {val.label}
-                          </tspan>
-                        </>
-                      );
-                    }}
-                    margin={{ top: 0, bottom: 0, left: 0, right: 0 }}
-                    hideLegends={windowWidth >= 1024}
-                    data={contributions}
-                  />
+                  <ResponsiveContainer
+                    className={"grow"}
+                    width="100%"
+                    height="100%"
+                  >
+                    <BarChart
+                      margin={{ left: 0, top: 0, right: 100, bottom: 15 }}
+                      layout="vertical"
+                      data={contributions}
+                    >
+                      <YAxis dataKey="name" type="category" hide />
+                      <XAxis type="number" dataKey={"value"} hide />
+                      <Bar maxBarSize={200} dataKey={"value"} fill="fill">
+                        <LabelList
+                          position={"right"}
+                          dataKey={"caption"}
+                          fill="black"
+                          width={100}
+                          style={{
+                            fontWeight: "bold",
+                            fontFamily: inter.style.fontFamily,
+                            fontSize: "clamp(12px, 1.5vw, 18px)",
+                          }}
+                        />
+                      </Bar>
+                    </BarChart>
+                  </ResponsiveContainer>
                 )}
                 {!contributions.length && (
                   <p className={cn(garamond.className, "text-xl")}>

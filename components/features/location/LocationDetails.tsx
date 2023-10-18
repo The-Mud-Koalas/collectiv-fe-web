@@ -74,7 +74,7 @@ const LocationDetails: React.FC<Props> = ({
         </div>
       </section>
       <section id="analytics">
-        <h1 className={cn(garamond.className, "text-4xl")}>About the Space</h1>
+        <h1 className={cn(garamond.className, "text-4xl mt-6")}>About the Space</h1>
         {typeof locationId === "string" && (
           <LocationAnalytics locationId={locationId} />
         )}
