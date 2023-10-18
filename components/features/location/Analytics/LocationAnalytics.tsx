@@ -7,17 +7,20 @@ import {
   FaFaceGrin,
   FaFaceMeh,
 } from "react-icons/fa6";
-import {
-  BarChart,
-  ChartContainer,
-  StatisticCard,
-} from "../../event/dashboard/dataviz";
-import { garamond } from "@/utils/constants/fonts";
+import { ChartContainer, StatisticCard } from "../../event/dashboard/dataviz";
+import { garamond, inter } from "@/utils/constants/fonts";
 import { BeatLoader } from "react-spinners";
 import { COLORS } from "@/utils/constants/colors";
 import { BsStar, BsStarFill, BsStarHalf } from "react-icons/bs";
+import {
+  Bar,
+  BarChart,
+  LabelList,
+  ResponsiveContainer,
+  XAxis,
+  YAxis,
+} from "recharts";
 import cn from "clsx";
-import PieChart from "../../event/dashboard/dataviz/PieChart";
 
 interface Props {
   locationId: string;
@@ -109,18 +112,36 @@ const LocationAnalytics = ({ locationId }: Props) => {
   }
 
   const showcasedGoals = useMemo(() => {
+    const colors = [
+      COLORS.primary[300],
+      COLORS.primary[400],
+      COLORS.primary[500],
+      COLORS.primary[600],
+      COLORS.primary[700],
+      COLORS.secondary[300],
+      COLORS.secondary[400],
+      COLORS.secondary[500],
+      COLORS.gray["400"],
+      COLORS.gray["600"],
+    ];
     if (!projectGoalsData.data) return [];
     const sorted = projectGoalsData.data.contribution_data
       .slice()
       .sort((a, b) => b.total_contribution - a.total_contribution);
     const topTen = sorted.slice(0, 10);
-    const mappedForPieChart = topTen.map((goal) => ({
-      id: `Amount of ${goal.goal_kind} (${goal.measurement_unit}) donated`,
-      label: `${goal.goal_kind} (${goal.measurement_unit})`,
+    const mappedForBarChart = topTen.map((goal, i) => ({
+      name:
+        goal.total_contribution > 0
+          ? `${goal.goal_kind} (${goal.measurement_unit})`
+          : undefined,
       value: goal.total_contribution,
+      caption:
+        goal.total_contribution > 0
+          ? `${goal.total_contribution} ${goal.measurement_unit} ${goal.goal_kind}`
+          : undefined,
+      fill: colors[i],
     }));
-
-    return mappedForPieChart;
+    return mappedForBarChart
   }, [projectGoalsData.data]);
 
   return (
@@ -201,34 +222,57 @@ const LocationAnalytics = ({ locationId }: Props) => {
           <p className="lg:text-sm text-xs text-secondary-400 italic text-left w-full pl-5">
             *The events in this location grouped by type
           </p>
-          <BarChart
-            data={
-              eventData.data
-                ? [
-                    {
-                      eventType: "total events",
-                      "total events":
-                        eventData.data.event_count_data
-                          .num_of_events_in_location,
-                    },
-                    {
-                      eventType: "initiatives",
-                      initiatives:
-                        eventData.data.event_count_data
-                          .num_of_initiatives_in_location,
-                    },
-                    {
-                      eventType: "projects",
-                      projects:
-                        eventData.data.event_count_data
-                          .num_of_projects_in_location,
-                    },
-                  ]
-                : []
-            }
-            indexBy="eventType"
-            keys={["total events", "initiatives", "projects"]}
-          />
+
+          {eventData.data && (
+            <ResponsiveContainer className={"grow"} width="100%" height="100%">
+              <BarChart
+                layout="horizontal"
+                data={[
+                  {
+                    name: "Events",
+                    value:
+                      eventData.data.event_count_data.num_of_events_in_location,
+                    fill: COLORS.secondary["500"],
+                  },
+                  {
+                    name: "Initiatives",
+                    value:
+                      eventData.data.event_count_data
+                        .num_of_initiatives_in_location,
+                    fill: COLORS.secondary["300"],
+                  },
+                  {
+                    name: "Projects",
+                    value:
+                      eventData.data.event_count_data
+                        .num_of_projects_in_location,
+                    fill: COLORS.secondary["400"],
+                  },
+                ]}
+              >
+                <XAxis
+                  dataKey={"name"}
+                  axisLine={false}
+                  tickLine={false}
+                  tickMargin={8}
+                  fontSize={"clamp(8px, 1vw, 18px)"}
+                  fontFamily={inter.style.fontFamily}
+                  fontWeight={500}
+                />
+                <Bar dataKey={"value"} fill="fill">
+                  <LabelList
+                    position={"top"}
+                    dataKey={"value"}
+                    fill="black"
+                    style={{
+                      fontWeight: "bold",
+                      fontFamily: inter.style.fontFamily,
+                    }}
+                  />
+                </Bar>
+              </BarChart>
+            </ResponsiveContainer>
+          )}
         </ChartContainer>
         <ChartContainer>
           <p
@@ -239,37 +283,62 @@ const LocationAnalytics = ({ locationId }: Props) => {
           >
             Collectiv active user role demographic
           </p>
-          <p className="lg:text-sm text-xs text-secondary-400 italic text-left w-full pl-5">
+          <p className="lg:text-sm text-[10px] text-secondary-400 italic text-left w-full pl-5">
             *Currently participating users group by event role
           </p>
-          <BarChart
-            data={
-              participationData.data
-                ? [
-                    {
-                      userType: "contributors",
-                      contributors:
-                        participationData.data.participation_data
-                          .contributors_in_location,
-                    },
-                    {
-                      userType: "volunteers",
-                      volunteers:
-                        participationData.data.participation_data
-                          .volunteers_count_in_location,
-                    },
-                    {
-                      userType: "participants",
-                      participants:
-                        participationData.data.participation_data
-                          .participants_in_location,
-                    },
-                  ]
-                : []
-            }
-            indexBy="userType"
-            keys={["contributors", "volunteers", "participants"]}
-          />
+
+          {participationData.data && (
+            <ResponsiveContainer className={"grow"} width="100%" height="80%">
+              <BarChart
+                layout="horizontal"
+                data={[
+                  {
+                    name: "Participants",
+                    value:
+                      participationData.data.participation_data
+                        .participants_in_location,
+                    fill: COLORS.primary["700"],
+                  },
+                  {
+                    name: "Volunteers",
+                    value:
+                      participationData.data.participation_data
+                        .volunteers_count_in_location,
+                    fill: COLORS.primary["600"],
+                  },
+                  {
+                    name: "Contributors",
+                    value:
+                      participationData.data.participation_data
+                        .contributors_in_location,
+                    fill: COLORS.primary["500"],
+                  },
+                ]}
+              >
+                <XAxis
+                  dataKey={"name"}
+                  axisLine={false}
+                  tickLine={false}
+                  tickMargin={8}
+                  fontSize={"clamp(8px, 1vw, 18px)"}
+                  interval={0}
+                  fontFamily={inter.style.fontFamily}
+                  fontWeight={500}
+                />
+                <Bar dataKey={"value"} fill="fill">
+                  <LabelList
+                    position={"top"}
+                    dataKey={"value"}
+                    fill="black"
+                    style={{
+                      fontWeight: "bold",
+                      fontFamily: inter.style.fontFamily,
+                    }}
+                  />
+                </Bar>
+              </BarChart>
+            </ResponsiveContainer>
+          )}
         </ChartContainer>
       </div>
       <div className="flex items-center justify-center w-full 2xl:gap-24 gap-12 flex-wrap">
@@ -283,39 +352,45 @@ const LocationAnalytics = ({ locationId }: Props) => {
             Look at what this location has achieved for our community.
           </p>
         </div>
-        <ChartContainer>
+        <ChartContainer className="!min-h-[600px]">
           <p
             className={cn(
-              "mt-2 lg:text-3xl text-xl font-medium text-left w-full pl-5",
+              "mt-2 lg:text-3xl text-2xl font-medium text-left w-full pl-5",
               garamond.className
             )}
           >
-            Projects in location contribution showcase
+            Projects in location contribution showcase:
           </p>
           <p className="lg:text-sm text-xs text-secondary-400 italic text-left w-full pl-5">
             *Top 10 past/current project goals by their contribution amount
           </p>
-          <PieChart
-            data={showcasedGoals}
-            hideLegends
-            margin={{ top: 15, bottom: 15 }}
-            // @ts-expect-error
-            val={(val) => {
-              // @ts-expect-error
-              if (!val.value) return "";
-              return (
-                <>
-                  <tspan dx={0} dy={0}>
-                    {/** @ts-expect-error */}
-                    {val.value}
-                  </tspan>
-                  <tspan dx={-40} dy={18}>
-                    {val.label}
-                  </tspan>
-                </>
-              );
-            }}
-          />
+          <ResponsiveContainer className={"grow"} width="100%" height="100%">
+            <BarChart
+              margin={{ left: 20, top: 20, right: 150 }}
+              layout="vertical"
+              data={showcasedGoals}
+              barCategoryGap={10}
+            >
+              <YAxis dataKey="name" type="category" hide />
+              <XAxis type="number" dataKey={"value"} hide />
+              <Bar
+                maxBarSize={200}
+                dataKey={"value"}
+                fill="fill"
+              >
+                <LabelList
+                  position={"right"}
+                  dataKey={"caption"}
+                  fill="black"
+                  style={{
+                    fontWeight: "bold",
+                    fontFamily: inter.style.fontFamily,
+                    fontSize: "clamp(14px, 1.5vw, 20px)",
+                  }}
+                />
+              </Bar>
+            </BarChart>
+          </ResponsiveContainer>
         </ChartContainer>
       </div>
     </div>

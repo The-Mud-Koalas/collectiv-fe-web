@@ -1,12 +1,6 @@
 import React from "react";
 import { garamond, inter } from "@/utils/constants/fonts";
-import {
-  BarChart,
-  ChartContainer,
-  GoalMeter,
-  LineChart,
-  StatisticCard,
-} from "./dataviz";
+import { ChartContainer, GoalMeter, StatisticCard } from "./dataviz";
 import {
   FaPeopleGroup,
   FaArrowsDownToPeople,
@@ -27,13 +21,24 @@ import { BiSolidPencil } from "react-icons/bi";
 import { Modal } from "@/components/shared/elements";
 import UpdateProgressModal from "./UpdateProgressModal";
 import ProgressHistoryModal from "./ProgressHistoryModal";
+import {
+  Bar,
+  BarChart,
+  Label,
+  LabelList,
+  Line,
+  LineChart,
+  ResponsiveContainer,
+  XAxis,
+  YAxis,
+} from "recharts";
 
 interface Props {
   eventId: string;
   analytics: UseQueryResult<EventAnalytics, unknown>;
 }
 
-const EventAnalytics = ({ analytics, eventId}: Props) => {
+const EventAnalytics = ({ analytics, eventId }: Props) => {
   const { user } = useAppContext();
   const router = useRouter();
   const BASE_URL = `/event/${eventId}`;
@@ -166,7 +171,7 @@ const EventAnalytics = ({ analytics, eventId}: Props) => {
           </StatisticCard>
         </div>
         <div className="flex items-center justify-center w-full 2xl:gap-24 gap-12 flex-wrap">
-          <ChartContainer>
+          <ChartContainer className="max-w-[700px]">
             <p
               className={cn(
                 "mt-2 lg:text-3xl text-xl font-medium text-left w-full pl-5",
@@ -179,20 +184,47 @@ const EventAnalytics = ({ analytics, eventId}: Props) => {
               *How many participants are registered compared to how many
               volunteers are registers.
             </p>
-            <BarChart
-              data={[
-                {
-                  participantType: "volunteer",
-                  volunteers: data.current_num_of_volunteers,
-                },
-                {
-                  participantType: "participant",
-                  participant: data.current_num_of_participants,
-                },
-              ]}
-              indexBy="participantType"
-              keys={["volunteers", "participant"]}
-            />
+            <ResponsiveContainer className={"grow"} width="100%" height="100%">
+              <BarChart
+                maxBarSize={120}
+                margin={{ top: 40 }}
+                layout="horizontal"
+                data={[
+                  {
+                    name: "Participants",
+                    value: data.current_num_of_participants,
+                    fill: COLORS.primary["700"],
+                  },
+                  {
+                    name: "Volunteers",
+                    value: data.current_num_of_volunteers,
+                    fill: COLORS.primary["600"],
+                  },
+                ]}
+              >
+                <XAxis
+                  dataKey={"name"}
+                  axisLine={false}
+                  tickLine={false}
+                  tickMargin={8}
+                  fontSize={"clamp(12px, 1vw, 18px)"}
+                  interval={0}
+                  fontFamily={inter.style.fontFamily}
+                  fontWeight={500}
+                />
+                <Bar dataKey={"value"} fill="fill">
+                  <LabelList
+                    position={"top"}
+                    dataKey={"value"}
+                    fill="black"
+                    style={{
+                      fontWeight: "bold",
+                      fontFamily: inter.style.fontFamily,
+                    }}
+                  />
+                </Bar>
+              </BarChart>
+            </ResponsiveContainer>
           </ChartContainer>
           {data.event_type === "initiative" && (
             <ChartContainer>
@@ -208,19 +240,43 @@ const EventAnalytics = ({ analytics, eventId}: Props) => {
                 *Days where there were participant registration(s) along with
                 their count
               </p>
-              <LineChart
-                data={[
-                  {
-                    id: "Registration Count:",
-                    data: data.registration_history
-                      .map((hist) => ({
-                        x: new Date(hist.registration_date),
-                        y: hist.count,
-                      }))
-                      .slice(0, 10),
-                  },
-                ]}
-              />
+              <ResponsiveContainer
+                className={"grow"}
+                width="100%"
+                height="100%"
+              >
+                <LineChart
+                  data={data.registration_history.slice(0, 10).map((hist) => ({
+                    date: new Date(hist.registration_date).toLocaleDateString(),
+                    ...hist,
+                  }))}
+                  margin={{
+                    top: 30,
+                    right: 50,
+                    left: 0,
+                    bottom: 5,
+                  }}
+                >
+                  <Line
+                    type="linear"
+                    dataKey="count"
+                    stroke={COLORS.secondary[500]}
+                    strokeWidth={4}
+                  />
+
+                  <XAxis
+                    type="category"
+                    dataKey={"date"}
+                    style={{ fontSize: "clamp(10px, 1vw, 14px)" }}
+                  />
+                  <YAxis
+                    type="number"
+                    dataKey={"count"}
+                    style={{ fontSize: "clamp(10px, 1vw, 14px)" }}
+                    label={{ value: "registration count", angle: 90 }}
+                  />
+                </LineChart>
+              </ResponsiveContainer>
             </ChartContainer>
           )}
         </div>
