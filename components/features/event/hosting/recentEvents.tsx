@@ -1,13 +1,11 @@
-import { FC, useEffect, useMemo } from "react";
-import { garamond, inter } from "@/utils/constants/fonts";
-import { GoogleMap } from "@react-google-maps/api";
-import LocationMapPin from "../../location/LocationMap/LocationMapPin";
-import EventHostingCard from "./EventHostingCard";
 import RecentEventMap from "@/components/shared/images/RecentEventMap.png";
+import { Loading } from "@/components/shared/layouts";
+import { garamond } from "@/utils/constants/fonts";
+import { getListOfEventsHost } from "@/utils/fetchers/event/discovery";
+import { useQuery } from "@tanstack/react-query";
 import Image from "next/image";
-import { getListOfEvents } from "@/utils/fetchers/event/discovery";
-import { useMutation, useQuery } from "@tanstack/react-query";
-import { showErrorToast } from "@/lib/toast";
+import { FC } from "react";
+import EventHostingCard from "./EventHostingCard";
 
 interface recentEventsProps {}
 interface EventFilters {
@@ -18,8 +16,8 @@ interface EventFilters {
     location: SelectOption<string> | null;
 }
 
-const recentEvents: FC<recentEventsProps> = ({}) => {
-    const PAGE_LIMIT = 3;
+const RecentEvents: FC<recentEventsProps> = ({}) => {
+    const max_events_shown = 3;
     const filters: EventFilters = {
         type: null,
         status: null,
@@ -28,16 +26,15 @@ const recentEvents: FC<recentEventsProps> = ({}) => {
         location: null,
     };
 
-    const { data, isLoading, isError, error, isPreviousData } = useQuery<
+    const { data, isLoading, isError, error } = useQuery<
         PaginatedResults<EventDetail[]>
     >({
-        queryFn: () => getListOfEvents(filters)(PAGE_LIMIT),
+        queryFn: () => getListOfEventsHost(filters)(3, max_events_shown),
         keepPreviousData: true,
     });
 
-    useEffect(() => {
-        console.log(data);
-    }, []);
+    if (isLoading) return <Loading />;
+    if (isError) return <></>;
 
     return (
         <div className="flex flex-wrap justify-left gap-10 items-center rounded-3xl bg-secondary-200 py-10">
@@ -50,19 +47,18 @@ const recentEvents: FC<recentEventsProps> = ({}) => {
                 <h1 className={`${garamond.className} text-5xl italic`}>
                     Previous Events Hosted
                 </h1>
-                {data
-                    ? data.results.map((eventItem: any, index: number) => (
-                          <EventHostingCard
-                              key={eventItem.id}
-                              number={index + 1}
-                              locationName={eventItem.name}
-                              locationComment={eventItem.description}
-                          />
-                      ))
-                    : "loading"}
+                {data &&
+                    data.results.map((eventItem: any, index: number) => (
+                        <EventHostingCard
+                            key={eventItem.id}
+                            number={index + 1}
+                            locationName={eventItem.name}
+                            locationComment={eventItem.description}
+                        />
+                    ))}
             </div>
         </div>
     );
 };
 
-export default recentEvents;
+export default RecentEvents;

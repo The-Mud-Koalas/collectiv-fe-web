@@ -42,6 +42,49 @@ const getListOfEvents = (
             }
         );
 
+        
+
+        const searchParams = new URLSearchParams(searchParamValues);
+        const endpoint = "/event/search";
+
+        const listOfEvents = await getRequest({ endpoint, searchParams });
+        return listOfEvents;
+    };
+};
+
+const getListOfEventsHost = (
+    filters: EventFilters | LocationFilters,
+    location?: EventLocation
+) => {
+    const searchFilters: EventFilters =
+        "location" in filters
+            ? (filters as EventFilters)
+            : ({
+                  ...filters,
+                  location: { value: location?.id, label: location?.name },
+              } as EventFilters);
+    return async (page: number = 1, limit: number) => {
+        const searchParamValues: Record<string, string> = Object.keys(
+            searchFilters
+        ).reduce(
+            (prev, key) =>
+                searchFilters[key as keyof EventFilters] == null
+                    ? prev
+                    : {
+                          ...prev,
+                          [EVENT_MAP[key as keyof EventFilters]]:
+                              searchFilters[
+                                  key as keyof EventFilters
+                              ]?.value.toLowerCase(),
+                      },
+            {
+                limit: `${limit}`,
+                page: `${page}`,
+            }
+        );
+
+        
+
         const searchParams = new URLSearchParams(searchParamValues);
         const endpoint = "/event/search";
 
@@ -78,4 +121,4 @@ const getParticipatedEvent = (choice?: string) => async () => {
     return listOfParticipatedEvents as EventParticipationData[];
 };
 
-export { getListOfEvents, getHostedEvent, getParticipatedEvent };
+export { getListOfEventsHost, getListOfEvents, getHostedEvent, getParticipatedEvent };
