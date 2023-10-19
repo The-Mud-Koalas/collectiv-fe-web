@@ -277,6 +277,7 @@ const EventAnalytics = ({ analytics, eventId }: Props) => {
                   />
                   <YAxis
                     type="number"
+                    allowDecimals={false}
                     dataKey={"count"}
                     style={{ fontSize: "clamp(10px, 1vw, 14px)" }}
                     label={{ value: "registration count", angle: 90 }}

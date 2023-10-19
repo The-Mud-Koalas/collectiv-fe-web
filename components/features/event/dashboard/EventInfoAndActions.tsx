@@ -24,7 +24,6 @@ import { capitalize } from "@/utils/helpers/formatting/capitalize";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { Button, Modal } from "@/components/shared/elements";
-import { getParticipation } from "@/utils/fetchers/event/participation";
 import RecordContributionModal from "../contribution";
 import ViewVolunteersModal from "./ViewVolunteersModal";
 import { AttendanceModal } from "../attendance/AttendanceModal";
@@ -43,10 +42,11 @@ import CheckoutModal from "../attendance/CheckoutModal";
 const REFETCH_INTERVAL_SECONDS = 30;
 interface Props {
   eventDetails: EventDetail;
+  participation: UseQueryResult<EventParticipation | null, unknown>;
   analytics: UseQueryResult<EventAnalytics, unknown>;
 }
 
-const EventInfoAndActions = ({ eventDetails, analytics }: Props) => {
+const EventInfoAndActions = ({ eventDetails, analytics, participation }: Props) => {
   const [showModal, setShowModal] = useState<boolean>(false);
   const BASE_URL = `/event/${eventDetails.id}`;
 
@@ -69,12 +69,6 @@ const EventInfoAndActions = ({ eventDetails, analytics }: Props) => {
       return response;
     },
     refetchInterval: REFETCH_INTERVAL_SECONDS * 1000,
-  });
-
-  const participation = useQuery({
-    queryKey: ["participation", user?.uid, eventDetails.id],
-    queryFn: getParticipation(user, eventDetails.id),
-    enabled: !!user?.uid,
   });
 
   const registerParticipant = useMutation({

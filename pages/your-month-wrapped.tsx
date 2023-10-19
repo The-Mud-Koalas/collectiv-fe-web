@@ -18,6 +18,9 @@ import {
   XAxis,
   YAxis,
 } from "recharts";
+import { Button } from "@/components/shared/elements";
+import { Back } from "@/components/shared/svg/icons";
+import { useRouter } from "next/router";
 
 interface WrappedData {
   last_month_created_events_count: number;
@@ -344,6 +347,7 @@ const SlidingActivities = ({ wrappedData }: { wrappedData: WrappedData }) => {
 const WrappedComponent = ({ wrappedData }: { wrappedData: WrappedData }) => {
   const uptoRef = useRef<HTMLDivElement>(null);
   const rankRef = useRef<HTMLDivElement>(null);
+  const router = useRouter();
   const [showTitle, setShowTitle] = useState(false);
   const [canScroll, setCanScroll] = useState(false);
   const [showRankCaption, setShowRankCaption] = useState(false);
@@ -402,6 +406,9 @@ const WrappedComponent = ({ wrappedData }: { wrappedData: WrappedData }) => {
         !canScroll && "overflow-hidden"
       )}
     >
+      <Button className="absolute top-5 left-5" onClick={() => router.back()}>
+        <Back color={COLORS.primary[800]} dimensions={{ width: 40 }} />
+      </Button>
       <motion.div
         animate={{
           backgroundColor: [
