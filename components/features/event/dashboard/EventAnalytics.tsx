@@ -125,19 +125,15 @@ const EventAnalytics = ({ analytics, eventId }: Props) => {
             <p
               className={`mt-2 lg:text-3xl text-xl font-medium ${garamond.className}`}
             >
-              {data.event_type === "initiative" ? (
-                <span>Registered Participants</span>
-              ) : (
-                <span>Contributors</span>
-              )}
+              Total registered users
             </p>
             {
               <p className="lg:text-sm text-xs text-secondary-400 italic">
-                {data.event_type === "initiative" ? (
-                  <span>*number of registered participants</span>
-                ) : (
-                  <span>*number of contributors</span>
-                )}
+                *the total amount of users registered in this event (
+                {data.event_type === "initiative"
+                  ? "participants"
+                  : "contributors"}
+                /volunteers)
               </p>
             }
           </StatisticCard>
@@ -178,11 +174,18 @@ const EventAnalytics = ({ analytics, eventId }: Props) => {
                 garamond.className
               )}
             >
-              Number of Participants vs Volunteers registered
+              Number of{" "}
+              {data.event_type === "initiative"
+                ? "Participants"
+                : "Contributors"}{" "}
+              vs Volunteers registered
             </p>
             <p className="lg:text-sm text-xs text-secondary-400 italic text-left w-full pl-5">
-              *How many participants are registered compared to how many
-              volunteers are registers.
+              *How many{" "}
+              {data.event_type === "initiative"
+                ? "participants"
+                : "contributors"}{" "}
+              are registered compared to how many volunteers are registers.
             </p>
             <ResponsiveContainer className={"grow"} width="100%" height="100%">
               <BarChart
@@ -191,7 +194,10 @@ const EventAnalytics = ({ analytics, eventId }: Props) => {
                 layout="horizontal"
                 data={[
                   {
-                    name: "Participants",
+                    name:
+                      data.event_type === "initiative"
+                        ? "Participants"
+                        : "Contributors",
                     value: data.current_num_of_participants,
                     fill: COLORS.primary["700"],
                   },
@@ -271,6 +277,7 @@ const EventAnalytics = ({ analytics, eventId }: Props) => {
                   />
                   <YAxis
                     type="number"
+                    allowDecimals={false}
                     dataKey={"count"}
                     style={{ fontSize: "clamp(10px, 1vw, 14px)" }}
                     label={{ value: "registration count", angle: 90 }}

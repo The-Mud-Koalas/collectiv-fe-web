@@ -18,6 +18,9 @@ import {
   XAxis,
   YAxis,
 } from "recharts";
+import { Button } from "@/components/shared/elements";
+import { Back } from "@/components/shared/svg/icons";
+import { useRouter } from "next/router";
 
 interface WrappedData {
   last_month_created_events_count: number;
@@ -344,6 +347,7 @@ const SlidingActivities = ({ wrappedData }: { wrappedData: WrappedData }) => {
 const WrappedComponent = ({ wrappedData }: { wrappedData: WrappedData }) => {
   const uptoRef = useRef<HTMLDivElement>(null);
   const rankRef = useRef<HTMLDivElement>(null);
+  const router = useRouter();
   const [showTitle, setShowTitle] = useState(false);
   const [canScroll, setCanScroll] = useState(false);
   const [showRankCaption, setShowRankCaption] = useState(false);
@@ -365,16 +369,16 @@ const WrappedComponent = ({ wrappedData }: { wrappedData: WrappedData }) => {
   ];
 
   // const dummy: WrappedData["last_month_contributions"] = [
-  //   { goal_kind: "rice", measurement_unit: "kg", total_contribution: 100 },
-  //   { goal_kind: "rice", measurement_unit: "kg", total_contribution: 400 },
-  //   { goal_kind: "rice", measurement_unit: "kg", total_contribution: 400 },
-  //   { goal_kind: "rice", measurement_unit: "kg", total_contribution: 200 },
-  //   { goal_kind: "rice", measurement_unit: "kg", total_contribution: 300 },
-  //   { goal_kind: "rice", measurement_unit: "kg", total_contribution: 400 },
-  //   { goal_kind: "rice", measurement_unit: "kg", total_contribution: 600 },
-  //   { goal_kind: "rice", measurement_unit: "kg", total_contribution: 890 },
-  //   { goal_kind: "rice", measurement_unit: "kg", total_contribution: 700 },
-  //   { goal_kind: "rice", measurement_unit: "kg", total_contribution: 900 },
+  //   { goal_kind: "rice", measurement_unit: "kg", total_contribution: 6 },
+  //   { goal_kind: "shoes", measurement_unit: "pairs", total_contribution: 43 },
+  //   { goal_kind: "bottles", measurement_unit: "", total_contribution: 12 },
+  //   { goal_kind: "clothes", measurement_unit: "pieces", total_contribution: 87 },
+  //   { goal_kind: "laptop", measurement_unit: "units", total_contribution: 4 },
+  //   { goal_kind: "pillows", measurement_unit: "", total_contribution: 35 },
+  //   { goal_kind: "water", measurement_unit: "litres", total_contribution: 50 },
+  //   { goal_kind: "bread", measurement_unit: "servings", total_contribution: 59 },
+  //   { goal_kind: "toys", measurement_unit: "", total_contribution: 13 },
+  //   { goal_kind: "coffee", measurement_unit: "kg", total_contribution: 3 },
   // ];
 
   const contributions = wrappedData.last_month_contributions
@@ -402,6 +406,9 @@ const WrappedComponent = ({ wrappedData }: { wrappedData: WrappedData }) => {
         !canScroll && "overflow-hidden"
       )}
     >
+      <Button className="absolute top-5 left-5" onClick={() => router.back()}>
+        <Back color={COLORS.primary[800]} dimensions={{ width: 40 }} />
+      </Button>
       <motion.div
         animate={{
           backgroundColor: [
@@ -523,7 +530,7 @@ const WrappedComponent = ({ wrappedData }: { wrappedData: WrappedData }) => {
           <motion.div
             initial={{ scale: 0 }}
             whileInView={{ scale: 1 }}
-            className="lg:h-screen lg:mt-0 mt-14 xl:p-20 h-[50vh] lg:w-1/2 w-full flex justify-center items-center px-8"
+            className="lg:h-screen lg:mt-0 mt-14 xl:p-20 h-[50vh] lg:w-1/2 w-full flex justify-center items-center"
           >
             {contributions.length > 0 && (
               <ResponsiveContainer
@@ -532,7 +539,7 @@ const WrappedComponent = ({ wrappedData }: { wrappedData: WrappedData }) => {
                 height="100%"
               >
                 <BarChart
-                  margin={{ left: 20, top: 20, right: 80 }}
+                  margin={{ left: 20, top: 20, right: 120 }}
                   layout="vertical"
                   data={contributions}
                   barCategoryGap={10}
@@ -563,7 +570,7 @@ const WrappedComponent = ({ wrappedData }: { wrappedData: WrappedData }) => {
               </p>
             )}
           </motion.div>
-          <div className="lg:min-h-screen min-h-[50vh] lg:w-1/2 w-full flex justify-center items-center px-8">
+          <div className="lg:min-h-screen min-h-[50vh] lg:w-1/2 w-full flex justify-center items-center lg:px-0 px-6">
             <p
               className={cn(
                 "text-7xl lg:text-6xl text-primary-700 text-center",
@@ -740,7 +747,7 @@ const WrappedComponent = ({ wrappedData }: { wrappedData: WrappedData }) => {
                           style={{
                             fontWeight: "bold",
                             fontFamily: inter.style.fontFamily,
-                            fontSize: "clamp(12px, 1.5vw, 18px)",
+                            fontSize: "clamp(10px, 1.5vw, 18px)",
                           }}
                         />
                       </Bar>

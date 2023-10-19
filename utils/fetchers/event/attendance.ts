@@ -13,16 +13,17 @@ interface CheckInAssistedProps {
 export const checkInAssisted =
   (type: "Participant" | "Volunteer", queryClient: QueryClient) =>
   async (data: CheckInAssistedProps) => {
-    queryClient.invalidateQueries({ queryKey: ["current-event", "participation"] });
     const idToken = await auth.currentUser?.getIdToken();
     const endpoint = `/participation/${type.toLowerCase()}/check-in/assisted`;
-
+    
     const checkIn = await postRequest({
       endpoint,
       body: data,
       token: idToken,
     });
 
+    await queryClient.refetchQueries({ queryKey: ["current-event"] });
+    
     return checkIn;
   };
 
@@ -34,16 +35,17 @@ interface CheckOutProps {
 export const checkOutSelf =
   (type: "Participant" | "Volunteer", queryClient: QueryClient) =>
   async (data: CheckOutProps) => {
-    queryClient.invalidateQueries({ queryKey: ["current-event", "participation"] });
     const idToken = await auth.currentUser?.getIdToken();
     const endpoint = `/participation/${type.toLowerCase()}/check-out/self`;
-
+    
     const checkOut = await postRequest({
       endpoint,
       body: data,
       token: idToken,
     });
 
+    await queryClient.refetchQueries({ queryKey: ["current-event"] });
+    
     return checkOut;
   };
 
@@ -52,16 +54,17 @@ type CheckOutAssistedProps = CheckOutProps & {
 };
 export const checkOutAssisted =
   (queryClient: QueryClient) => async (data: CheckOutAssistedProps) => {
-    queryClient.invalidateQueries({ queryKey: ["current-event"] });
     const idToken = await auth.currentUser?.getIdToken();
     const endpoint = "/participation/participant/check-out/assisted";
-
+    
     const checkOut = await postRequest({
       endpoint,
       body: data,
       token: idToken,
     });
 
+    await queryClient.refetchQueries({ queryKey: ["current-event"] });
+    
     return checkOut;
   };
 
