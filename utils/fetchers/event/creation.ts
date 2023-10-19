@@ -51,6 +51,7 @@ const getProjectUnitGoals: QueryFunction<
 const createEvent = (queryClient: QueryClient) => async (values: NewEventFields) => {
   const { eventValues, isProject } = values;
   queryClient.invalidateQueries({queryKey: ["event"]});
+  queryClient.invalidateQueries({queryKey: ["tags"]});
   const idToken = await auth.currentUser?.getIdToken();
 
     const tagList: { id: string; name: string }[] = await postRequest({

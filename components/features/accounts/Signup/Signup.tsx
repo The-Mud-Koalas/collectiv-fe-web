@@ -64,12 +64,13 @@ const Signup: React.FC<Props> = ({ form, onSubmit, onError, isLoading }) => {
             />
 
             <PasswordField
-              label="Passcode"
+              label="6-digit PIN code"
               field="password"
               register={register}
+              inputMode="numeric"
               registerOptions={{
                 validate: {
-                  isNumeric: numericValidator("Your passcode should be numeric"),
+                  isNumeric: numericValidator("Your PIN code should be numeric"),
                   isLengthSix: exactLengthValidator(6),
                 },
                 required: "This field should not be left empty.",
