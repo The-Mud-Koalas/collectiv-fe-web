@@ -9,15 +9,18 @@ const useUpload = ({ endpoint, method }: Props) => {
   const [isLoading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [uploadProgress, setUploadProgress] = useState(0);
-  console.log({ isLoading, uploadProgress })
 
   const uploadFile = async (formData: FormData, token?: string) =>
     new Promise((resolve, reject) => {
       setLoading(true);
       const xhr = new XMLHttpRequest();
+      const host = `${window.location.protocol}//${window.location.host}`;
       
       xhr.open(method, `${process.env.NEXT_PUBLIC_BACKEND_URL}${endpoint}/`);
-      xhr.setRequestHeader("Authorization", `Bearer ${token}`)
+      xhr.setRequestHeader("Authorization", `Bearer ${token}`);
+      xhr.setRequestHeader("Origin", host);
+      
+      
 
       xhr.onload = () => {
         if (!(xhr.status < 300 && 200 <= xhr.status)) {
