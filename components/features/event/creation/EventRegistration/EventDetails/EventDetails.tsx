@@ -112,7 +112,11 @@ const EventDetails: React.FC<Props> = ({
 
   const onDrop = async (file: File[]) => {
     const url = URL.createObjectURL(file[0]);
-    const fileRenamed = new File([file[0]], nanoid());
+    const fileRenamed = new File(
+      [file[0]],
+      `${nanoid()}.${file[0].name.split(".").pop()}`,
+      { type: file[0].type }
+    );
     const imageObject = { url, file: fileRenamed };
 
     setValue("image", imageObject);
