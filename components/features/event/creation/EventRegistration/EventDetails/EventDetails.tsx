@@ -1,37 +1,33 @@
-import React, { useEffect, useState } from "react";
-import EventCollapsible from "../EventCollapsible";
-import { useEventCreationContext } from "@/context/event/EventCreationContext";
+import { Button } from "@/components/shared/elements";
 import {
-  TextInputField,
-  SelectField,
-  MultiselectInputField,
   DateField,
   FileUploadField,
-  AsyncSelectField,
+  MultiselectInputField,
+  SelectField,
+  TextInputField,
 } from "@/components/shared/forms";
-import { Button } from "@/components/shared/elements";
+import { useEventCreationContext } from "@/context/event/EventCreationContext";
+import React, { useEffect } from "react";
+import EventCollapsible from "../EventCollapsible";
 
+import { Arrow } from "@/components/shared/svg/icons";
+import useUpload from "@/hooks/utils/useUpload";
+import { auth } from "@/lib/firebase";
+import { COLORS } from "@/utils/constants/colors";
+import { inter } from "@/utils/constants/fonts";
+import { createEvent } from "@/utils/fetchers/event/creation";
+import { capitalize } from "@/utils/helpers/formatting/capitalize";
+import { numericValidator } from "@/utils/helpers/validator/numericValidator";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import {
   FieldError,
   SubmitErrorHandler,
   SubmitHandler,
   useWatch,
 } from "react-hook-form";
-import { numericValidator } from "@/utils/helpers/validator/numericValidator";
-import { inter } from "@/utils/constants/fonts";
-import {
-  createEvent,
-  getProjectUnitGoals,
-  getTags,
-} from "@/utils/fetchers/event/creation";
-import { Arrow } from "@/components/shared/svg/icons";
-import { COLORS } from "@/utils/constants/colors";
-import useUpload from "@/hooks/utils/useUpload";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { auth } from "@/lib/firebase";
-import { BeatLoader, ClipLoader } from "react-spinners";
-import { capitalize } from "@/utils/helpers/formatting/capitalize";
+import { ClipLoader } from "react-spinners";
 import { toast } from "react-toastify";
+import { nanoid } from "nanoid";
 
 interface Props {
   currentStage?: number;
@@ -116,7 +112,8 @@ const EventDetails: React.FC<Props> = ({
 
   const onDrop = async (file: File[]) => {
     const url = URL.createObjectURL(file[0]);
-    const imageObject = { url, file: file[0] };
+    const fileRenamed = new File([file[0]], nanoid());
+    const imageObject = { url, file: fileRenamed };
 
     setValue("image", imageObject);
     clearErrors("image");
