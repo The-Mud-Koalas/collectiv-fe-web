@@ -12,7 +12,7 @@ interface MutateProps<T> extends FetchProps {
 const getRequest = async ({ url, endpoint, token, searchParams }: FetchProps) => {
   url ??= `${process.env.NEXT_PUBLIC_BACKEND_URL}${endpoint}/${searchParams != null ? `?${searchParams.toString()}` : ""}`;
 
-  const host = `${window.location.protocol}//${window.location.host}`;
+  const host = process.env.NEXT_PUBLIC_FRONTEND_URL ?? `${window.location.protocol}//${window.location.host}`;
   const response = await fetch(url, {
     headers: {
       Authorization: `Bearer ${token}`,
@@ -39,7 +39,7 @@ const postRequest = async <T>({
   token,
 }: MutateProps<T>) => {
   url ??= `${process.env.NEXT_PUBLIC_BACKEND_URL}${endpoint}/`;
-  const host = `${window.location.protocol}//${window.location.host}`;
+  const host = process.env.NEXT_PUBLIC_FRONTEND_URL ?? `${window.location.protocol}//${window.location.host}`;
   const response = await fetch(url, {
     headers: {
       Authorization: `Bearer ${token}`,
