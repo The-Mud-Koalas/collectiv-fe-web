@@ -31,7 +31,7 @@ const NavbarAccount = () => {
           >
             <ul className="flex flex-col gap-5 mt-6 bg-primary-300 px-4 pt-2 pb-4  w-44">
               <li>
-                <NavbarLink name="Your Activities" url="/wrapped"/>
+                <NavbarLink name="Your Activities" url="/your-month-wrapped"/>
               </li>
               <li>
                 <NavbarLink name="Registered Events" url="/event/registered"/>
