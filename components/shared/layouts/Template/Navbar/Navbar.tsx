@@ -24,19 +24,15 @@ const LOGGED_IN: NavLinksType = [
     url: "/event/discover",
   },
   {
-    name: "Hosts",
+    name: "Host",
     group: [
-      {
-        name: "About Host",
-        url: "/event/host",
-      },
       {
         name: "Host Event",
         url: "/event/create",
       },
       {
-        name: "My Events",
-        url: "/event",
+        name: "My Events Hosted",
+        url: "/event/hosted",
       },
     ],
   },

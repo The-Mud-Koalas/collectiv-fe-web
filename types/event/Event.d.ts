@@ -102,7 +102,7 @@ interface BaseUpdateEventDetail {
 }
 
 interface UpdateInitiativeEventDetail extends BaseUpdateEventDetail {
-  participant_registration_enabled: boolean;
+  participation_registration_enabled: boolean;
 }
 
 interface BaseEventAnalytics {

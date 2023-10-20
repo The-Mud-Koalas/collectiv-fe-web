@@ -82,7 +82,7 @@ const ReportModal: FC<ReportModalProps> = ({
             <TextInputField
               field="remarks"
               label="Why are you reporting this event?"
-              placeholder="Placeholder text"
+              placeholder="Write your report.."
               register={register}
               registerOptions={{
                 required: "This field should not be left empty.",

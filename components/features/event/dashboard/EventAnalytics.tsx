@@ -94,6 +94,7 @@ const EventAnalytics = ({ analytics, eventId }: Props) => {
             {isOwnerOfProject && (
               <Link
                 shallow
+                replace
                 scroll={false}
                 href={BASE_URL + "?viewProgressHistory=true"}
                 className="text-xs lg:text-sm underline text-secondary-500 font-semibold"
@@ -104,6 +105,7 @@ const EventAnalytics = ({ analytics, eventId }: Props) => {
             {isOwnerOfProject && (
               <Link
                 shallow
+                replace
                 scroll={false}
                 href={BASE_URL + "?updateProgress=true"}
                 className="border-[2px] hover:bg-opacity-10 hover:bg-primary-400 border-primary-700 rounded-full px-4 text-primary-700 flex items-center gap-2 py-1 text-xs lg:text-sm"
@@ -296,7 +298,7 @@ const EventAnalytics = ({ analytics, eventId }: Props) => {
           }
         >
           <UpdateProgressModal
-            onClose={() => router.push(BASE_URL, undefined, { shallow: true })}
+            onClose={() => router.replace(BASE_URL, undefined, { shallow: true })}
             eventDetails={data}
           />
         </Modal>
@@ -310,7 +312,7 @@ const EventAnalytics = ({ analytics, eventId }: Props) => {
         >
           <ProgressHistoryModal
             eventDetails={data}
-            onClose={() => router.push(BASE_URL, undefined, { shallow: true })}
+            onClose={() => router.replace(BASE_URL, undefined, { shallow: true })}
           />
         </Modal>
       )}

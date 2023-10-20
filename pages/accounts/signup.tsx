@@ -1,4 +1,5 @@
 import Signup from "@/components/features/accounts/Signup";
+import { Template } from "@/components/shared/layouts";
 import { auth } from "@/lib/firebase";
 import { signUpWithEmail } from "@/utils/fetchers/authentication";
 import { formatFirebaseAuthErrorMessage } from "@/utils/helpers/formatting/formatFirebaseAuthErrorMessage";
@@ -22,7 +23,7 @@ const SignupPage: NextPage = () => {
     mutationFn: signUpWithEmail,
     onSuccess: (data) => {
       form.reset();
-      router.push("/accounts/login")
+      router.push("/accounts/login");
     },
     onError: (error) => {
       if (error instanceof FirebaseError) {
@@ -50,12 +51,14 @@ const SignupPage: NextPage = () => {
   };
 
   return (
-    <Signup
-      form={form}
-      isLoading={isLoading}
-      onError={onError}
-      onSubmit={onSubmit}
-    />
+    <Template>
+      <Signup
+        form={form}
+        isLoading={isLoading}
+        onError={onError}
+        onSubmit={onSubmit}
+      />
+    </Template>
   );
 };
 
