@@ -18,6 +18,7 @@ import {
 import { toast } from "react-toastify";
 import { useAppContext } from "@/context/AppContext";
 import { showErrorToast } from "@/lib/toast";
+import { Template } from "@/components/shared/layouts";
 
 const LoginPage: NextPage = () => {
   const { sendMessageToRN } = useAppContext();
@@ -63,14 +64,14 @@ const LoginPage: NextPage = () => {
   };
 
   return (
-    <div>
+    <Template>
       <Login
         form={form}
         isLoading={isLoading}
         onError={onError}
         onSubmit={onSubmit}
       />
-    </div>
+    </Template>
   );
 };
 

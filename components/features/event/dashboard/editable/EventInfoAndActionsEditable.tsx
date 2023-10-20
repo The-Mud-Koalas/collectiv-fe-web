@@ -182,8 +182,8 @@ const EventInfoAndActionsEditable = ({
           start_date_time: data.start_date_time.toISOString(),
           end_date_time: data.end_date_time.toISOString(),
           tags: data.tags.map((tag) => tag.id),
-          participant_registration_enabled:
-            data.participant_registration_enabled,
+          participation_registration_enabled:
+            data.participation_registration_enabled,
           project_goal: (eventDetails as ProjectDetail).goal,
           goal_kind: (eventDetails as ProjectDetail).goal_kind,
           goal_measurement_unit: (eventDetails as ProjectDetail)
@@ -213,7 +213,7 @@ const EventInfoAndActionsEditable = ({
     defaultValues: {
       start_date_time: currentStartDate,
       end_date_time: currentEndDate,
-      participant_registration_enabled:
+      participation_registration_enabled:
         (eventDetails as InitiativeDetail).participation_registration_enabled ??
         false,
       volunteer_registration_enabled:
@@ -235,10 +235,11 @@ const EventInfoAndActionsEditable = ({
     updateForm.reset({
       start_date_time: currentStartDate,
       end_date_time: currentEndDate,
-      participant_registration_enabled:
+      participation_registration_enabled:
         (eventData as InitiativeDetail).participation_registration_enabled ??
         false,
-      volunteer_registration_enabled: eventData.volunteer_registration_enabled,
+      volunteer_registration_enabled:
+        (eventData as InitiativeDetail).volunteer_registration_enabled ?? false,
       tags: eventData.event_tags.map((tag) => ({
         label: tag.name,
         value: tag.id,
@@ -407,14 +408,14 @@ const EventInfoAndActionsEditable = ({
                 >
                   <Controller
                     control={updateForm.control}
-                    name="participant_registration_enabled"
+                    name="participation_registration_enabled"
                     render={({ field: { value } }) => (
                       <Switch
                         label="Participant Registration:"
                         disabled={!isEditing}
                         onToggle={(toggled) =>
                           updateForm.setValue(
-                            "participant_registration_enabled",
+                            "participation_registration_enabled",
                             toggled,
                             { shouldDirty: true }
                           )

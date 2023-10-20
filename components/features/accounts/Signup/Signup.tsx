@@ -32,7 +32,6 @@ const Signup: React.FC<Props> = ({ form, onSubmit, onError, isLoading }) => {
 
   return (
     <>
-      <AccountNavbar />
       <div className="grid place-items-center">
         <div
           className={`${inter.className} flex flex-col px-5 py-8 md:py-[5%] gap-6 max-w-xl w-full`}
