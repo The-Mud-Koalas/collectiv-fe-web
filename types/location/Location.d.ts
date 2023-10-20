@@ -3,6 +3,7 @@ interface EventLocation {
     name: string;
     latitude: number;
     longitude: number;
+    description: string;
 }
 
 interface LocationParticipationData {

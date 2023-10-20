@@ -69,7 +69,7 @@ const LocationDetails: React.FC<Props> = ({
           <h1 className="font-semibold text-4xl sm:text-7xl">
             {locationDetails.name}
           </h1>
-          <p className="font-medium text-base text-primary-800">{desc}</p>
+          <p className="font-medium text-base text-primary-800">{locationDetails.description}</p>
           <SubscribeToggle isSubscribed={subscribedToLocation} />
         </div>
       </section>
